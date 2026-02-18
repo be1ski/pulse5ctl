@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "Abbrechen";
+"general.connect" = "Verbinden";
+"general.connected" = "Verbunden";
+"general.disconnect" = "Trennen";
+"general.quit" = "Beenden";
+"general.dismiss" = "Schließen";
+
+/* Hero */
+"hero.title" = "Pulse 5";
+"hero.subtitle" = "Verbinden, um LED-Themen,\nHelligkeit und Animationen zu steuern";
+"hero.scan_button" = "Nach Lautsprecher suchen";
+"hero.searching" = "Suche nach Pulse 5...";
+
+/* Controls */
+"controls.themes" = "Themen";
+"controls.patterns" = "Muster";
+"controls.color" = "Farbe";
+"controls.custom" = "Benutzerdefiniert";
+"controls.color_loop" = "Farbschleife";
+"controls.brightness" = "Helligkeit";
+"controls.body" = "Gehäuse";
+"controls.projection" = "Projektion";
+"controls.animation_speed" = "Animationsgeschwindigkeit";
+"controls.speed" = "Geschwindigkeit";
+"controls.speed_low" = "Niedrig";
+"controls.speed_mid" = "Mittel";
+"controls.speed_high" = "Hoch";
+
+/* Settings */
+"settings.title" = "Einstellungen";
+"settings.auto_theme" = "Auto-Thema";
+"settings.when_music_plays" = "Bei Musikwiedergabe:";
+"settings.playing_theme" = "Wiedergabe-Thema";
+"settings.when_idle" = "Im Ruhezustand:";
+"settings.idle_theme" = "Ruhezustand-Thema";
+"settings.language" = "Sprache";
+"settings.language_system" = "Systemstandard";
+
+/* Color */
+"color.red" = "Rot";
+"color.orange" = "Orange";
+"color.yellow" = "Gelb";
+"color.green" = "Grün";
+"color.cyan" = "Cyan";
+"color.blue" = "Blau";
+"color.purple" = "Lila";
+"color.pink" = "Rosa";
+"color.white" = "Weiß";
+
+/* Theme */
+"theme.nature" = "Natur";
+"theme.party" = "Party";
+"theme.spiritual" = "Spirituell";
+"theme.cocktail" = "Cocktail";
+"theme.weather" = "Wetter";
+"theme.canvas" = "Leinwand";
+
+/* Pattern */
+"pattern.campfire" = "Lagerfeuer";
+"pattern.northern_lights" = "Nordlichter";
+"pattern.sea_wave" = "Meereswelle";
+"pattern.universe" = "Universum";
+"pattern.strobe" = "Stroboskop";
+"pattern.equalizer" = "Equalizer";
+"pattern.geometry" = "Geometrie";
+"pattern.spin" = "Drehung";
+"pattern.rainbow" = "Regenbogen";
+"pattern.dynamic_wave" = "Dynamische Welle";
+"pattern.lava" = "Lava";
+"pattern.focus" = "Fokus";
+"pattern.sky_sunny" = "Sonniger Himmel";
+"pattern.rain" = "Regen";
+"pattern.snow" = "Schnee";
+"pattern.thunder" = "Donner";
+"pattern.cloud" = "Wolke";
+"pattern.fruit_gin" = "Frucht-Gin";
+"pattern.mojito" = "Mojito";
+"pattern.tequila" = "Tequila";
+"pattern.cherry" = "Kirsche";
+
+/* State */
+"state.disconnected" = "Getrennt";
+"state.scanning" = "Wird gesucht...";
+"state.connecting" = "Verbindung wird hergestellt...";
+"state.discovering_services" = "Dienste werden erkannt...";
+"state.connected" = "Verbunden";
+"state.reconnecting" = "Erneut verbinden (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetooth ist ausgeschaltet. Aktivieren Sie Bluetooth in den Systemeinstellungen.";
+"error.unauthorized" = "Der Bluetooth-Zugriff ist nicht autorisiert.";
+"error.unsupported" = "Bluetooth LE wird auf diesem Mac nicht unterstützt.";
+"error.service_not_found" = "Pulse 5 BLE-Dienst wurde auf diesem Gerät nicht gefunden.";
+"error.characteristic_not_found" = "Pulse 5 BLE-Eigenschaften wurden nicht gefunden.";
+"error.connection_failed" = "Verbindung fehlgeschlagen: %@";
+"error.write_failed" = "Befehl konnte nicht geschrieben werden: %@";
+"error.disconnected" = "Der Lautsprecher wurde unerwartet getrennt.";
+"error.unknown_device" = "Gerät befindet sich nicht mehr in der Erkennungsliste.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";

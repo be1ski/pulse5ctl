@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "Бекор кардан";
+"general.connect" = "Пайваст шудан";
+"general.connected" = "Пайваст аст";
+"general.disconnect" = "Ҷудо кардан";
+"general.quit" = "Баромадан";
+"general.dismiss" = "Пӯшидан";
+
+/* Hero */
+"hero.title" = "Pulse 5";
+"hero.subtitle" = "Барои идоракунӣ пайваст шавед\nМавзӯъҳои LED, равшанӣ ва аниматсияҳо";
+"hero.scan_button" = "Ҷустуҷӯи баландгӯяк";
+"hero.searching" = "Ҷустуҷӯи Pulse 5...";
+
+/* Controls */
+"controls.themes" = "Мавзӯъҳо";
+"controls.patterns" = "Намунаҳо";
+"controls.color" = "Ранг";
+"controls.custom" = "Фармоишӣ";
+"controls.color_loop" = "Давраи ранг";
+"controls.brightness" = "Равшанӣ";
+"controls.body" = "Корпус";
+"controls.projection" = "Проексия";
+"controls.animation_speed" = "Суръати аниматсия";
+"controls.speed" = "Суръат";
+"controls.speed_low" = "Паст";
+"controls.speed_mid" = "Миёна";
+"controls.speed_high" = "Баланд";
+
+/* Settings */
+"settings.title" = "Танзимот";
+"settings.auto_theme" = "Мавзӯи худкор";
+"settings.when_music_plays" = "Ҳангоми навохтани мусиқӣ:";
+"settings.playing_theme" = "Мавзӯи навохтан";
+"settings.when_idle" = "Ҳангоми бекорӣ:";
+"settings.idle_theme" = "Мавзӯи бекорӣ";
+"settings.language" = "Забон";
+"settings.language_system" = "Пешфарзи система";
+
+/* Color */
+"color.red" = "Сурх";
+"color.orange" = "Норинҷӣ";
+"color.yellow" = "Зард";
+"color.green" = "Сабз";
+"color.cyan" = "Обӣ";
+"color.blue" = "Кабуд";
+"color.purple" = "Бунафш";
+"color.pink" = "Гулобӣ";
+"color.white" = "Сафед";
+
+/* Theme */
+"theme.nature" = "Табиат";
+"theme.party" = "Базм";
+"theme.spiritual" = "Маънавӣ";
+"theme.cocktail" = "Коктейл";
+"theme.weather" = "Обу ҳаво";
+"theme.canvas" = "Бум";
+
+/* Pattern */
+"pattern.campfire" = "Оташи лагер";
+"pattern.northern_lights" = "Шафақи шимолӣ";
+"pattern.sea_wave" = "Мавҷи баҳр";
+"pattern.universe" = "Коинот";
+"pattern.strobe" = "Строб";
+"pattern.equalizer" = "Эквалайзер";
+"pattern.geometry" = "Геометрия";
+"pattern.spin" = "Чархиш";
+"pattern.rainbow" = "Тирукамон";
+"pattern.dynamic_wave" = "Мавҷи динамикӣ";
+"pattern.lava" = "Лава";
+"pattern.focus" = "Фокус";
+"pattern.sky_sunny" = "Осмони офтобӣ";
+"pattern.rain" = "Борон";
+"pattern.snow" = "Барф";
+"pattern.thunder" = "Раъду барқ";
+"pattern.cloud" = "Абр";
+"pattern.fruit_gin" = "Ҷини мевагӣ";
+"pattern.mojito" = "Мохито";
+"pattern.tequila" = "Текила";
+"pattern.cherry" = "Олуболу";
+
+/* State */
+"state.disconnected" = "Ҷудо шудааст";
+"state.scanning" = "Сканкунӣ...";
+"state.connecting" = "Пайваст шуда истодааст...";
+"state.discovering_services" = "Кашфи хидматҳо...";
+"state.connected" = "Пайваст аст";
+"state.reconnecting" = "Аз нав пайваст шуда истодааст (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetooth хомӯш аст. Bluetooth-ро дар Танзимоти система фаъол кунед.";
+"error.unauthorized" = "Дастрасӣ ба Bluetooth иҷозат дода нашудааст.";
+"error.unsupported" = "Bluetooth LE дар ин Mac дастгирӣ намешавад.";
+"error.service_not_found" = "Хидмати BLE-и Pulse 5 дар ин дастгоҳ ёфт нашуд.";
+"error.characteristic_not_found" = "Хусусиятҳои BLE-и Pulse 5 ёфт нашуданд.";
+"error.connection_failed" = "Пайвастшавӣ ноком шуд: %@";
+"error.write_failed" = "Навиштани фармон ноком шуд: %@";
+"error.disconnected" = "Баландгӯяк ногаҳон ҷудо шуд.";
+"error.unknown_device" = "Дастгоҳ дигар дар рӯйхати кашф нест.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";
