@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "Cancel";
+"general.connect" = "Connect";
+"general.connected" = "Connected";
+"general.disconnect" = "Disconnect";
+"general.quit" = "Quit";
+"general.dismiss" = "Dismiss";
+
+/* Hero */
+"hero.title" = "Pulse 5";
+"hero.subtitle" = "Connect to control\nLED themes, brightness and animations";
+"hero.scan_button" = "Scan for Speaker";
+"hero.searching" = "Searching for Pulse 5...";
+
+/* Controls */
+"controls.themes" = "Themes";
+"controls.patterns" = "Patterns";
+"controls.color" = "Color";
+"controls.custom" = "Custom";
+"controls.color_loop" = "Color Loop";
+"controls.brightness" = "Brightness";
+"controls.body" = "Body";
+"controls.projection" = "Projection";
+"controls.animation_speed" = "Animation Speed";
+"controls.speed" = "Speed";
+"controls.speed_low" = "Low";
+"controls.speed_mid" = "Mid";
+"controls.speed_high" = "High";
+
+/* Settings */
+"settings.title" = "Settings";
+"settings.auto_theme" = "Auto Theme";
+"settings.when_music_plays" = "When music plays:";
+"settings.playing_theme" = "Playing theme";
+"settings.when_idle" = "When idle:";
+"settings.idle_theme" = "Idle theme";
+"settings.language" = "Language";
+"settings.language_system" = "System Default";
+
+/* Color */
+"color.red" = "Red";
+"color.orange" = "Orange";
+"color.yellow" = "Yellow";
+"color.green" = "Green";
+"color.cyan" = "Cyan";
+"color.blue" = "Blue";
+"color.purple" = "Purple";
+"color.pink" = "Pink";
+"color.white" = "White";
+
+/* Theme */
+"theme.nature" = "Nature";
+"theme.party" = "Party";
+"theme.spiritual" = "Spiritual";
+"theme.cocktail" = "Cocktail";
+"theme.weather" = "Weather";
+"theme.canvas" = "Canvas";
+
+/* Pattern */
+"pattern.campfire" = "Campfire";
+"pattern.northern_lights" = "Northern Lights";
+"pattern.sea_wave" = "Sea Wave";
+"pattern.universe" = "Universe";
+"pattern.strobe" = "Strobe";
+"pattern.equalizer" = "Equalizer";
+"pattern.geometry" = "Geometry";
+"pattern.spin" = "Spin";
+"pattern.rainbow" = "Rainbow";
+"pattern.dynamic_wave" = "Dynamic Wave";
+"pattern.lava" = "Lava";
+"pattern.focus" = "Focus";
+"pattern.sky_sunny" = "Sky Sunny";
+"pattern.rain" = "Rain";
+"pattern.snow" = "Snow";
+"pattern.thunder" = "Thunder";
+"pattern.cloud" = "Cloud";
+"pattern.fruit_gin" = "Fruit Gin";
+"pattern.mojito" = "Mojito";
+"pattern.tequila" = "Tequila";
+"pattern.cherry" = "Cherry";
+
+/* State */
+"state.disconnected" = "Disconnected";
+"state.scanning" = "Scanning...";
+"state.connecting" = "Connecting...";
+"state.discovering_services" = "Discovering services...";
+"state.connected" = "Connected";
+"state.reconnecting" = "Reconnecting (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetooth is powered off. Enable Bluetooth in System Settings.";
+"error.unauthorized" = "Bluetooth access is not authorized.";
+"error.unsupported" = "Bluetooth LE is not supported on this Mac.";
+"error.service_not_found" = "Pulse 5 BLE service not found on this device.";
+"error.characteristic_not_found" = "Pulse 5 BLE characteristics were not found.";
+"error.connection_failed" = "Connection failed: %@";
+"error.write_failed" = "Command write failed: %@";
+"error.disconnected" = "Speaker disconnected unexpectedly.";
+"error.unknown_device" = "Device is no longer in discovery list.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";
