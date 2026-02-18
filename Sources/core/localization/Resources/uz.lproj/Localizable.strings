@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "Bekor qilish";
+"general.connect" = "Ulanish";
+"general.connected" = "Ulangan";
+"general.disconnect" = "Uzish";
+"general.quit" = "Chiqish";
+"general.dismiss" = "Yopish";
+
+/* Hero */
+"hero.title" = "Pulse 5";
+"hero.subtitle" = "LED-mavzular, yorqinlik va\nanimatsiyalarni boshqarish uchun ulaning";
+"hero.scan_button" = "Karnayni qidirish";
+"hero.searching" = "Pulse 5 qidirilmoqda...";
+
+/* Controls */
+"controls.themes" = "Mavzular";
+"controls.patterns" = "Naqshlar";
+"controls.color" = "Rang";
+"controls.custom" = "Maxsus";
+"controls.color_loop" = "Rang aylanishi";
+"controls.brightness" = "Yorqinlik";
+"controls.body" = "Korpus";
+"controls.projection" = "Proyeksiya";
+"controls.animation_speed" = "Animatsiya tezligi";
+"controls.speed" = "Tezlik";
+"controls.speed_low" = "Past";
+"controls.speed_mid" = "O'rta";
+"controls.speed_high" = "Yuqori";
+
+/* Settings */
+"settings.title" = "Sozlamalar";
+"settings.auto_theme" = "Avtomavzu";
+"settings.when_music_plays" = "Musiqa ijro etilganda:";
+"settings.playing_theme" = "Ijro mavzusi";
+"settings.when_idle" = "Kutish rejimida:";
+"settings.idle_theme" = "Kutish mavzusi";
+"settings.language" = "Til";
+"settings.language_system" = "Tizim boʻyicha";
+
+/* Color */
+"color.red" = "Qizil";
+"color.orange" = "To'q sariq";
+"color.yellow" = "Sariq";
+"color.green" = "Yashil";
+"color.cyan" = "Moviy";
+"color.blue" = "Ko'k";
+"color.purple" = "Binafsha";
+"color.pink" = "Pushti";
+"color.white" = "Oq";
+
+/* Theme */
+"theme.nature" = "Tabiat";
+"theme.party" = "Bayram";
+"theme.spiritual" = "Ruhiy";
+"theme.cocktail" = "Kokteyl";
+"theme.weather" = "Ob-havo";
+"theme.canvas" = "Tuval";
+
+/* Pattern */
+"pattern.campfire" = "Gulxan";
+"pattern.northern_lights" = "Shimoliy shu'la";
+"pattern.sea_wave" = "Dengiz to'lqini";
+"pattern.universe" = "Koinot";
+"pattern.strobe" = "Stroboskop";
+"pattern.equalizer" = "Ekvalazer";
+"pattern.geometry" = "Geometriya";
+"pattern.spin" = "Aylanish";
+"pattern.rainbow" = "Kamalak";
+"pattern.dynamic_wave" = "Dinamik to'lqin";
+"pattern.lava" = "Lava";
+"pattern.focus" = "Fokus";
+"pattern.sky_sunny" = "Ochiq osmon";
+"pattern.rain" = "Yomg'ir";
+"pattern.snow" = "Qor";
+"pattern.thunder" = "Momaqaldiroq";
+"pattern.cloud" = "Bulut";
+"pattern.fruit_gin" = "Mevali jin";
+"pattern.mojito" = "Moxito";
+"pattern.tequila" = "Tekila";
+"pattern.cherry" = "Olcha";
+
+/* State */
+"state.disconnected" = "Uzilgan";
+"state.scanning" = "Skanerlash...";
+"state.connecting" = "Ulanmoqda...";
+"state.discovering_services" = "Xizmatlar aniqlanmoqda...";
+"state.connected" = "Ulangan";
+"state.reconnecting" = "Qayta ulanish (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetooth o'chirilgan. Tizim sozlamalarida Bluetooth-ni yoqing.";
+"error.unauthorized" = "Bluetooth-ga kirish ruxsat etilmagan.";
+"error.unsupported" = "Bluetooth LE bu Mac-da qo'llab-quvvatlanmaydi.";
+"error.service_not_found" = "Bu qurilmada Pulse 5 BLE xizmati topilmadi.";
+"error.characteristic_not_found" = "Pulse 5 BLE xarakteristikalari topilmadi.";
+"error.connection_failed" = "Ulanish xatosi: %@";
+"error.write_failed" = "Buyruqni yozish xatosi: %@";
+"error.disconnected" = "Karnay kutilmaganda uzildi.";
+"error.unknown_device" = "Qurilma topilganlar ro'yxatida yo'q.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";

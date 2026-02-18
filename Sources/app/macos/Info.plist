@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>pulse5ctl</string>
+    <key>CFBundleIdentifier</key>
+    <string>space.be1ski.pulse5ctl</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>pulse5ctl uses Bluetooth to discover and control your Pulse 5 speaker.</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>pulse5ctl uses Bluetooth to discover and control your Pulse 5 speaker.</string>
+</dict>
+</plist>

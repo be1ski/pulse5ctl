@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "Bes etmek";
+"general.connect" = "Birikdirmek";
+"general.connected" = "Birikdirildi";
+"general.disconnect" = "Aýyrmak";
+"general.quit" = "Çykmak";
+"general.dismiss" = "Ýapmak";
+
+/* Hero */
+"hero.title" = "Pulse 5";
+"hero.subtitle" = "LED temalary, ýagtylygy we\nanimasiýalary dolandyrmak uçin birikdiriň";
+"hero.scan_button" = "Dinamik gözlemek";
+"hero.searching" = "Pulse 5 gözlenýär...";
+
+/* Controls */
+"controls.themes" = "Temalar";
+"controls.patterns" = "Nusgalar";
+"controls.color" = "Reňk";
+"controls.custom" = "Özbaşdak";
+"controls.color_loop" = "Reňk aýlawy";
+"controls.brightness" = "Ýagtylyk";
+"controls.body" = "Göwre";
+"controls.projection" = "Projeksiýa";
+"controls.animation_speed" = "Animasiýa tizligi";
+"controls.speed" = "Tizlik";
+"controls.speed_low" = "Pes";
+"controls.speed_mid" = "Orta";
+"controls.speed_high" = "Ýokary";
+
+/* Settings */
+"settings.title" = "Sazlamalar";
+"settings.auto_theme" = "Awtomatik tema";
+"settings.when_music_plays" = "Aýdym çalanda:";
+"settings.playing_theme" = "Çalynýan tema";
+"settings.when_idle" = "Boş wagty:";
+"settings.idle_theme" = "Garaşyk temasy";
+"settings.language" = "Dil";
+"settings.language_system" = "Ulgam boýunça";
+
+/* Color */
+"color.red" = "Gyzyl";
+"color.orange" = "Mämişi";
+"color.yellow" = "Sary";
+"color.green" = "Ýaşyl";
+"color.cyan" = "Gök-ýaşyl";
+"color.blue" = "Gök";
+"color.purple" = "Benewşe";
+"color.pink" = "Gülgüne";
+"color.white" = "Ak";
+
+/* Theme */
+"theme.nature" = "Tebigat";
+"theme.party" = "Şüweleň";
+"theme.spiritual" = "Ruhy";
+"theme.cocktail" = "Kokteýl";
+"theme.weather" = "Howa";
+"theme.canvas" = "Kanwa";
+
+/* Pattern */
+"pattern.campfire" = "Ojakbaşy";
+"pattern.northern_lights" = "Demirgazyk şöhlesi";
+"pattern.sea_wave" = "Deňiz tolkuny";
+"pattern.universe" = "Älem";
+"pattern.strobe" = "Strob";
+"pattern.equalizer" = "Ekwalaýzer";
+"pattern.geometry" = "Geometriýa";
+"pattern.spin" = "Aýlaw";
+"pattern.rainbow" = "Älemgoşar";
+"pattern.dynamic_wave" = "Dinamik tolkun";
+"pattern.lava" = "Lawa";
+"pattern.focus" = "Fokus";
+"pattern.sky_sunny" = "Güneşli asman";
+"pattern.rain" = "Ýagyş";
+"pattern.snow" = "Gar";
+"pattern.thunder" = "Ýyldyrym";
+"pattern.cloud" = "Bulut";
+"pattern.fruit_gin" = "Miweli jin";
+"pattern.mojito" = "Mohito";
+"pattern.tequila" = "Tekila";
+"pattern.cherry" = "Albalы";
+
+/* State */
+"state.disconnected" = "Aýryldy";
+"state.scanning" = "Gözlenýär...";
+"state.connecting" = "Birikdirilýär...";
+"state.discovering_services" = "Hyzmatlar gözlenýär...";
+"state.connected" = "Birikdirildi";
+"state.reconnecting" = "Täzeden birikdirilýär (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetooth öçürilen. Ulgam sazlamalarynda Bluetooth-y açyň.";
+"error.unauthorized" = "Bluetooth ulanmaga rugsat berilmedik.";
+"error.unsupported" = "Bu Mac-da Bluetooth LE goldanylmaýar.";
+"error.service_not_found" = "Bu enjamda Pulse 5 BLE hyzmaty tapylmady.";
+"error.characteristic_not_found" = "Pulse 5 BLE aýratynlyklary tapylmady.";
+"error.connection_failed" = "Birikdirme şowsuz: %@";
+"error.write_failed" = "Buýruk ýazmak şowsuz: %@";
+"error.disconnected" = "Dinamik garaşylmadyk ýagdaýda aýryldy.";
+"error.unknown_device" = "Enjam gözleg sanawynda ýok.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";

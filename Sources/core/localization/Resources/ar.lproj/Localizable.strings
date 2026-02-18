@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "إلغاء";
+"general.connect" = "اتصال";
+"general.connected" = "متصل";
+"general.disconnect" = "قطع الاتصال";
+"general.quit" = "إنهاء";
+"general.dismiss" = "تجاهل";
+
+/* Hero */
+"hero.title" = "Pulse 5";
+"hero.subtitle" = "اتصل للتحكم في\nسمات LED والسطوع والرسوم المتحركة";
+"hero.scan_button" = "البحث عن السماعة";
+"hero.searching" = "جارٍ البحث عن Pulse 5...";
+
+/* Controls */
+"controls.themes" = "السمات";
+"controls.patterns" = "الأنماط";
+"controls.color" = "اللون";
+"controls.custom" = "مخصص";
+"controls.color_loop" = "دورة الألوان";
+"controls.brightness" = "السطوع";
+"controls.body" = "الهيكل";
+"controls.projection" = "الإسقاط";
+"controls.animation_speed" = "سرعة الرسوم المتحركة";
+"controls.speed" = "السرعة";
+"controls.speed_low" = "منخفضة";
+"controls.speed_mid" = "متوسطة";
+"controls.speed_high" = "عالية";
+
+/* Settings */
+"settings.title" = "الإعدادات";
+"settings.auto_theme" = "سمة تلقائية";
+"settings.when_music_plays" = "عند تشغيل الموسيقى:";
+"settings.playing_theme" = "سمة التشغيل";
+"settings.when_idle" = "في وضع الخمول:";
+"settings.idle_theme" = "سمة الخمول";
+"settings.language" = "اللغة";
+"settings.language_system" = "النظام الافتراضي";
+
+/* Color */
+"color.red" = "أحمر";
+"color.orange" = "برتقالي";
+"color.yellow" = "أصفر";
+"color.green" = "أخضر";
+"color.cyan" = "سماوي";
+"color.blue" = "أزرق";
+"color.purple" = "بنفسجي";
+"color.pink" = "وردي";
+"color.white" = "أبيض";
+
+/* Theme */
+"theme.nature" = "طبيعة";
+"theme.party" = "حفلة";
+"theme.spiritual" = "روحاني";
+"theme.cocktail" = "كوكتيل";
+"theme.weather" = "طقس";
+"theme.canvas" = "لوحة";
+
+/* Pattern */
+"pattern.campfire" = "نار المخيم";
+"pattern.northern_lights" = "الشفق القطبي";
+"pattern.sea_wave" = "موجة بحرية";
+"pattern.universe" = "الكون";
+"pattern.strobe" = "وميض";
+"pattern.equalizer" = "معادل الصوت";
+"pattern.geometry" = "هندسة";
+"pattern.spin" = "دوران";
+"pattern.rainbow" = "قوس قزح";
+"pattern.dynamic_wave" = "موجة ديناميكية";
+"pattern.lava" = "حمم";
+"pattern.focus" = "تركيز";
+"pattern.sky_sunny" = "سماء مشمسة";
+"pattern.rain" = "مطر";
+"pattern.snow" = "ثلج";
+"pattern.thunder" = "رعد";
+"pattern.cloud" = "سحاب";
+"pattern.fruit_gin" = "فروت جين";
+"pattern.mojito" = "موهيتو";
+"pattern.tequila" = "تكيلا";
+"pattern.cherry" = "كرز";
+
+/* State */
+"state.disconnected" = "غير متصل";
+"state.scanning" = "جارٍ البحث...";
+"state.connecting" = "جارٍ الاتصال...";
+"state.discovering_services" = "جارٍ اكتشاف الخدمات...";
+"state.connected" = "متصل";
+"state.reconnecting" = "جارٍ إعادة الاتصال (%d/3)...";
+
+/* Error */
+"error.powered_off" = "البلوتوث مغلق. قم بتفعيل البلوتوث من إعدادات النظام.";
+"error.unauthorized" = "الوصول إلى البلوتوث غير مصرح به.";
+"error.unsupported" = "Bluetooth LE غير مدعوم على هذا الـ Mac.";
+"error.service_not_found" = "لم يتم العثور على خدمة Pulse 5 BLE على هذا الجهاز.";
+"error.characteristic_not_found" = "لم يتم العثور على خصائص Pulse 5 BLE.";
+"error.connection_failed" = "فشل الاتصال: %@";
+"error.write_failed" = "فشل كتابة الأمر: %@";
+"error.disconnected" = "انقطع اتصال السماعة بشكل غير متوقع.";
+"error.unknown_device" = "الجهاز لم يعد موجوداً في قائمة الاكتشاف.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";
