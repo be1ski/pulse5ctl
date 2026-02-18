@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build release binary
+        run: swift build -c release --product pulse5ctl
+
+      - name: Package app bundle
+        run: |
+          mkdir -p pulse5ctl.app/Contents/MacOS
+          mkdir -p pulse5ctl.app/Contents/Resources
+          cp .build/release/pulse5ctl pulse5ctl.app/Contents/MacOS/
+          cp Sources/app/macos/Info.plist pulse5ctl.app/Contents/
+          chmod +x pulse5ctl.app/Contents/MacOS/pulse5ctl
+
+      - name: Create zip
+        run: ditto -c -k --keepParent pulse5ctl.app pulse5ctl-${{ github.event.release.tag_name }}.zip
+
+      - name: Upload to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload ${{ github.event.release.tag_name }} pulse5ctl-${{ github.event.release.tag_name }}.zip
