@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "Ləğv et";
+"general.connect" = "Qoşul";
+"general.connected" = "Qoşulub";
+"general.disconnect" = "Ayrıl";
+"general.quit" = "Çıx";
+"general.dismiss" = "Bağla";
+
+/* Hero */
+"hero.title" = "JBL Pulse 5";
+"hero.subtitle" = "İdarə etmək üçün qoşulun\nLED mövzular, parlaqlıq və animasiyalar";
+"hero.scan_button" = "Dinamik axtar";
+"hero.searching" = "Pulse 5 axtarılır...";
+
+/* Controls */
+"controls.themes" = "Mövzular";
+"controls.patterns" = "Naxışlar";
+"controls.color" = "Rəng";
+"controls.custom" = "Fərdi";
+"controls.color_loop" = "Rəng dövrü";
+"controls.brightness" = "Parlaqlıq";
+"controls.body" = "Gövdə";
+"controls.projection" = "Proyeksiya";
+"controls.animation_speed" = "Animasiya sürəti";
+"controls.speed" = "Sürət";
+"controls.speed_low" = "Aşağı";
+"controls.speed_mid" = "Orta";
+"controls.speed_high" = "Yüksək";
+
+/* Settings */
+"settings.title" = "Parametrlər";
+"settings.auto_theme" = "Avto mövzu";
+"settings.when_music_plays" = "Musiqi oxuyanda:";
+"settings.playing_theme" = "Oxuma mövzusu";
+"settings.when_idle" = "Boş olanda:";
+"settings.idle_theme" = "Boş mövzu";
+"settings.language" = "Dil";
+"settings.language_system" = "Sistem standartı";
+
+/* Color */
+"color.red" = "Qırmızı";
+"color.orange" = "Narıncı";
+"color.yellow" = "Sarı";
+"color.green" = "Yaşıl";
+"color.cyan" = "Mavi-yaşıl";
+"color.blue" = "Göy";
+"color.purple" = "Bənövşəyi";
+"color.pink" = "Çəhrayı";
+"color.white" = "Ağ";
+
+/* Theme */
+"theme.nature" = "Təbiət";
+"theme.party" = "Əyləncə";
+"theme.spiritual" = "Mənəvi";
+"theme.cocktail" = "Kokteyl";
+"theme.weather" = "Hava";
+"theme.canvas" = "Kətan";
+
+/* Pattern */
+"pattern.campfire" = "Tonqal";
+"pattern.northern_lights" = "Şimal işıqları";
+"pattern.sea_wave" = "Dəniz dalğası";
+"pattern.universe" = "Kainat";
+"pattern.strobe" = "Strob";
+"pattern.equalizer" = "Ekvalaizer";
+"pattern.geometry" = "Həndəsə";
+"pattern.spin" = "Fırlanma";
+"pattern.rainbow" = "Göy qurşağı";
+"pattern.dynamic_wave" = "Dinamik dalğa";
+"pattern.lava" = "Lava";
+"pattern.focus" = "Fokus";
+"pattern.sky_sunny" = "Günəşli səma";
+"pattern.rain" = "Yağış";
+"pattern.snow" = "Qar";
+"pattern.thunder" = "İldırım";
+"pattern.cloud" = "Bulud";
+"pattern.fruit_gin" = "Meyvə cini";
+"pattern.mojito" = "Moxito";
+"pattern.tequila" = "Tekila";
+"pattern.cherry" = "Albalı";
+
+/* State */
+"state.disconnected" = "Ayrılıb";
+"state.scanning" = "Axtarılır...";
+"state.connecting" = "Qoşulur...";
+"state.discovering_services" = "Xidmətlər aşkarlanır...";
+"state.connected" = "Qoşulub";
+"state.reconnecting" = "Yenidən qoşulur (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetooth söndürülüb. Sistem Parametrlərində Bluetooth-u yandırın.";
+"error.unauthorized" = "Bluetooth girişinə icazə verilməyib.";
+"error.unsupported" = "Bu Mac-da Bluetooth LE dəstəklənmir.";
+"error.service_not_found" = "Bu cihazda Pulse 5 BLE xidməti tapılmadı.";
+"error.characteristic_not_found" = "Pulse 5 BLE xarakteristikaları tapılmadı.";
+"error.connection_failed" = "Qoşulma uğursuz oldu: %@";
+"error.write_failed" = "Əmr yazılması uğursuz oldu: %@";
+"error.disconnected" = "Dinamik gözlənilmədən ayrıldı.";
+"error.unknown_device" = "Cihaz artıq aşkarlama siyahısında deyil.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";

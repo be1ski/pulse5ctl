@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "Болдырмау";
+"general.connect" = "Қосу";
+"general.connected" = "Қосылған";
+"general.disconnect" = "Ажырату";
+"general.quit" = "Шығу";
+"general.dismiss" = "Жабу";
+
+/* Hero */
+"hero.title" = "JBL Pulse 5";
+"hero.subtitle" = "LED-тақырыптарды, жарықтықты\nжәне анимацияны басқару үшін қосылыңыз";
+"hero.scan_button" = "Динамикті іздеу";
+"hero.searching" = "Pulse 5 іздеуде...";
+
+/* Controls */
+"controls.themes" = "Тақырыптар";
+"controls.patterns" = "Өрнектер";
+"controls.color" = "Түс";
+"controls.custom" = "Өзгеше";
+"controls.color_loop" = "Түс ауысуы";
+"controls.brightness" = "Жарықтық";
+"controls.body" = "Корпус";
+"controls.projection" = "Проекция";
+"controls.animation_speed" = "Анимация жылдамдығы";
+"controls.speed" = "Жылдамдық";
+"controls.speed_low" = "Баяу";
+"controls.speed_mid" = "Орташа";
+"controls.speed_high" = "Жоғары";
+
+/* Settings */
+"settings.title" = "Параметрлер";
+"settings.auto_theme" = "Автотақырып";
+"settings.when_music_plays" = "Музыка ойнағанда:";
+"settings.playing_theme" = "Ойнату тақырыбы";
+"settings.when_idle" = "Күту режимінде:";
+"settings.idle_theme" = "Күту тақырыбы";
+"settings.language" = "Тіл";
+"settings.language_system" = "Жүйе бойынша";
+
+/* Color */
+"color.red" = "Қызыл";
+"color.orange" = "Қызғылт сары";
+"color.yellow" = "Сары";
+"color.green" = "Жасыл";
+"color.cyan" = "Көгілдір";
+"color.blue" = "Көк";
+"color.purple" = "Күлгін";
+"color.pink" = "Қызғылт";
+"color.white" = "Ақ";
+
+/* Theme */
+"theme.nature" = "Табиғат";
+"theme.party" = "Кеш";
+"theme.spiritual" = "Рухани";
+"theme.cocktail" = "Коктейль";
+"theme.weather" = "Ауа райы";
+"theme.canvas" = "Кенеп";
+
+/* Pattern */
+"pattern.campfire" = "Алау";
+"pattern.northern_lights" = "Солтүстік шұғыла";
+"pattern.sea_wave" = "Теңіз толқыны";
+"pattern.universe" = "Ғалам";
+"pattern.strobe" = "Стробоскоп";
+"pattern.equalizer" = "Эквалайзер";
+"pattern.geometry" = "Геометрия";
+"pattern.spin" = "Айналу";
+"pattern.rainbow" = "Кемпірқосақ";
+"pattern.dynamic_wave" = "Динамикалық толқын";
+"pattern.lava" = "Лава";
+"pattern.focus" = "Фокус";
+"pattern.sky_sunny" = "Ашық аспан";
+"pattern.rain" = "Жаңбыр";
+"pattern.snow" = "Қар";
+"pattern.thunder" = "Найзағай";
+"pattern.cloud" = "Бұлт";
+"pattern.fruit_gin" = "Жеміс джині";
+"pattern.mojito" = "Мохито";
+"pattern.tequila" = "Текила";
+"pattern.cherry" = "Шие";
+
+/* State */
+"state.disconnected" = "Ажыратылған";
+"state.scanning" = "Сканерлеу...";
+"state.connecting" = "Қосылу...";
+"state.discovering_services" = "Сервистерді анықтау...";
+"state.connected" = "Қосылған";
+"state.reconnecting" = "Қайта қосылу (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetooth өшірілген. Жүйе параметрлерінде Bluetooth-ды қосыңыз.";
+"error.unauthorized" = "Bluetooth-ға қол жеткізуге рұқсат берілмеген.";
+"error.unsupported" = "Bluetooth LE бұл Mac-та қолдау көрсетілмейді.";
+"error.service_not_found" = "Бұл құрылғыда Pulse 5 BLE сервисі табылмады.";
+"error.characteristic_not_found" = "Pulse 5 BLE сипаттамалары табылмады.";
+"error.connection_failed" = "Қосылу қатесі: %@";
+"error.write_failed" = "Команданы жазу қатесі: %@";
+"error.disconnected" = "Динамик күтпеген жерден ажыратылды.";
+"error.unknown_device" = "Құрылғы табылғандар тізімінде жоқ.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";

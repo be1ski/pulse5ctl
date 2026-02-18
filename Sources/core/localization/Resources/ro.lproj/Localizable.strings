@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "Anulează";
+"general.connect" = "Conectare";
+"general.connected" = "Conectat";
+"general.disconnect" = "Deconectare";
+"general.quit" = "Ieșire";
+"general.dismiss" = "Închide";
+
+/* Hero */
+"hero.title" = "JBL Pulse 5";
+"hero.subtitle" = "Conectează-te pentru a controla\ntemele LED, luminozitatea și animațiile";
+"hero.scan_button" = "Caută difuzorul";
+"hero.searching" = "Se caută Pulse 5...";
+
+/* Controls */
+"controls.themes" = "Teme";
+"controls.patterns" = "Modele";
+"controls.color" = "Culoare";
+"controls.custom" = "Personalizat";
+"controls.color_loop" = "Buclă de culori";
+"controls.brightness" = "Luminozitate";
+"controls.body" = "Corp";
+"controls.projection" = "Proiecție";
+"controls.animation_speed" = "Viteza animației";
+"controls.speed" = "Viteză";
+"controls.speed_low" = "Mică";
+"controls.speed_mid" = "Medie";
+"controls.speed_high" = "Mare";
+
+/* Settings */
+"settings.title" = "Setări";
+"settings.auto_theme" = "Temă automată";
+"settings.when_music_plays" = "Când se redă muzică:";
+"settings.playing_theme" = "Temă de redare";
+"settings.when_idle" = "Când e inactiv:";
+"settings.idle_theme" = "Temă de inactivitate";
+"settings.language" = "Limbă";
+"settings.language_system" = "Implicit sistem";
+
+/* Color */
+"color.red" = "Roșu";
+"color.orange" = "Portocaliu";
+"color.yellow" = "Galben";
+"color.green" = "Verde";
+"color.cyan" = "Cyan";
+"color.blue" = "Albastru";
+"color.purple" = "Violet";
+"color.pink" = "Roz";
+"color.white" = "Alb";
+
+/* Theme */
+"theme.nature" = "Natură";
+"theme.party" = "Petrecere";
+"theme.spiritual" = "Spiritual";
+"theme.cocktail" = "Cocktail";
+"theme.weather" = "Vreme";
+"theme.canvas" = "Pânză";
+
+/* Pattern */
+"pattern.campfire" = "Foc de tabără";
+"pattern.northern_lights" = "Aurora boreală";
+"pattern.sea_wave" = "Val marin";
+"pattern.universe" = "Univers";
+"pattern.strobe" = "Stroboscop";
+"pattern.equalizer" = "Egalizator";
+"pattern.geometry" = "Geometrie";
+"pattern.spin" = "Rotire";
+"pattern.rainbow" = "Curcubeu";
+"pattern.dynamic_wave" = "Val dinamic";
+"pattern.lava" = "Lavă";
+"pattern.focus" = "Focus";
+"pattern.sky_sunny" = "Cer senin";
+"pattern.rain" = "Ploaie";
+"pattern.snow" = "Zăpadă";
+"pattern.thunder" = "Tunet";
+"pattern.cloud" = "Nor";
+"pattern.fruit_gin" = "Gin cu fructe";
+"pattern.mojito" = "Mojito";
+"pattern.tequila" = "Tequila";
+"pattern.cherry" = "Cireașă";
+
+/* State */
+"state.disconnected" = "Deconectat";
+"state.scanning" = "Se scanează...";
+"state.connecting" = "Se conectează...";
+"state.discovering_services" = "Se descoperă serviciile...";
+"state.connected" = "Conectat";
+"state.reconnecting" = "Reconectare (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetooth este oprit. Activează Bluetooth din Setări sistem.";
+"error.unauthorized" = "Accesul la Bluetooth nu este autorizat.";
+"error.unsupported" = "Bluetooth LE nu este compatibil cu acest Mac.";
+"error.service_not_found" = "Serviciul BLE Pulse 5 nu a fost găsit pe acest dispozitiv.";
+"error.characteristic_not_found" = "Caracteristicile BLE Pulse 5 nu au fost găsite.";
+"error.connection_failed" = "Conectarea a eșuat: %@";
+"error.write_failed" = "Scrierea comenzii a eșuat: %@";
+"error.disconnected" = "Difuzorul s-a deconectat neașteptat.";
+"error.unknown_device" = "Dispozitivul nu se mai află în lista de descoperire.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";

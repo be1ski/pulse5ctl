@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "取消";
+"general.connect" = "连接";
+"general.connected" = "已连接";
+"general.disconnect" = "断开连接";
+"general.quit" = "退出";
+"general.dismiss" = "关闭";
+
+/* Hero */
+"hero.title" = "JBL Pulse 5";
+"hero.subtitle" = "连接以控制\nLED 主题、亮度和动画";
+"hero.scan_button" = "搜索音箱";
+"hero.searching" = "正在搜索 Pulse 5...";
+
+/* Controls */
+"controls.themes" = "主题";
+"controls.patterns" = "图案";
+"controls.color" = "颜色";
+"controls.custom" = "自定义";
+"controls.color_loop" = "色彩循环";
+"controls.brightness" = "亮度";
+"controls.body" = "机身";
+"controls.projection" = "投影";
+"controls.animation_speed" = "动画速度";
+"controls.speed" = "速度";
+"controls.speed_low" = "低";
+"controls.speed_mid" = "中";
+"controls.speed_high" = "高";
+
+/* Settings */
+"settings.title" = "设置";
+"settings.auto_theme" = "自动主题";
+"settings.when_music_plays" = "播放音乐时：";
+"settings.playing_theme" = "播放主题";
+"settings.when_idle" = "空闲时：";
+"settings.idle_theme" = "空闲主题";
+"settings.language" = "语言";
+"settings.language_system" = "系统默认";
+
+/* Color */
+"color.red" = "红色";
+"color.orange" = "橙色";
+"color.yellow" = "黄色";
+"color.green" = "绿色";
+"color.cyan" = "青色";
+"color.blue" = "蓝色";
+"color.purple" = "紫色";
+"color.pink" = "粉色";
+"color.white" = "白色";
+
+/* Theme */
+"theme.nature" = "自然";
+"theme.party" = "派对";
+"theme.spiritual" = "禅意";
+"theme.cocktail" = "鸡尾酒";
+"theme.weather" = "天气";
+"theme.canvas" = "画布";
+
+/* Pattern */
+"pattern.campfire" = "篝火";
+"pattern.northern_lights" = "极光";
+"pattern.sea_wave" = "海浪";
+"pattern.universe" = "宇宙";
+"pattern.strobe" = "频闪";
+"pattern.equalizer" = "均衡器";
+"pattern.geometry" = "几何";
+"pattern.spin" = "旋转";
+"pattern.rainbow" = "彩虹";
+"pattern.dynamic_wave" = "动态波浪";
+"pattern.lava" = "熔岩";
+"pattern.focus" = "专注";
+"pattern.sky_sunny" = "晴空";
+"pattern.rain" = "雨";
+"pattern.snow" = "雪";
+"pattern.thunder" = "雷电";
+"pattern.cloud" = "云";
+"pattern.fruit_gin" = "果味金酒";
+"pattern.mojito" = "莫吉托";
+"pattern.tequila" = "龙舌兰";
+"pattern.cherry" = "樱桃";
+
+/* State */
+"state.disconnected" = "未连接";
+"state.scanning" = "正在扫描...";
+"state.connecting" = "正在连接...";
+"state.discovering_services" = "正在发现服务...";
+"state.connected" = "已连接";
+"state.reconnecting" = "正在重连 (%d/3)...";
+
+/* Error */
+"error.powered_off" = "蓝牙已关闭。请在系统设置中开启蓝牙。";
+"error.unauthorized" = "蓝牙访问未获授权。";
+"error.unsupported" = "此 Mac 不支持低功耗蓝牙。";
+"error.service_not_found" = "在此设备上未找到 Pulse 5 BLE 服务。";
+"error.characteristic_not_found" = "未找到 Pulse 5 BLE 特征。";
+"error.connection_failed" = "连接失败：%@";
+"error.write_failed" = "命令写入失败：%@";
+"error.disconnected" = "音箱意外断开连接。";
+"error.unknown_device" = "设备不再出现在发现列表中。";
+
+/* Format */
+"format.rssi" = "RSSI：%d dBm";

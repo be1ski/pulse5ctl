@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "रद्द करें";
+"general.connect" = "कनेक्ट करें";
+"general.connected" = "कनेक्टेड";
+"general.disconnect" = "डिस्कनेक्ट करें";
+"general.quit" = "बंद करें";
+"general.dismiss" = "खारिज करें";
+
+/* Hero */
+"hero.title" = "JBL Pulse 5";
+"hero.subtitle" = "LED थीम, ब्राइटनेस और\nएनिमेशन नियंत्रित करने के लिए कनेक्ट करें";
+"hero.scan_button" = "स्पीकर खोजें";
+"hero.searching" = "Pulse 5 खोज रहे हैं...";
+
+/* Controls */
+"controls.themes" = "थीम";
+"controls.patterns" = "पैटर्न";
+"controls.color" = "रंग";
+"controls.custom" = "कस्टम";
+"controls.color_loop" = "कलर लूप";
+"controls.brightness" = "ब्राइटनेस";
+"controls.body" = "बॉडी";
+"controls.projection" = "प्रोजेक्शन";
+"controls.animation_speed" = "एनिमेशन गति";
+"controls.speed" = "गति";
+"controls.speed_low" = "धीमी";
+"controls.speed_mid" = "मध्यम";
+"controls.speed_high" = "तेज़";
+
+/* Settings */
+"settings.title" = "सेटिंग्स";
+"settings.auto_theme" = "ऑटो थीम";
+"settings.when_music_plays" = "संगीत चलने पर:";
+"settings.playing_theme" = "प्लेइंग थीम";
+"settings.when_idle" = "निष्क्रिय होने पर:";
+"settings.idle_theme" = "निष्क्रिय थीम";
+"settings.language" = "भाषा";
+"settings.language_system" = "सिस्टम डिफ़ॉल्ट";
+
+/* Color */
+"color.red" = "लाल";
+"color.orange" = "नारंगी";
+"color.yellow" = "पीला";
+"color.green" = "हरा";
+"color.cyan" = "सियान";
+"color.blue" = "नीला";
+"color.purple" = "बैंगनी";
+"color.pink" = "गुलाबी";
+"color.white" = "सफ़ेद";
+
+/* Theme */
+"theme.nature" = "प्रकृति";
+"theme.party" = "पार्टी";
+"theme.spiritual" = "आध्यात्मिक";
+"theme.cocktail" = "कॉकटेल";
+"theme.weather" = "मौसम";
+"theme.canvas" = "कैनवास";
+
+/* Pattern */
+"pattern.campfire" = "कैम्पफ़ायर";
+"pattern.northern_lights" = "उत्तरी ध्रुवीय ज्योति";
+"pattern.sea_wave" = "समुद्री लहर";
+"pattern.universe" = "ब्रह्मांड";
+"pattern.strobe" = "स्ट्रोब";
+"pattern.equalizer" = "इक्वलाइज़र";
+"pattern.geometry" = "ज्यामिति";
+"pattern.spin" = "स्पिन";
+"pattern.rainbow" = "इंद्रधनुष";
+"pattern.dynamic_wave" = "डायनामिक वेव";
+"pattern.lava" = "लावा";
+"pattern.focus" = "फ़ोकस";
+"pattern.sky_sunny" = "धूप भरा आसमान";
+"pattern.rain" = "बारिश";
+"pattern.snow" = "बर्फ़";
+"pattern.thunder" = "गरज";
+"pattern.cloud" = "बादल";
+"pattern.fruit_gin" = "फ़्रूट जिन";
+"pattern.mojito" = "मोजीतो";
+"pattern.tequila" = "टकीला";
+"pattern.cherry" = "चेरी";
+
+/* State */
+"state.disconnected" = "डिस्कनेक्टेड";
+"state.scanning" = "स्कैन हो रहा है...";
+"state.connecting" = "कनेक्ट हो रहा है...";
+"state.discovering_services" = "सेवाएँ खोज रहे हैं...";
+"state.connected" = "कनेक्टेड";
+"state.reconnecting" = "फिर से कनेक्ट हो रहा है (%d/3)...";
+
+/* Error */
+"error.powered_off" = "ब्लूटूथ बंद है। सिस्टम सेटिंग्स में ब्लूटूथ चालू करें।";
+"error.unauthorized" = "ब्लूटूथ एक्सेस अधिकृत नहीं है।";
+"error.unsupported" = "इस Mac पर Bluetooth LE समर्थित नहीं है।";
+"error.service_not_found" = "इस डिवाइस पर Pulse 5 BLE सेवा नहीं मिली।";
+"error.characteristic_not_found" = "Pulse 5 BLE कैरेक्टरिस्टिक्स नहीं मिलीं।";
+"error.connection_failed" = "कनेक्शन विफल: %@";
+"error.write_failed" = "कमांड लिखने में विफल: %@";
+"error.disconnected" = "स्पीकर अनपेक्षित रूप से डिस्कनेक्ट हो गया।";
+"error.unknown_device" = "डिवाइस अब खोज सूची में नहीं है।";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";
