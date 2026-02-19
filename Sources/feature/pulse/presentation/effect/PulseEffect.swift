@@ -15,4 +15,5 @@ public enum PulseEffect: Equatable {
     case observeNowPlaying
     case saveAutoThemeSettings(AutoThemeSettings)
     case saveLedCustomization(LEDCustomization)
+    case saveLanguage(String?)
 }

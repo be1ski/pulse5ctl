@@ -16,6 +16,7 @@ public final class PulseEffectHandler {
     private let observeNowPlaying: ObserveNowPlayingUseCase
     private let saveAutoThemeSettings: (AutoThemeSettings) -> Void
     private let saveLedCustomization: (LEDCustomization) -> Void
+    private let saveLanguage: (String?) -> Void
 
     private var brightnessTask: Task<Void, Never>?
     private var ledPackageTask: Task<Void, Never>?
@@ -33,7 +34,8 @@ public final class PulseEffectHandler {
         requestPulseState: RequestPulseStateUseCase,
         observeNowPlaying: @escaping ObserveNowPlayingUseCase,
         saveAutoThemeSettings: @escaping (AutoThemeSettings) -> Void,
-        saveLedCustomization: @escaping (LEDCustomization) -> Void
+        saveLedCustomization: @escaping (LEDCustomization) -> Void,
+        saveLanguage: @escaping (String?) -> Void
     ) {
         self.observePulseEvents = observePulseEvents
         self.startPulseScan = startPulseScan
@@ -48,6 +50,7 @@ public final class PulseEffectHandler {
         self.observeNowPlaying = observeNowPlaying
         self.saveAutoThemeSettings = saveAutoThemeSettings
         self.saveLedCustomization = saveLedCustomization
+        self.saveLanguage = saveLanguage
     }
 
     public func handle(_ effect: PulseEffect) -> AsyncStream<PulseAction> {
@@ -128,6 +131,11 @@ public final class PulseEffectHandler {
         case let .saveLedCustomization(customization):
             return sideEffect {
                 self.saveLedCustomization(customization)
+            }
+
+        case let .saveLanguage(locale):
+            return sideEffect {
+                self.saveLanguage(locale)
             }
         }
     }

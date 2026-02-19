@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "გაუქმება";
+"general.connect" = "დაკავშირება";
+"general.connected" = "დაკავშირებულია";
+"general.disconnect" = "გათიშვა";
+"general.quit" = "გასვლა";
+"general.dismiss" = "დახურვა";
+
+/* Hero */
+"hero.title" = "JBL Pulse 5";
+"hero.subtitle" = "დაუკავშირდით სამართავად\nLED თემები, სიკაშკაშე და ანიმაციები";
+"hero.scan_button" = "დინამიკის ძიება";
+"hero.searching" = "Pulse 5-ის ძიება...";
+
+/* Controls */
+"controls.themes" = "თემები";
+"controls.patterns" = "შაბლონები";
+"controls.color" = "ფერი";
+"controls.custom" = "მორგებული";
+"controls.color_loop" = "ფერთა ციკლი";
+"controls.brightness" = "სიკაშკაშე";
+"controls.body" = "კორპუსი";
+"controls.projection" = "პროექცია";
+"controls.animation_speed" = "ანიმაციის სიჩქარე";
+"controls.speed" = "სიჩქარე";
+"controls.speed_low" = "დაბალი";
+"controls.speed_mid" = "საშუალო";
+"controls.speed_high" = "მაღალი";
+
+/* Settings */
+"settings.title" = "პარამეტრები";
+"settings.auto_theme" = "ავტო თემა";
+"settings.when_music_plays" = "მუსიკის დაკვრისას:";
+"settings.playing_theme" = "დაკვრის თემა";
+"settings.when_idle" = "უმოქმედობისას:";
+"settings.idle_theme" = "უმოქმედობის თემა";
+"settings.language" = "ენა";
+"settings.language_system" = "სისტემის ნაგულისხმევი";
+
+/* Color */
+"color.red" = "წითელი";
+"color.orange" = "ნარინჯისფერი";
+"color.yellow" = "ყვითელი";
+"color.green" = "მწვანე";
+"color.cyan" = "ცისფერი";
+"color.blue" = "ლურჯი";
+"color.purple" = "იისფერი";
+"color.pink" = "ვარდისფერი";
+"color.white" = "თეთრი";
+
+/* Theme */
+"theme.nature" = "ბუნება";
+"theme.party" = "წვეულება";
+"theme.spiritual" = "სულიერი";
+"theme.cocktail" = "კოქტეილი";
+"theme.weather" = "ამინდი";
+"theme.canvas" = "ტილო";
+
+/* Pattern */
+"pattern.campfire" = "კოცონი";
+"pattern.northern_lights" = "ჩრდილოეთის ნათება";
+"pattern.sea_wave" = "ზღვის ტალღა";
+"pattern.universe" = "სამყარო";
+"pattern.strobe" = "სტრობოსკოპი";
+"pattern.equalizer" = "ექვალაიზერი";
+"pattern.geometry" = "გეომეტრია";
+"pattern.spin" = "ტრიალი";
+"pattern.rainbow" = "ცისარტყელა";
+"pattern.dynamic_wave" = "დინამიური ტალღა";
+"pattern.lava" = "ლავა";
+"pattern.focus" = "ფოკუსი";
+"pattern.sky_sunny" = "მზიანი ცა";
+"pattern.rain" = "წვიმა";
+"pattern.snow" = "თოვლი";
+"pattern.thunder" = "ქუხილი";
+"pattern.cloud" = "ღრუბელი";
+"pattern.fruit_gin" = "ხილის ჯინი";
+"pattern.mojito" = "მოხიტო";
+"pattern.tequila" = "ტეკილა";
+"pattern.cherry" = "ალუბალი";
+
+/* State */
+"state.disconnected" = "გათიშულია";
+"state.scanning" = "სკანირება...";
+"state.connecting" = "დაკავშირება...";
+"state.discovering_services" = "სერვისების აღმოჩენა...";
+"state.connected" = "დაკავშირებულია";
+"state.reconnecting" = "ხელახლა დაკავშირება (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetooth გამორთულია. ჩართეთ Bluetooth სისტემის პარამეტრებში.";
+"error.unauthorized" = "Bluetooth-ზე წვდომა არ არის ავტორიზებული.";
+"error.unsupported" = "Bluetooth LE არ არის მხარდაჭერილი ამ Mac-ზე.";
+"error.service_not_found" = "Pulse 5 BLE სერვისი ვერ მოიძებნა ამ მოწყობილობაზე.";
+"error.characteristic_not_found" = "Pulse 5 BLE მახასიათებლები ვერ მოიძებნა.";
+"error.connection_failed" = "დაკავშირება ვერ მოხერხდა: %@";
+"error.write_failed" = "ბრძანების ჩაწერა ვერ მოხერხდა: %@";
+"error.disconnected" = "დინამიკი მოულოდნელად გაითიშა.";
+"error.unknown_device" = "მოწყობილობა აღარ არის აღმოჩენის სიაში.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";

@@ -1,3 +1,5 @@
+import CoreLocalization
+
 public enum LEDTheme: UInt8, CaseIterable, Identifiable, Codable {
     case nature = 0x01
     case party = 0x02
@@ -11,17 +13,17 @@ public enum LEDTheme: UInt8, CaseIterable, Identifiable, Codable {
     public var displayName: String {
         switch self {
         case .nature:
-            return "Nature"
+            return L10n.themeNature
         case .party:
-            return "Party"
+            return L10n.themeParty
         case .spiritual:
-            return "Spiritual"
+            return L10n.themeSpiritual
         case .cocktail:
-            return "Cocktail"
+            return L10n.themeCocktail
         case .weather:
-            return "Weather"
+            return L10n.themeWeather
         case .canvas:
-            return "Canvas"
+            return L10n.themeCanvas
         }
     }
 

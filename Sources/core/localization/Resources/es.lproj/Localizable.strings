@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "Cancelar";
+"general.connect" = "Conectar";
+"general.connected" = "Conectado";
+"general.disconnect" = "Desconectar";
+"general.quit" = "Salir";
+"general.dismiss" = "Cerrar";
+
+/* Hero */
+"hero.title" = "JBL Pulse 5";
+"hero.subtitle" = "Conéctate para controlar\ntemas LED, brillo y animaciones";
+"hero.scan_button" = "Buscar altavoz";
+"hero.searching" = "Buscando Pulse 5...";
+
+/* Controls */
+"controls.themes" = "Temas";
+"controls.patterns" = "Patrones";
+"controls.color" = "Color";
+"controls.custom" = "Personalizado";
+"controls.color_loop" = "Ciclo de colores";
+"controls.brightness" = "Brillo";
+"controls.body" = "Cuerpo";
+"controls.projection" = "Proyección";
+"controls.animation_speed" = "Velocidad de animación";
+"controls.speed" = "Velocidad";
+"controls.speed_low" = "Baja";
+"controls.speed_mid" = "Media";
+"controls.speed_high" = "Alta";
+
+/* Settings */
+"settings.title" = "Ajustes";
+"settings.auto_theme" = "Tema automático";
+"settings.when_music_plays" = "Al reproducir música:";
+"settings.playing_theme" = "Tema de reproducción";
+"settings.when_idle" = "En reposo:";
+"settings.idle_theme" = "Tema en reposo";
+"settings.language" = "Idioma";
+"settings.language_system" = "Predeterminado del sistema";
+
+/* Color */
+"color.red" = "Rojo";
+"color.orange" = "Naranja";
+"color.yellow" = "Amarillo";
+"color.green" = "Verde";
+"color.cyan" = "Cian";
+"color.blue" = "Azul";
+"color.purple" = "Púrpura";
+"color.pink" = "Rosa";
+"color.white" = "Blanco";
+
+/* Theme */
+"theme.nature" = "Naturaleza";
+"theme.party" = "Fiesta";
+"theme.spiritual" = "Espiritual";
+"theme.cocktail" = "Cóctel";
+"theme.weather" = "Clima";
+"theme.canvas" = "Lienzo";
+
+/* Pattern */
+"pattern.campfire" = "Fogata";
+"pattern.northern_lights" = "Aurora boreal";
+"pattern.sea_wave" = "Ola marina";
+"pattern.universe" = "Universo";
+"pattern.strobe" = "Estroboscópico";
+"pattern.equalizer" = "Ecualizador";
+"pattern.geometry" = "Geometría";
+"pattern.spin" = "Giro";
+"pattern.rainbow" = "Arcoíris";
+"pattern.dynamic_wave" = "Onda dinámica";
+"pattern.lava" = "Lava";
+"pattern.focus" = "Enfoque";
+"pattern.sky_sunny" = "Cielo soleado";
+"pattern.rain" = "Lluvia";
+"pattern.snow" = "Nieve";
+"pattern.thunder" = "Trueno";
+"pattern.cloud" = "Nube";
+"pattern.fruit_gin" = "Fruit Gin";
+"pattern.mojito" = "Mojito";
+"pattern.tequila" = "Tequila";
+"pattern.cherry" = "Cereza";
+
+/* State */
+"state.disconnected" = "Desconectado";
+"state.scanning" = "Buscando...";
+"state.connecting" = "Conectando...";
+"state.discovering_services" = "Descubriendo servicios...";
+"state.connected" = "Conectado";
+"state.reconnecting" = "Reconectando (%d/3)...";
+
+/* Error */
+"error.powered_off" = "El Bluetooth está apagado. Activa el Bluetooth en Ajustes del Sistema.";
+"error.unauthorized" = "El acceso a Bluetooth no está autorizado.";
+"error.unsupported" = "Bluetooth LE no es compatible con este Mac.";
+"error.service_not_found" = "No se encontró el servicio BLE de Pulse 5 en este dispositivo.";
+"error.characteristic_not_found" = "No se encontraron las características BLE de Pulse 5.";
+"error.connection_failed" = "Error de conexión: %@";
+"error.write_failed" = "Error al enviar comando: %@";
+"error.disconnected" = "El altavoz se desconectó inesperadamente.";
+"error.unknown_device" = "El dispositivo ya no está en la lista de descubrimiento.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";

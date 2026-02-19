@@ -1,3 +1,4 @@
+import CoreLocalization
 import FeaturePulseDomain
 import SwiftUI
 
@@ -21,14 +22,14 @@ public struct SettingsView: View {
                 }
                 .buttonStyle(.plain)
 
-                Text("Settings")
+                Text(L10n.settingsTitle)
                     .font(.headline)
 
                 Spacer()
             }
 
             HStack {
-                Text("Auto Theme")
+                Text(L10n.settingsAutoTheme)
                 Spacer()
                 Toggle(
                     "",
@@ -42,11 +43,11 @@ public struct SettingsView: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("When music plays:")
+                Text(L10n.settingsWhenMusicPlays)
                     .font(.subheadline)
                     .foregroundStyle(isEnabled ? .primary : .secondary)
 
-                Picker("Playing theme", selection: Binding(
+                Picker(L10n.settingsPlayingTheme, selection: Binding(
                     get: { feature.state.autoThemeSettings.playingTheme },
                     set: { feature.send(.autoTheme(.setPlayingTheme($0))) }
                 )) {
@@ -59,11 +60,11 @@ public struct SettingsView: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("When idle:")
+                Text(L10n.settingsWhenIdle)
                     .font(.subheadline)
                     .foregroundStyle(isEnabled ? .primary : .secondary)
 
-                Picker("Idle theme", selection: Binding(
+                Picker(L10n.settingsIdleTheme, selection: Binding(
                     get: { feature.state.autoThemeSettings.idleTheme },
                     set: { feature.send(.autoTheme(.setIdleTheme($0))) }
                 )) {
@@ -74,6 +75,25 @@ public struct SettingsView: View {
                 .labelsHidden()
                 .disabled(!isEnabled)
             }
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text(L10n.settingsLanguage)
+                    .font(.subheadline)
+
+                Picker(L10n.settingsLanguage, selection: Binding(
+                    get: { feature.state.selectedLanguage ?? "" },
+                    set: { feature.send(.settings(.setLanguage($0.isEmpty ? nil : $0))) }
+                )) {
+                    Text(L10n.settingsLanguageSystem).tag("")
+                    Divider()
+                    ForEach(L10n.supportedLocales, id: \.self) { code in
+                        Text(Self.autonym(for: code)).tag(code)
+                    }
+                }
+                .labelsHidden()
+            }
         }
         .padding(16)
         .frame(width: 340)
@@ -81,5 +101,10 @@ public struct SettingsView: View {
 
     private var isEnabled: Bool {
         feature.state.autoThemeSettings.enabled
+    }
+
+    private static func autonym(for code: String) -> String {
+        let locale = Locale(identifier: code)
+        return locale.localizedString(forIdentifier: code)?.localizedCapitalized ?? code
     }
 }

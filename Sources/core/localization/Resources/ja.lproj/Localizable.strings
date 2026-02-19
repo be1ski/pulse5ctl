@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "キャンセル";
+"general.connect" = "接続";
+"general.connected" = "接続済み";
+"general.disconnect" = "切断";
+"general.quit" = "終了";
+"general.dismiss" = "閉じる";
+
+/* Hero */
+"hero.title" = "JBL Pulse 5";
+"hero.subtitle" = "接続してLEDテーマ、明るさ、\nアニメーションをコントロール";
+"hero.scan_button" = "スピーカーを検索";
+"hero.searching" = "Pulse 5 を検索中...";
+
+/* Controls */
+"controls.themes" = "テーマ";
+"controls.patterns" = "パターン";
+"controls.color" = "カラー";
+"controls.custom" = "カスタム";
+"controls.color_loop" = "カラーループ";
+"controls.brightness" = "明るさ";
+"controls.body" = "本体";
+"controls.projection" = "プロジェクション";
+"controls.animation_speed" = "アニメーション速度";
+"controls.speed" = "速度";
+"controls.speed_low" = "低";
+"controls.speed_mid" = "中";
+"controls.speed_high" = "高";
+
+/* Settings */
+"settings.title" = "設定";
+"settings.auto_theme" = "自動テーマ";
+"settings.when_music_plays" = "音楽再生時:";
+"settings.playing_theme" = "再生中のテーマ";
+"settings.when_idle" = "待機時:";
+"settings.idle_theme" = "待機テーマ";
+"settings.language" = "言語";
+"settings.language_system" = "システムデフォルト";
+
+/* Color */
+"color.red" = "レッド";
+"color.orange" = "オレンジ";
+"color.yellow" = "イエロー";
+"color.green" = "グリーン";
+"color.cyan" = "シアン";
+"color.blue" = "ブルー";
+"color.purple" = "パープル";
+"color.pink" = "ピンク";
+"color.white" = "ホワイト";
+
+/* Theme */
+"theme.nature" = "ネイチャー";
+"theme.party" = "パーティー";
+"theme.spiritual" = "スピリチュアル";
+"theme.cocktail" = "カクテル";
+"theme.weather" = "ウェザー";
+"theme.canvas" = "キャンバス";
+
+/* Pattern */
+"pattern.campfire" = "キャンプファイヤー";
+"pattern.northern_lights" = "オーロラ";
+"pattern.sea_wave" = "海の波";
+"pattern.universe" = "宇宙";
+"pattern.strobe" = "ストロボ";
+"pattern.equalizer" = "イコライザー";
+"pattern.geometry" = "ジオメトリー";
+"pattern.spin" = "スピン";
+"pattern.rainbow" = "レインボー";
+"pattern.dynamic_wave" = "ダイナミックウェーブ";
+"pattern.lava" = "溶岩";
+"pattern.focus" = "フォーカス";
+"pattern.sky_sunny" = "晴天";
+"pattern.rain" = "雨";
+"pattern.snow" = "雪";
+"pattern.thunder" = "雷";
+"pattern.cloud" = "雲";
+"pattern.fruit_gin" = "フルーツジン";
+"pattern.mojito" = "モヒート";
+"pattern.tequila" = "テキーラ";
+"pattern.cherry" = "チェリー";
+
+/* State */
+"state.disconnected" = "未接続";
+"state.scanning" = "スキャン中...";
+"state.connecting" = "接続中...";
+"state.discovering_services" = "サービスを検出中...";
+"state.connected" = "接続済み";
+"state.reconnecting" = "再接続中 (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetoothがオフです。システム設定でBluetoothを有効にしてください。";
+"error.unauthorized" = "Bluetoothへのアクセスが許可されていません。";
+"error.unsupported" = "このMacではBluetooth LEがサポートされていません。";
+"error.service_not_found" = "このデバイスでPulse 5 BLEサービスが見つかりません。";
+"error.characteristic_not_found" = "Pulse 5 BLEキャラクタリスティックが見つかりません。";
+"error.connection_failed" = "接続に失敗しました: %@";
+"error.write_failed" = "コマンドの書き込みに失敗しました: %@";
+"error.disconnected" = "スピーカーが予期せず切断されました。";
+"error.unknown_device" = "デバイスが検出リストにありません。";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";

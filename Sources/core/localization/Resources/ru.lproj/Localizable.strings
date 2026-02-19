@@ -1,0 +1,102 @@
+/* General */
+"general.cancel" = "Отмена";
+"general.connect" = "Подключить";
+"general.connected" = "Подключено";
+"general.disconnect" = "Отключить";
+"general.quit" = "Выход";
+"general.dismiss" = "Закрыть";
+
+/* Hero */
+"hero.title" = "JBL Pulse 5";
+"hero.subtitle" = "Подключитесь для управления\nLED-темами, яркостью и анимацией";
+"hero.scan_button" = "Найти колонку";
+"hero.searching" = "Поиск Pulse 5...";
+
+/* Controls */
+"controls.themes" = "Темы";
+"controls.patterns" = "Узоры";
+"controls.color" = "Цвет";
+"controls.custom" = "Свой";
+"controls.color_loop" = "Перелив цветов";
+"controls.brightness" = "Яркость";
+"controls.body" = "Корпус";
+"controls.projection" = "Проекция";
+"controls.animation_speed" = "Скорость анимации";
+"controls.speed" = "Скорость";
+"controls.speed_low" = "Низкая";
+"controls.speed_mid" = "Средняя";
+"controls.speed_high" = "Высокая";
+
+/* Settings */
+"settings.title" = "Настройки";
+"settings.auto_theme" = "Автотема";
+"settings.when_music_plays" = "При воспроизведении музыки:";
+"settings.playing_theme" = "Тема воспроизведения";
+"settings.when_idle" = "В режиме ожидания:";
+"settings.idle_theme" = "Тема ожидания";
+"settings.language" = "Язык";
+"settings.language_system" = "Системный";
+
+/* Color */
+"color.red" = "Красный";
+"color.orange" = "Оранжевый";
+"color.yellow" = "Жёлтый";
+"color.green" = "Зелёный";
+"color.cyan" = "Голубой";
+"color.blue" = "Синий";
+"color.purple" = "Фиолетовый";
+"color.pink" = "Розовый";
+"color.white" = "Белый";
+
+/* Theme */
+"theme.nature" = "Природа";
+"theme.party" = "Вечеринка";
+"theme.spiritual" = "Духовность";
+"theme.cocktail" = "Коктейль";
+"theme.weather" = "Погода";
+"theme.canvas" = "Холст";
+
+/* Pattern */
+"pattern.campfire" = "Костёр";
+"pattern.northern_lights" = "Северное сияние";
+"pattern.sea_wave" = "Морская волна";
+"pattern.universe" = "Вселенная";
+"pattern.strobe" = "Стробоскоп";
+"pattern.equalizer" = "Эквалайзер";
+"pattern.geometry" = "Геометрия";
+"pattern.spin" = "Вращение";
+"pattern.rainbow" = "Радуга";
+"pattern.dynamic_wave" = "Динамическая волна";
+"pattern.lava" = "Лава";
+"pattern.focus" = "Фокус";
+"pattern.sky_sunny" = "Ясное небо";
+"pattern.rain" = "Дождь";
+"pattern.snow" = "Снег";
+"pattern.thunder" = "Гроза";
+"pattern.cloud" = "Облако";
+"pattern.fruit_gin" = "Фруктовый джин";
+"pattern.mojito" = "Мохито";
+"pattern.tequila" = "Текила";
+"pattern.cherry" = "Вишня";
+
+/* State */
+"state.disconnected" = "Отключено";
+"state.scanning" = "Сканирование...";
+"state.connecting" = "Подключение...";
+"state.discovering_services" = "Обнаружение сервисов...";
+"state.connected" = "Подключено";
+"state.reconnecting" = "Переподключение (%d/3)...";
+
+/* Error */
+"error.powered_off" = "Bluetooth выключен. Включите Bluetooth в Системных настройках.";
+"error.unauthorized" = "Доступ к Bluetooth не авторизован.";
+"error.unsupported" = "Bluetooth LE не поддерживается на этом Mac.";
+"error.service_not_found" = "BLE-сервис Pulse 5 не найден на этом устройстве.";
+"error.characteristic_not_found" = "BLE-характеристики Pulse 5 не найдены.";
+"error.connection_failed" = "Ошибка подключения: %@";
+"error.write_failed" = "Ошибка записи команды: %@";
+"error.disconnected" = "Колонка неожиданно отключилась.";
+"error.unknown_device" = "Устройство больше не в списке обнаруженных.";
+
+/* Format */
+"format.rssi" = "RSSI: %d dBm";

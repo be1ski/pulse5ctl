@@ -14,6 +14,9 @@ public let pulseReducer: Reducer<PulseAction, PulseState, PulseEffect, Never> = 
     case let .autoTheme(autoThemeAction):
         pulseAutoThemeReducer(autoThemeAction, state, context)
 
+    case let .settings(settingsAction):
+        pulseSettingsReducer(settingsAction, state, context)
+
     case let .system(systemAction):
         pulseSystemReducer(systemAction, state, context)
     }

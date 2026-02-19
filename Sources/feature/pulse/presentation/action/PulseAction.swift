@@ -7,6 +7,7 @@ public enum PulseAction: ElmAction, Equatable {
     case connection(Connection)
     case controls(Controls)
     case autoTheme(AutoTheme)
+    case settings(Settings)
     case system(System)
 
     public enum Lifecycle: Equatable {
@@ -36,6 +37,10 @@ public enum PulseAction: ElmAction, Equatable {
         case toggleEnabled
         case setPlayingTheme(LEDTheme)
         case setIdleTheme(LEDTheme)
+    }
+
+    public enum Settings: Equatable {
+        case setLanguage(String?)
     }
 
     public enum System: Equatable {

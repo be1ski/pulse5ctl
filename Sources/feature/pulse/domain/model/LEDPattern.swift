@@ -1,3 +1,5 @@
+import CoreLocalization
+
 public enum LEDPattern: UInt8, CaseIterable, Identifiable, Hashable, Codable {
     // Nature
     case campfire = 0x01
@@ -34,27 +36,27 @@ public enum LEDPattern: UInt8, CaseIterable, Identifiable, Hashable, Codable {
 
     public var displayName: String {
         switch self {
-        case .campfire: return "Campfire"
-        case .northernLights: return "Northern Lights"
-        case .seaWave: return "Sea Wave"
-        case .universe: return "Universe"
-        case .strobe: return "Strobe"
-        case .equalizer: return "Equalizer"
-        case .geometry: return "Geometry"
-        case .spin: return "Spin"
-        case .rainbow: return "Rainbow"
-        case .dynamicWave: return "Dynamic Wave"
-        case .lava: return "Lava"
-        case .focus: return "Focus"
-        case .skySunny: return "Sky Sunny"
-        case .rain: return "Rain"
-        case .snow: return "Snow"
-        case .thunder: return "Thunder"
-        case .cloud: return "Cloud"
-        case .fruitGin: return "Fruit Gin"
-        case .mojito: return "Mojito"
-        case .tequila: return "Tequila"
-        case .cherry: return "Cherry"
+        case .campfire: return L10n.patternCampfire
+        case .northernLights: return L10n.patternNorthernLights
+        case .seaWave: return L10n.patternSeaWave
+        case .universe: return L10n.patternUniverse
+        case .strobe: return L10n.patternStrobe
+        case .equalizer: return L10n.patternEqualizer
+        case .geometry: return L10n.patternGeometry
+        case .spin: return L10n.patternSpin
+        case .rainbow: return L10n.patternRainbow
+        case .dynamicWave: return L10n.patternDynamicWave
+        case .lava: return L10n.patternLava
+        case .focus: return L10n.patternFocus
+        case .skySunny: return L10n.patternSkySunny
+        case .rain: return L10n.patternRain
+        case .snow: return L10n.patternSnow
+        case .thunder: return L10n.patternThunder
+        case .cloud: return L10n.patternCloud
+        case .fruitGin: return L10n.patternFruitGin
+        case .mojito: return L10n.patternMojito
+        case .tequila: return L10n.patternTequila
+        case .cherry: return L10n.patternCherry
         }
     }
 

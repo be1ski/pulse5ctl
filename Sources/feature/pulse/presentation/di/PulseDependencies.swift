@@ -17,6 +17,8 @@ public struct PulseDependencies {
     public let saveAutoThemeSettings: (AutoThemeSettings) -> Void
     public let loadLedCustomization: () -> LEDCustomization
     public let saveLedCustomization: (LEDCustomization) -> Void
+    public let loadLanguage: () -> String?
+    public let saveLanguage: (String?) -> Void
 
     public init(
         observePulseEvents: ObservePulseEventsUseCase,
@@ -34,7 +36,9 @@ public struct PulseDependencies {
         loadAutoThemeSettings: @escaping () -> AutoThemeSettings,
         saveAutoThemeSettings: @escaping (AutoThemeSettings) -> Void,
         loadLedCustomization: @escaping () -> LEDCustomization,
-        saveLedCustomization: @escaping (LEDCustomization) -> Void
+        saveLedCustomization: @escaping (LEDCustomization) -> Void,
+        loadLanguage: @escaping () -> String?,
+        saveLanguage: @escaping (String?) -> Void
     ) {
         self.observePulseEvents = observePulseEvents
         self.loadPulseSnapshot = loadPulseSnapshot
@@ -52,5 +56,7 @@ public struct PulseDependencies {
         self.saveAutoThemeSettings = saveAutoThemeSettings
         self.loadLedCustomization = loadLedCustomization
         self.saveLedCustomization = saveLedCustomization
+        self.loadLanguage = loadLanguage
+        self.saveLanguage = saveLanguage
     }
 }

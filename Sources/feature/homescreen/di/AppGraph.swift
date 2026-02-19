@@ -11,6 +11,7 @@ public final class AppGraph {
 
     private static let autoThemeKey = "autoThemeSettings"
     private static let ledCustomizationKey = "ledCustomization"
+    private static let languageKey = "selectedLanguage"
 
     private init() {
         let repository = PulseSpeakerRepositoryImpl()
@@ -51,6 +52,16 @@ public final class AppGraph {
             saveLedCustomization: { customization in
                 if let data = try? JSONEncoder().encode(customization) {
                     UserDefaults.standard.set(data, forKey: AppGraph.ledCustomizationKey)
+                }
+            },
+            loadLanguage: {
+                UserDefaults.standard.string(forKey: AppGraph.languageKey)
+            },
+            saveLanguage: { locale in
+                if let locale {
+                    UserDefaults.standard.set(locale, forKey: AppGraph.languageKey)
+                } else {
+                    UserDefaults.standard.removeObject(forKey: AppGraph.languageKey)
                 }
             }
         )

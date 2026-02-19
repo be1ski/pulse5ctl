@@ -1,3 +1,4 @@
+import CoreLocalization
 import Foundation
 
 enum BluetoothError: LocalizedError {
@@ -14,23 +15,23 @@ enum BluetoothError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .poweredOff:
-            return "Bluetooth is powered off. Enable Bluetooth in System Settings."
+            return L10n.errorPoweredOff
         case .unauthorized:
-            return "Bluetooth access is not authorized."
+            return L10n.errorUnauthorized
         case .unsupported:
-            return "Bluetooth LE is not supported on this Mac."
+            return L10n.errorUnsupported
         case .serviceNotFound:
-            return "Pulse 5 BLE service not found on this device."
+            return L10n.errorServiceNotFound
         case .characteristicNotFound:
-            return "Pulse 5 BLE characteristics were not found."
+            return L10n.errorCharacteristicNotFound
         case let .connectionFailed(reason):
-            return "Connection failed: \(reason)"
+            return L10n.errorConnectionFailed(reason)
         case let .writeFailed(reason):
-            return "Command write failed: \(reason)"
+            return L10n.errorWriteFailed(reason)
         case .disconnected:
-            return "Speaker disconnected unexpectedly."
+            return L10n.errorDisconnected
         case .unknownDevice:
-            return "Device is no longer in discovery list."
+            return L10n.errorUnknownDevice
         }
     }
 }

@@ -1,4 +1,5 @@
 import AppKit
+import CoreLocalization
 import FeaturePulseDomain
 import SwiftUI
 
@@ -57,10 +58,10 @@ public struct PulseMenuView: View {
                 .foregroundStyle(.secondary)
                 .padding(.top, 8)
 
-            Text("JBL Pulse 5")
+            Text(L10n.heroTitle)
                 .font(.headline)
 
-            Text("Connect to control\nLED themes, brightness and animations")
+            Text(L10n.heroSubtitle)
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -68,7 +69,7 @@ public struct PulseMenuView: View {
             Button {
                 feature.send(.connection(.connectTapped))
             } label: {
-                Label("Scan for Speaker", systemImage: "magnifyingglass")
+                Label(L10n.heroScanButton, systemImage: "magnifyingglass")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
@@ -86,7 +87,7 @@ public struct PulseMenuView: View {
 
                 Spacer()
 
-                Button("Cancel") {
+                Button(L10n.generalCancel) {
                     feature.send(.connection(.disconnectTapped))
                 }
                 .buttonStyle(.bordered)
@@ -97,7 +98,7 @@ public struct PulseMenuView: View {
                 HStack(spacing: 8) {
                     ProgressView()
                         .controlSize(.small)
-                    Text("Searching for Pulse 5...")
+                    Text(L10n.heroSearching)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -120,13 +121,13 @@ public struct PulseMenuView: View {
                                         .fontWeight(device.hasJBLService ? .semibold : .regular)
                                 }
 
-                                Text("RSSI: \(device.rssi) dBm")
+                                Text(L10n.formatRSSI(device.rssi))
                                     .font(.caption2)
                                     .foregroundStyle(.secondary)
                             }
 
                             Spacer()
-                            Text("Connect")
+                            Text(L10n.generalConnect)
                                 .font(.caption)
                                 .foregroundStyle(.blue)
                         }
@@ -170,7 +171,7 @@ public struct PulseMenuView: View {
                 .foregroundStyle(.green)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("Connected")
+                Text(L10n.generalConnected)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
@@ -192,11 +193,11 @@ public struct PulseMenuView: View {
             .foregroundStyle(.secondary)
 
             Menu {
-                Button("Disconnect") {
+                Button(L10n.generalDisconnect) {
                     feature.send(.connection(.disconnectTapped))
                 }
                 Divider()
-                Button("Quit") {
+                Button(L10n.generalQuit) {
                     NSApplication.shared.terminate(nil)
                 }
             } label: {
@@ -211,7 +212,7 @@ public struct PulseMenuView: View {
 
     private var themesSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Themes")
+            Text(L10n.controlsThemes)
                 .font(.headline)
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
@@ -261,7 +262,7 @@ public struct PulseMenuView: View {
         let activeSet = state.activePatternsForTheme(theme)
 
         return VStack(alignment: .leading, spacing: 8) {
-            Text("Patterns")
+            Text(L10n.controlsPatterns)
                 .font(.headline)
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 6) {
@@ -299,19 +300,19 @@ public struct PulseMenuView: View {
 
     private var colorSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Color")
+            Text(L10n.controlsColor)
                 .font(.headline)
 
             let swatches: [(String, LEDColor)] = [
-                ("Red", LEDColor(red: 0xFF, green: 0x00, blue: 0x00)),
-                ("Orange", LEDColor(red: 0xFF, green: 0x8C, blue: 0x00)),
-                ("Yellow", LEDColor(red: 0xFF, green: 0xFF, blue: 0x00)),
-                ("Green", LEDColor(red: 0x00, green: 0xFF, blue: 0x00)),
-                ("Cyan", LEDColor(red: 0x00, green: 0xFF, blue: 0xFF)),
-                ("Blue", LEDColor(red: 0x00, green: 0x00, blue: 0xFF)),
-                ("Purple", LEDColor(red: 0x80, green: 0x00, blue: 0xFF)),
-                ("Pink", LEDColor(red: 0xFF, green: 0x00, blue: 0x80)),
-                ("White", LEDColor(red: 0xFF, green: 0xFF, blue: 0xFF)),
+                (L10n.colorRed, LEDColor(red: 0xFF, green: 0x00, blue: 0x00)),
+                (L10n.colorOrange, LEDColor(red: 0xFF, green: 0x8C, blue: 0x00)),
+                (L10n.colorYellow, LEDColor(red: 0xFF, green: 0xFF, blue: 0x00)),
+                (L10n.colorGreen, LEDColor(red: 0x00, green: 0xFF, blue: 0x00)),
+                (L10n.colorCyan, LEDColor(red: 0x00, green: 0xFF, blue: 0xFF)),
+                (L10n.colorBlue, LEDColor(red: 0x00, green: 0x00, blue: 0xFF)),
+                (L10n.colorPurple, LEDColor(red: 0x80, green: 0x00, blue: 0xFF)),
+                (L10n.colorPink, LEDColor(red: 0xFF, green: 0x00, blue: 0x80)),
+                (L10n.colorWhite, LEDColor(red: 0xFF, green: 0xFF, blue: 0xFF)),
             ]
 
             HStack(spacing: 6) {
@@ -349,7 +350,7 @@ public struct PulseMenuView: View {
 
             HStack(spacing: 12) {
                 ColorPicker(
-                    "Custom",
+                    L10n.controlsCustom,
                     selection: Binding(
                         get: {
                             Color(
@@ -378,7 +379,7 @@ public struct PulseMenuView: View {
                 Spacer()
 
                 Toggle(
-                    "Color Loop",
+                    L10n.controlsColorLoop,
                     isOn: Binding(
                         get: { state.colorEffect == .colorLoop },
                         set: { isOn in
@@ -395,7 +396,7 @@ public struct PulseMenuView: View {
 
     private var brightnessSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Brightness")
+            Text(L10n.controlsBrightness)
                 .font(.headline)
 
             HStack(spacing: 10) {
@@ -418,7 +419,7 @@ public struct PulseMenuView: View {
 
             HStack(spacing: 12) {
                 Toggle(
-                    "Body",
+                    L10n.controlsBody,
                     isOn: Binding(
                         get: { state.bodyLightOn },
                         set: { _ in feature.send(.controls(.toggleBodyLight)) }
@@ -428,7 +429,7 @@ public struct PulseMenuView: View {
                 .controlSize(.small)
 
                 Toggle(
-                    "Projection",
+                    L10n.controlsProjection,
                     isOn: Binding(
                         get: { state.projectionOn },
                         set: { _ in feature.send(.controls(.toggleProjection)) }
@@ -444,16 +445,16 @@ public struct PulseMenuView: View {
 
     private var speedSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Animation Speed")
+            Text(L10n.controlsAnimationSpeed)
                 .font(.headline)
 
-            Picker("Speed", selection: Binding(
+            Picker(L10n.controlsSpeed, selection: Binding(
                 get: { state.speed },
                 set: { feature.send(.controls(.setSpeed($0))) }
             )) {
-                Text("Low").tag(UInt8(1))
-                Text("Mid").tag(UInt8(2))
-                Text("High").tag(UInt8(3))
+                Text(L10n.controlsSpeedLow).tag(UInt8(1))
+                Text(L10n.controlsSpeedMid).tag(UInt8(2))
+                Text(L10n.controlsSpeedHigh).tag(UInt8(3))
             }
             .pickerStyle(.segmented)
             .labelsHidden()
@@ -468,7 +469,7 @@ public struct PulseMenuView: View {
                 .font(.caption)
                 .foregroundStyle(.red)
 
-            Button("Dismiss") {
+            Button(L10n.generalDismiss) {
                 feature.send(.system(.dismissError))
             }
             .buttonStyle(.plain)
@@ -477,7 +478,7 @@ public struct PulseMenuView: View {
     }
 
     private var quitButton: some View {
-        Button("Quit") {
+        Button(L10n.generalQuit) {
             NSApplication.shared.terminate(nil)
         }
         .buttonStyle(.plain)

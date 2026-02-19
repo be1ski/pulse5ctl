@@ -1,3 +1,5 @@
+import CoreLocalization
+
 public enum ConnectionState: Equatable {
     case disconnected
     case scanning
@@ -9,17 +11,17 @@ public enum ConnectionState: Equatable {
     public var displayText: String {
         switch self {
         case .disconnected:
-            return "Disconnected"
+            return L10n.stateDisconnected
         case .scanning:
-            return "Scanning..."
+            return L10n.stateScanning
         case .connecting:
-            return "Connecting..."
+            return L10n.stateConnecting
         case .discoveringServices:
-            return "Discovering services..."
+            return L10n.stateDiscoveringServices
         case .connected:
-            return "Connected"
+            return L10n.stateConnected
         case let .reconnecting(attempt):
-            return "Reconnecting (\(attempt)/3)..."
+            return L10n.stateReconnecting(attempt)
         }
     }
 

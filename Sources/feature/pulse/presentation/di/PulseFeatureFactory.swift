@@ -1,3 +1,4 @@
+import CoreLocalization
 import FeaturePulseDomain
 
 public enum PulseFeatureFactory {
@@ -6,6 +7,8 @@ public enum PulseFeatureFactory {
         let snapshot = dependencies.loadPulseSnapshot()
         let autoThemeSettings = dependencies.loadAutoThemeSettings()
         let ledCustomization = dependencies.loadLedCustomization()
+        let savedLanguage = dependencies.loadLanguage()
+        L10n.overrideLocale = savedLanguage
 
         let effectHandler = PulseEffectHandler(
             observePulseEvents: dependencies.observePulseEvents,
@@ -20,7 +23,8 @@ public enum PulseFeatureFactory {
             requestPulseState: dependencies.requestPulseState,
             observeNowPlaying: dependencies.observeNowPlaying,
             saveAutoThemeSettings: dependencies.saveAutoThemeSettings,
-            saveLedCustomization: dependencies.saveLedCustomization
+            saveLedCustomization: dependencies.saveLedCustomization,
+            saveLanguage: dependencies.saveLanguage
         )
 
         let feature = PulseFeature(
@@ -38,7 +42,8 @@ public enum PulseFeatureFactory {
                 autoThemeSettings: autoThemeSettings,
                 activePatterns: ledCustomization.activePatternsMap(),
                 colorEffect: ledCustomization.colorEffect,
-                customColor: ledCustomization.customColor
+                customColor: ledCustomization.customColor,
+                selectedLanguage: savedLanguage
             ),
             reducer: pulseReducer,
             effectHandler: effectHandler.handle
