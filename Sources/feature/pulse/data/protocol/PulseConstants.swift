@@ -30,6 +30,7 @@ enum PulseConstants {
     static let cmdRetLedMovementSpeed: UInt8 = 0x8F
 
     static let cmdSwitchLedPackage: UInt8 = 0x90
+    static let cmdPreviewPattern: UInt8 = 0x91
 
     static let minBrightness: UInt8 = 20
     static let maxBrightness: UInt8 = 80

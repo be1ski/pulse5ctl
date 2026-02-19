@@ -82,6 +82,22 @@ public final class PulseSpeakerRepositoryImpl: NSObject, PulseSpeakerRepository 
         bluetoothManager.write(PulseProtocol.setMovementSpeed(speed))
     }
 
+    public func setLedPackage(theme: LEDTheme, activePatterns: [LEDPattern], allPatterns: [LEDPattern], colorEffect: ColorEffect, color: LEDColor) {
+        snapshot.selectedTheme = theme
+        bluetoothManager.write(
+            PulseProtocol.setLedPackage(
+                packageID: theme.rawValue,
+                activePatterns: activePatterns.map(\.rawValue),
+                allPatterns: allPatterns.map(\.rawValue),
+                colorEffect: colorEffect.rawValue,
+                red: color.red,
+                green: color.green,
+                blue: color.blue
+            )
+        )
+        emit(.theme(theme))
+    }
+
     public func requestCurrentState() {
         bluetoothManager.write(PulseProtocol.requestSpeakerInfo())
 

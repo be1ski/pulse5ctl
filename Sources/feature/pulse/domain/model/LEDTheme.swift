@@ -25,6 +25,17 @@ public enum LEDTheme: UInt8, CaseIterable, Identifiable, Codable {
         }
     }
 
+    public var patterns: [LEDPattern] {
+        switch self {
+        case .nature: return [.campfire, .northernLights, .seaWave, .universe]
+        case .party: return [.strobe, .equalizer, .geometry, .spin, .rainbow]
+        case .spiritual: return [.dynamicWave, .lava, .focus]
+        case .cocktail: return [.fruitGin, .mojito, .tequila, .cherry]
+        case .weather: return [.skySunny, .rain, .snow, .thunder, .cloud]
+        case .canvas: return []
+        }
+    }
+
     public var sfSymbol: String {
         switch self {
         case .nature:

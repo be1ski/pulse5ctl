@@ -46,6 +46,36 @@ enum PulseProtocol {
         Data([PulseConstants.header, PulseConstants.cmdReqLedPackageInfo, 0x00])
     }
 
+    static func setLedPackage(
+        packageID: UInt8,
+        activePatterns: [UInt8],
+        allPatterns: [UInt8],
+        colorEffect: UInt8,
+        red: UInt8,
+        green: UInt8,
+        blue: UInt8
+    ) -> Data {
+        let allCount = UInt8(allPatterns.count)
+        let activeCount = UInt8(activePatterns.count)
+        let length = allCount + 7
+
+        var bytes: [UInt8] = [
+            PulseConstants.header,
+            PulseConstants.cmdSetLedPackage,
+            length,
+            packageID,
+            activeCount,
+            allCount,
+        ]
+        bytes.append(contentsOf: allPatterns)
+        bytes.append(contentsOf: [colorEffect, red, green, blue])
+        return Data(bytes)
+    }
+
+    static func previewPattern(packageID: UInt8, patternID: UInt8) -> Data {
+        Data([PulseConstants.header, PulseConstants.cmdPreviewPattern, 0x02, packageID, patternID])
+    }
+
     struct Response {
         let commandID: UInt8
         let payload: Data

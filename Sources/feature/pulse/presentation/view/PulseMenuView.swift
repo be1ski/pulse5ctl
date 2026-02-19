@@ -152,6 +152,12 @@ public struct PulseMenuView: View {
             }
 
             themesSection
+
+            if let theme = state.selectedTheme, !theme.patterns.isEmpty {
+                patternsSection(theme: theme)
+            }
+
+            colorSection
             brightnessSection
             speedSection
         }
@@ -247,6 +253,142 @@ public struct PulseMenuView: View {
                     }
                     .buttonStyle(.plain)
                 }
+            }
+        }
+    }
+
+    private func patternsSection(theme: LEDTheme) -> some View {
+        let activeSet = state.activePatternsForTheme(theme)
+
+        return VStack(alignment: .leading, spacing: 8) {
+            Text("Patterns")
+                .font(.headline)
+
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 6) {
+                ForEach(theme.patterns) { pattern in
+                    let isActive = activeSet.contains(pattern)
+
+                    HStack(spacing: 4) {
+                        Image(systemName: pattern.sfSymbol)
+                            .font(.caption2)
+                        Text(pattern.displayName)
+                            .font(.caption2)
+                            .lineLimit(1)
+                    }
+                    .padding(.vertical, 5)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .fill(isActive ? themeColor(theme).opacity(0.15) : Color(.controlBackgroundColor))
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 6)
+                            .stroke(isActive ? themeColor(theme) : Color(.separatorColor), lineWidth: 1)
+                    )
+                    .onTapGesture(count: 2) {
+                        feature.send(.controls(.soloPattern(pattern, theme)))
+                    }
+                    .onTapGesture(count: 1) {
+                        feature.send(.controls(.togglePattern(pattern, theme)))
+                    }
+                    .animation(.easeInOut(duration: 0.15), value: isActive)
+                }
+            }
+        }
+    }
+
+    private var colorSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Color")
+                .font(.headline)
+
+            let swatches: [(String, LEDColor)] = [
+                ("Red", LEDColor(red: 0xFF, green: 0x00, blue: 0x00)),
+                ("Orange", LEDColor(red: 0xFF, green: 0x8C, blue: 0x00)),
+                ("Yellow", LEDColor(red: 0xFF, green: 0xFF, blue: 0x00)),
+                ("Green", LEDColor(red: 0x00, green: 0xFF, blue: 0x00)),
+                ("Cyan", LEDColor(red: 0x00, green: 0xFF, blue: 0xFF)),
+                ("Blue", LEDColor(red: 0x00, green: 0x00, blue: 0xFF)),
+                ("Purple", LEDColor(red: 0x80, green: 0x00, blue: 0xFF)),
+                ("Pink", LEDColor(red: 0xFF, green: 0x00, blue: 0x80)),
+                ("White", LEDColor(red: 0xFF, green: 0xFF, blue: 0xFF)),
+            ]
+
+            HStack(spacing: 6) {
+                ForEach(swatches, id: \.0) { name, color in
+                    let isSelected = state.customColor == color && state.colorEffect == .staticColor
+                    Button {
+                        if state.colorEffect == .colorLoop {
+                            feature.send(.controls(.setColorEffect(.staticColor)))
+                        }
+                        feature.send(.controls(.setCustomColor(color)))
+                    } label: {
+                        Circle()
+                            .fill(Color(
+                                red: Double(color.red) / 255.0,
+                                green: Double(color.green) / 255.0,
+                                blue: Double(color.blue) / 255.0
+                            ))
+                            .frame(width: 22, height: 22)
+                            .overlay(
+                                Circle()
+                                    .stroke(isSelected ? Color.white : Color.clear, lineWidth: 2)
+                            )
+                            .overlay(
+                                Circle()
+                                    .stroke(isSelected ? Color.black.opacity(0.3) : Color(.separatorColor), lineWidth: 1)
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .help(name)
+                }
+
+                Spacer()
+            }
+            .opacity(state.colorEffect == .colorLoop ? 0.4 : 1.0)
+
+            HStack(spacing: 12) {
+                ColorPicker(
+                    "Custom",
+                    selection: Binding(
+                        get: {
+                            Color(
+                                red: Double(state.customColor.red) / 255.0,
+                                green: Double(state.customColor.green) / 255.0,
+                                blue: Double(state.customColor.blue) / 255.0
+                            )
+                        },
+                        set: { newColor in
+                            if state.colorEffect == .colorLoop {
+                                feature.send(.controls(.setColorEffect(.staticColor)))
+                            }
+                            if let components = newColor.cgColor?.components, components.count >= 3 {
+                                let r = UInt8(min(max(components[0] * 255, 0), 255))
+                                let g = UInt8(min(max(components[1] * 255, 0), 255))
+                                let b = UInt8(min(max(components[2] * 255, 0), 255))
+                                feature.send(.controls(.setCustomColor(LEDColor(red: r, green: g, blue: b))))
+                            }
+                        }
+                    ),
+                    supportsOpacity: false
+                )
+                .font(.caption)
+                .opacity(state.colorEffect == .colorLoop ? 0.4 : 1.0)
+
+                Spacer()
+
+                Toggle(
+                    "Color Loop",
+                    isOn: Binding(
+                        get: { state.colorEffect == .colorLoop },
+                        set: { isOn in
+                            feature.send(.controls(.setColorEffect(isOn ? .colorLoop : .staticColor)))
+                        }
+                    )
+                )
+                .toggleStyle(.switch)
+                .controlSize(.small)
+                .font(.caption)
             }
         }
     }

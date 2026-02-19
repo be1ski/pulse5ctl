@@ -14,6 +14,10 @@ func pulseLifecycleReducer(
             updated.isObservingRepository = true
             return updated
         }
-        context.commands(.observeRepository, .requestCurrentState, .observeNowPlaying)
+        context.command(.observeRepository)
+        context.command(.observeNowPlaying)
+        if state.connectionState.isConnected {
+            context.command(.requestCurrentState)
+        }
     }
 }

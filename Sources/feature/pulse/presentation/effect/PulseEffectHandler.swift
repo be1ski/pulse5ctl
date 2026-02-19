@@ -11,11 +11,14 @@ public final class PulseEffectHandler {
     private let setPulseLightStatus: SetPulseLightStatusUseCase
     private let setPulseBrightness: SetPulseBrightnessUseCase
     private let setPulseSpeed: SetPulseSpeedUseCase
+    private let setPulseLedPackage: SetPulseLedPackageUseCase
     private let requestPulseState: RequestPulseStateUseCase
     private let observeNowPlaying: ObserveNowPlayingUseCase
     private let saveAutoThemeSettings: (AutoThemeSettings) -> Void
+    private let saveLedCustomization: (LEDCustomization) -> Void
 
     private var brightnessTask: Task<Void, Never>?
+    private var ledPackageTask: Task<Void, Never>?
 
     public init(
         observePulseEvents: ObservePulseEventsUseCase,
@@ -26,9 +29,11 @@ public final class PulseEffectHandler {
         setPulseLightStatus: SetPulseLightStatusUseCase,
         setPulseBrightness: SetPulseBrightnessUseCase,
         setPulseSpeed: SetPulseSpeedUseCase,
+        setPulseLedPackage: SetPulseLedPackageUseCase,
         requestPulseState: RequestPulseStateUseCase,
         observeNowPlaying: @escaping ObserveNowPlayingUseCase,
-        saveAutoThemeSettings: @escaping (AutoThemeSettings) -> Void
+        saveAutoThemeSettings: @escaping (AutoThemeSettings) -> Void,
+        saveLedCustomization: @escaping (LEDCustomization) -> Void
     ) {
         self.observePulseEvents = observePulseEvents
         self.startPulseScan = startPulseScan
@@ -38,9 +43,11 @@ public final class PulseEffectHandler {
         self.setPulseLightStatus = setPulseLightStatus
         self.setPulseBrightness = setPulseBrightness
         self.setPulseSpeed = setPulseSpeed
+        self.setPulseLedPackage = setPulseLedPackage
         self.requestPulseState = requestPulseState
         self.observeNowPlaying = observeNowPlaying
         self.saveAutoThemeSettings = saveAutoThemeSettings
+        self.saveLedCustomization = saveLedCustomization
     }
 
     public func handle(_ effect: PulseEffect) -> AsyncStream<PulseAction> {
@@ -73,6 +80,7 @@ public final class PulseEffectHandler {
             }
 
         case let .setTheme(theme):
+            ledPackageTask?.cancel()
             return sideEffect {
                 self.setPulseTheme(theme: theme)
             }
@@ -83,6 +91,15 @@ public final class PulseEffectHandler {
                 try? await Task.sleep(nanoseconds: 150_000_000)
                 guard !Task.isCancelled else { return }
                 setPulseBrightness(level: level, bodyLight: bodyLight, projection: projection)
+            }
+            return noActions()
+
+        case let .setLedPackage(theme, activePatterns, allPatterns, colorEffect, color):
+            ledPackageTask?.cancel()
+            ledPackageTask = Task { [setPulseLedPackage] in
+                try? await Task.sleep(nanoseconds: 150_000_000)
+                guard !Task.isCancelled else { return }
+                setPulseLedPackage(theme: theme, activePatterns: activePatterns, allPatterns: allPatterns, colorEffect: colorEffect, color: color)
             }
             return noActions()
 
@@ -106,6 +123,11 @@ public final class PulseEffectHandler {
         case let .saveAutoThemeSettings(settings):
             return sideEffect {
                 self.saveAutoThemeSettings(settings)
+            }
+
+        case let .saveLedCustomization(customization):
+            return sideEffect {
+                self.saveLedCustomization(customization)
             }
         }
     }

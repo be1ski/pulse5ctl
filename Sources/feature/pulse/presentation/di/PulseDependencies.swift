@@ -10,10 +10,13 @@ public struct PulseDependencies {
     public let setPulseLightStatus: SetPulseLightStatusUseCase
     public let setPulseBrightness: SetPulseBrightnessUseCase
     public let setPulseSpeed: SetPulseSpeedUseCase
+    public let setPulseLedPackage: SetPulseLedPackageUseCase
     public let requestPulseState: RequestPulseStateUseCase
     public let observeNowPlaying: ObserveNowPlayingUseCase
     public let loadAutoThemeSettings: () -> AutoThemeSettings
     public let saveAutoThemeSettings: (AutoThemeSettings) -> Void
+    public let loadLedCustomization: () -> LEDCustomization
+    public let saveLedCustomization: (LEDCustomization) -> Void
 
     public init(
         observePulseEvents: ObservePulseEventsUseCase,
@@ -25,10 +28,13 @@ public struct PulseDependencies {
         setPulseLightStatus: SetPulseLightStatusUseCase,
         setPulseBrightness: SetPulseBrightnessUseCase,
         setPulseSpeed: SetPulseSpeedUseCase,
+        setPulseLedPackage: SetPulseLedPackageUseCase,
         requestPulseState: RequestPulseStateUseCase,
         observeNowPlaying: @escaping ObserveNowPlayingUseCase,
         loadAutoThemeSettings: @escaping () -> AutoThemeSettings,
-        saveAutoThemeSettings: @escaping (AutoThemeSettings) -> Void
+        saveAutoThemeSettings: @escaping (AutoThemeSettings) -> Void,
+        loadLedCustomization: @escaping () -> LEDCustomization,
+        saveLedCustomization: @escaping (LEDCustomization) -> Void
     ) {
         self.observePulseEvents = observePulseEvents
         self.loadPulseSnapshot = loadPulseSnapshot
@@ -39,9 +45,12 @@ public struct PulseDependencies {
         self.setPulseLightStatus = setPulseLightStatus
         self.setPulseBrightness = setPulseBrightness
         self.setPulseSpeed = setPulseSpeed
+        self.setPulseLedPackage = setPulseLedPackage
         self.requestPulseState = requestPulseState
         self.observeNowPlaying = observeNowPlaying
         self.loadAutoThemeSettings = loadAutoThemeSettings
         self.saveAutoThemeSettings = saveAutoThemeSettings
+        self.loadLedCustomization = loadLedCustomization
+        self.saveLedCustomization = saveLedCustomization
     }
 }

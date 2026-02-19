@@ -1,8 +1,11 @@
+import FeaturePulseDomain
+
 public enum PulseFeatureFactory {
     @MainActor
     public static func create(dependencies: PulseDependencies) -> PulseFeature {
         let snapshot = dependencies.loadPulseSnapshot()
         let autoThemeSettings = dependencies.loadAutoThemeSettings()
+        let ledCustomization = dependencies.loadLedCustomization()
 
         let effectHandler = PulseEffectHandler(
             observePulseEvents: dependencies.observePulseEvents,
@@ -13,9 +16,11 @@ public enum PulseFeatureFactory {
             setPulseLightStatus: dependencies.setPulseLightStatus,
             setPulseBrightness: dependencies.setPulseBrightness,
             setPulseSpeed: dependencies.setPulseSpeed,
+            setPulseLedPackage: dependencies.setPulseLedPackage,
             requestPulseState: dependencies.requestPulseState,
             observeNowPlaying: dependencies.observeNowPlaying,
-            saveAutoThemeSettings: dependencies.saveAutoThemeSettings
+            saveAutoThemeSettings: dependencies.saveAutoThemeSettings,
+            saveLedCustomization: dependencies.saveLedCustomization
         )
 
         let feature = PulseFeature(
@@ -30,7 +35,10 @@ public enum PulseFeatureFactory {
                 selectedTheme: snapshot.selectedTheme,
                 errorMessage: nil,
                 isObservingRepository: false,
-                autoThemeSettings: autoThemeSettings
+                autoThemeSettings: autoThemeSettings,
+                activePatterns: ledCustomization.activePatternsMap(),
+                colorEffect: ledCustomization.colorEffect,
+                customColor: ledCustomization.customColor
             ),
             reducer: pulseReducer,
             effectHandler: effectHandler.handle

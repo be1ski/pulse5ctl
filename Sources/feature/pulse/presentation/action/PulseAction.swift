@@ -26,6 +26,10 @@ public enum PulseAction: ElmAction, Equatable {
         case toggleBodyLight
         case toggleProjection
         case setSpeed(UInt8)
+        case togglePattern(LEDPattern, LEDTheme)
+        case soloPattern(LEDPattern, LEDTheme)
+        case setCustomColor(LEDColor)
+        case setColorEffect(ColorEffect)
     }
 
     public enum AutoTheme: Equatable {

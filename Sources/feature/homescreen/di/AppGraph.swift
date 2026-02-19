@@ -10,6 +10,7 @@ public final class AppGraph {
     public let appDependencies: AppDependencies
 
     private static let autoThemeKey = "autoThemeSettings"
+    private static let ledCustomizationKey = "ledCustomization"
 
     private init() {
         let repository = PulseSpeakerRepositoryImpl()
@@ -25,6 +26,7 @@ public final class AppGraph {
             setPulseLightStatus: SetPulseLightStatusUseCase(repository: repository),
             setPulseBrightness: SetPulseBrightnessUseCase(repository: repository),
             setPulseSpeed: SetPulseSpeedUseCase(repository: repository),
+            setPulseLedPackage: SetPulseLedPackageUseCase(repository: repository),
             requestPulseState: RequestPulseStateUseCase(repository: repository),
             observeNowPlaying: { nowPlayingMonitor.observe() },
             loadAutoThemeSettings: {
@@ -37,6 +39,18 @@ public final class AppGraph {
             saveAutoThemeSettings: { settings in
                 if let data = try? JSONEncoder().encode(settings) {
                     UserDefaults.standard.set(data, forKey: AppGraph.autoThemeKey)
+                }
+            },
+            loadLedCustomization: {
+                guard let data = UserDefaults.standard.data(forKey: AppGraph.ledCustomizationKey),
+                      let customization = try? JSONDecoder().decode(LEDCustomization.self, from: data) else {
+                    return LEDCustomization()
+                }
+                return customization
+            },
+            saveLedCustomization: { customization in
+                if let data = try? JSONEncoder().encode(customization) {
+                    UserDefaults.standard.set(data, forKey: AppGraph.ledCustomizationKey)
                 }
             }
         )

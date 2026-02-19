@@ -14,6 +14,9 @@ public struct PulseState: Equatable {
     public var connectedDeviceName: String?
     public var autoThemeSettings: AutoThemeSettings = .init()
     public var isMusicPlaying: Bool = false
+    public var activePatterns: [LEDTheme: Set<LEDPattern>] = [:]
+    public var colorEffect: ColorEffect = .colorLoop
+    public var customColor: LEDColor = LEDColor(red: 0xFF, green: 0xFF, blue: 0xFF)
 
     public init(
         connectionState: ConnectionState = .disconnected,
@@ -28,7 +31,10 @@ public struct PulseState: Equatable {
         isObservingRepository: Bool = false,
         connectedDeviceName: String? = nil,
         autoThemeSettings: AutoThemeSettings = .init(),
-        isMusicPlaying: Bool = false
+        isMusicPlaying: Bool = false,
+        activePatterns: [LEDTheme: Set<LEDPattern>] = [:],
+        colorEffect: ColorEffect = .colorLoop,
+        customColor: LEDColor = LEDColor(red: 0xFF, green: 0xFF, blue: 0xFF)
     ) {
         self.connectionState = connectionState
         self.discoveredDevices = discoveredDevices
@@ -43,9 +49,16 @@ public struct PulseState: Equatable {
         self.connectedDeviceName = connectedDeviceName
         self.autoThemeSettings = autoThemeSettings
         self.isMusicPlaying = isMusicPlaying
+        self.activePatterns = activePatterns
+        self.colorEffect = colorEffect
+        self.customColor = customColor
     }
 
     public var canShowControls: Bool {
         connectionState.isConnected
+    }
+
+    public func activePatternsForTheme(_ theme: LEDTheme) -> Set<LEDPattern> {
+        activePatterns[theme] ?? Set(theme.patterns)
     }
 }
