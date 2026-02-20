@@ -68,6 +68,10 @@ class TestDecoding:
         assert resp is not None
         assert resp.payload == b""
 
+    def test_parse_truncated_payload(self):
+        # Declares length=10 but only has 2 bytes of payload data
+        assert PulseCodec.parse(bytes([0xAA, 0x72, 0x0A, 0x01, 0x02])) is None
+
     def test_parse_brightness_state(self):
         brt = PulseCodec.parse_brightness_state(bytes([0xAA, 0x8C, 0x03, 50, 1, 1]))
         assert brt == BrightnessState(level=50, body_light_on=True, projection_on=True)
