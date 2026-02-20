@@ -34,6 +34,13 @@ public struct PulseMenuView: View {
         feature.state
     }
 
+    private var visibleDevices: [DiscoveredDevice] {
+        let devices = state.discoveredDevices
+        let pulse = devices.filter(\.hasPulseService)
+        let other = devices.filter { !$0.hasPulseService }
+        return Array((pulse + other).prefix(8))
+    }
+
     // MARK: - Disconnected
 
     @ViewBuilder
@@ -103,7 +110,7 @@ public struct PulseMenuView: View {
                         .foregroundStyle(.secondary)
                 }
             } else {
-                ForEach(state.discoveredDevices) { device in
+                ForEach(visibleDevices) { device in
                     Button {
                         feature.send(.connection(.selectDevice(device.id)))
                     } label: {
