@@ -1,24 +1,34 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
-CONFIG_DIR = Path.home() / ".config" / "pulse5"
-CONFIG_FILE = CONFIG_DIR / "config.json"
+
+def _config_dir() -> Path:
+    xdg = os.environ.get("XDG_CONFIG_HOME")
+    base = Path(xdg) if xdg else Path.home() / ".config"
+    return base / "pulse5"
+
+
+def _config_file() -> Path:
+    return _config_dir() / "config.json"
 
 
 def _load() -> dict:
-    if CONFIG_FILE.exists():
+    path = _config_file()
+    if path.exists():
         try:
-            return json.loads(CONFIG_FILE.read_text())
+            return json.loads(path.read_text())
         except (json.JSONDecodeError, OSError):
             return {}
     return {}
 
 
 def _save(data: dict) -> None:
-    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    CONFIG_FILE.write_text(json.dumps(data, indent=2) + "\n")
+    cfg_dir = _config_dir()
+    cfg_dir.mkdir(parents=True, exist_ok=True)
+    (_config_dir() / "config.json").write_text(json.dumps(data, indent=2) + "\n")
 
 
 def get_saved_device() -> tuple[str, str] | None:
