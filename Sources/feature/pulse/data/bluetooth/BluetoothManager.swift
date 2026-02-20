@@ -54,6 +54,7 @@ final class BluetoothManager: NSObject {
            let uuid = UUID(uuidString: uuidString),
            let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first {
             connect(to: cached)
+            return
         }
 
         centralManager.scanForPeripherals(
