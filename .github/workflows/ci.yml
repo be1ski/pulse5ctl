@@ -22,7 +22,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install bleak click mcp pytest ruff
+        run: pip install -e . pytest ruff
 
       - name: Lint with ruff
         run: ruff check pulse5/ tests/
