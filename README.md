@@ -1,8 +1,5 @@
 # pulse5ctl
 
-[![PyPI](https://img.shields.io/pypi/v/pulse5ctl)](https://pypi.org/project/pulse5ctl/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-
 Control Pulse 5 speaker LED lights over BLE.
 
 <img src=".github/preview.png" width="360">
@@ -33,11 +30,4 @@ claude mcp add pulse5 -- uvx --from pulse5ctl pulse5-mcp
 
 # Codex
 codex mcp add pulse5 -- uvx --from pulse5ctl pulse5-mcp
-```
-
-## Development
-
-```sh
-swift build                            # build macOS app
-cd cli && pip install -e . && pytest   # run Python tests
 ```
