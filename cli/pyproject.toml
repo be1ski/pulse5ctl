@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pulse5ctl"
-version = "1.4.0"
+version = "0.0.0"
 description = "CLI & MCP server for Pulse 5 speaker LED control over BLE"
 license = "MIT"
 requires-python = ">=3.10"
