@@ -14,12 +14,24 @@ swift build && .build/debug/pulse5ctl
 
 ```sh
 pipx install pulse5ctl
-pulse5 scan                  # discover nearby speakers
-pulse5 theme party           # set LED theme
-pulse5 pattern rainbow       # set LED pattern
-pulse5 brightness 60         # set brightness (20-80)
-pulse5 status                # query current state
-pulse5 version               # show installed version
+```
+
+```
+Usage: pulse5 [OPTIONS] COMMAND [ARGS]...
+
+  Control Pulse 5 speaker LEDs over Bluetooth.
+
+Options:
+  -a, --address TEXT  Device BLE address.
+  --help              Show this message and exit.
+
+Commands:
+  brightness  Set brightness level (20-80).
+  pattern     Set an LED pattern.
+  scan        Discover nearby Pulse 5 speakers.
+  status      Query current speaker state.
+  theme       Set LED theme.
+  version     Show installed version.
 ```
 
 ## MCP
