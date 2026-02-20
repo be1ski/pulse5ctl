@@ -93,21 +93,7 @@ The Swift app uses an **Elm architecture** -- unidirectional data flow with pure
 
 ## Development
 
-### Swift
-
 ```sh
-swift build            # build
-swift run              # build & run menu bar app
+swift build                        # build macOS app
+cd cli && pip install -e . && pytest   # run Python tests
 ```
-
-### Python
-
-```sh
-cd cli
-pip install -e ".[dev]"
-pytest                 # run tests
-```
-
-## License
-
-[MIT](LICENSE)
