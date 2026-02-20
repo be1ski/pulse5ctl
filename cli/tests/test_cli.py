@@ -13,8 +13,6 @@ from click.testing import CliRunner
 
 from pulse5.ble import DiscoveredDevice
 from pulse5.cli import _get_address, cli
-from pulse5.protocol.codec import BrightnessState
-from pulse5.protocol.models import LEDTheme
 
 
 @pytest.fixture
@@ -291,8 +289,6 @@ class TestPatternCommand:
 class TestStatusCommand:
     def test_status_displays_brightness_and_theme(self, runner):
         """status should display brightness level and theme name."""
-        brightness_state = BrightnessState(level=50, body_light_on=True, projection_on=True)
-
         @asynccontextmanager
         async def mock_connect(address):
             yield MagicMock()
