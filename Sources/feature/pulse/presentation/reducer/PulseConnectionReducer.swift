@@ -20,6 +20,7 @@ func pulseConnectionReducer(
             var updated = current
             updated.connectionState = .disconnected
             updated.connectedDeviceName = nil
+            updated.discoveredDevices = []
             return updated
         }
         context.command(.disconnect)
