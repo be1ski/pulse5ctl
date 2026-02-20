@@ -348,6 +348,32 @@ class TestStatusCommand:
         assert result.exit_code == 0
         assert connected_address == "XX:YY:ZZ"
 
+    def test_status_no_response_from_speaker(self, runner):
+        """status should show a message when the speaker doesn't respond."""
+        @asynccontextmanager
+        async def mock_connect(address):
+            yield MagicMock()
+
+        async def mock_subscribe(client, callback):
+            # No notifications — speaker didn't respond
+            pass
+
+        async def mock_write(client, data):
+            pass
+
+        with patch("pulse5.cli.ble.connect", side_effect=mock_connect), \
+             patch("pulse5.cli.ble.subscribe", side_effect=mock_subscribe), \
+             patch("pulse5.cli.ble.write", side_effect=mock_write), \
+             patch("pulse5.cli.asyncio.sleep", new_callable=AsyncMock), \
+             patch("pulse5.cli.config.get_saved_device", return_value=("AA:BB:CC", "Pulse 5")):
+            result = runner.invoke(cli, ["status"])
+
+        assert result.exit_code == 0
+        assert "Speaker Status:" in result.output
+        assert "No response from speaker." in result.output
+        assert "Brightness" not in result.output
+        assert "Theme" not in result.output
+
 
 # ---------------------------------------------------------------------------
 # _get_address helper
