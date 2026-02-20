@@ -5,7 +5,6 @@ All BLE hardware interaction is mocked via unittest.mock.
 
 from __future__ import annotations
 
-import asyncio
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
@@ -300,7 +299,7 @@ class TestConnect:
 
         with patch("pulse5.ble._resolve_device", new_callable=AsyncMock, return_value="AA:BB:CC"), \
              patch("pulse5.ble.BleakClient", return_value=mock_client):
-            async with connect("AA:BB:CC") as client:
+            async with connect("AA:BB:CC") as _:
                 pass
 
         mock_client.disconnect.assert_awaited_once()
@@ -313,7 +312,7 @@ class TestConnect:
 
         with patch("pulse5.ble._resolve_device", new_callable=AsyncMock, return_value="AA:BB:CC"), \
              patch("pulse5.ble.BleakClient", return_value=mock_client):
-            async with connect("AA:BB:CC") as client:
+            async with connect("AA:BB:CC") as _:
                 pass
 
         mock_client.disconnect.assert_not_awaited()
@@ -352,7 +351,7 @@ class TestConnect:
              patch("pulse5.ble.BleakClient", return_value=mock_client), \
              patch("pulse5.ble.asyncio.sleep", new_callable=AsyncMock):
             with pytest.raises(ConnectionError, match="Failed to connect after"):
-                async with connect("AA:BB:CC") as client:
+                async with connect("AA:BB:CC") as _:
                     pass
 
         assert mock_client.connect.await_count == C.MAX_RECONNECT_ATTEMPTS
@@ -372,7 +371,7 @@ class TestConnect:
              patch("pulse5.ble.BleakClient", return_value=mock_client), \
              patch("pulse5.ble.asyncio.sleep", side_effect=record_sleep):
             with pytest.raises(ConnectionError):
-                async with connect("AA:BB:CC") as client:
+                async with connect("AA:BB:CC") as _:
                     pass
 
         # With MAX_RECONNECT_ATTEMPTS=3, there are 2 retries with exponential backoff
@@ -389,7 +388,7 @@ class TestConnect:
              patch("pulse5.ble.BleakClient", return_value=mock_client), \
              patch("pulse5.ble.asyncio.sleep", new_callable=AsyncMock):
             with pytest.raises(ConnectionError, match="Device unreachable"):
-                async with connect("AA:BB:CC") as client:
+                async with connect("AA:BB:CC") as _:
                     pass
 
 
