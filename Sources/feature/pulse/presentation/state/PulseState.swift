@@ -18,6 +18,10 @@ public struct PulseState: Equatable {
     public var colorEffect: ColorEffect = .colorLoop
     public var customColor: LEDColor = LEDColor(red: 0xFF, green: 0xFF, blue: 0xFF)
     public var selectedLanguage: String?
+    public var lightScheduleSettings: LightScheduleSettings = .init()
+    public var lightScheduleActive: Bool = false
+    public var savedBodyLightOn: Bool? = nil
+    public var savedProjectionOn: Bool? = nil
 
     public init(
         connectionState: ConnectionState = .disconnected,
@@ -36,7 +40,8 @@ public struct PulseState: Equatable {
         activePatterns: [LEDTheme: Set<LEDPattern>] = [:],
         colorEffect: ColorEffect = .colorLoop,
         customColor: LEDColor = LEDColor(red: 0xFF, green: 0xFF, blue: 0xFF),
-        selectedLanguage: String? = nil
+        selectedLanguage: String? = nil,
+        lightScheduleSettings: LightScheduleSettings = .init()
     ) {
         self.connectionState = connectionState
         self.discoveredDevices = discoveredDevices
@@ -55,6 +60,7 @@ public struct PulseState: Equatable {
         self.colorEffect = colorEffect
         self.customColor = customColor
         self.selectedLanguage = selectedLanguage
+        self.lightScheduleSettings = lightScheduleSettings
     }
 
     public var canShowControls: Bool {

@@ -61,6 +61,7 @@ public enum L10n {
     public static var controlsSpeedLow: String { str("controls.speed_low") }
     public static var controlsSpeedMid: String { str("controls.speed_mid") }
     public static var controlsSpeedHigh: String { str("controls.speed_high") }
+    public static var controlsScheduleActive: String { str("controls.schedule_active") }
 
     // MARK: - Settings
 
@@ -70,6 +71,9 @@ public enum L10n {
     public static var settingsPlayingTheme: String { str("settings.playing_theme") }
     public static var settingsWhenIdle: String { str("settings.when_idle") }
     public static var settingsIdleTheme: String { str("settings.idle_theme") }
+    public static var settingsLightSchedule: String { str("settings.light_schedule") }
+    public static var settingsLightsOffAt: String { str("settings.lights_off_at") }
+    public static var settingsLightsOnAt: String { str("settings.lights_on_at") }
     public static var settingsLanguage: String { str("settings.language") }
     public static var settingsLanguageSystem: String { str("settings.language_system") }
 
