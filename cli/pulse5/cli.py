@@ -145,6 +145,8 @@ def status(ctx: click.Context) -> None:
             click.echo(f"  Brightness: {brt.level}")
         if "theme" in results:
             click.echo(f"  Theme:      {results['theme'].display_name}")
+        if "brightness" not in results and "theme" not in results:
+            click.echo("  No response from speaker.")
 
     _run(_cmd())
 
