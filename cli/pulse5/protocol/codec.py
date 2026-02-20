@@ -81,6 +81,8 @@ class PulseCodec:
             return None
         command_id = data[1]
         length = data[2]
+        if len(data) < 3 + length:
+            return None
         payload = bytes(data[3 : 3 + length])
         return Response(command_id=command_id, payload=payload)
 
