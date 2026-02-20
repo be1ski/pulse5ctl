@@ -43,6 +43,10 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Set version from tag
+        working-directory: cli
+        run: sed -i "s/version = \"0.0.0\"/version = \"${GITHUB_REF_NAME#v}\"/" pyproject.toml
+
       - name: Build package
         working-directory: cli
         run: pip install build && python -m build
