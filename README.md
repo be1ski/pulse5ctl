@@ -16,7 +16,7 @@ swift build && .build/debug/pulse5ctl
 pipx install pulse5ctl
 ```
 
-```
+<pre>
 Usage: pulse5 [OPTIONS] COMMAND [ARGS]...
 
   Control Pulse 5 speaker LEDs over Bluetooth.
@@ -32,7 +32,7 @@ Commands:
   status      Query current speaker state.
   theme       Set LED theme.
   version     Show installed version.
-```
+</pre>
 
 ## MCP
 
