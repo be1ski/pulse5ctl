@@ -23,6 +23,7 @@ jobs:
           mkdir -p pulse5ctl.app/Contents/Resources
           cp .build/release/pulse5ctl pulse5ctl.app/Contents/MacOS/
           cp Sources/app/macos/Info.plist pulse5ctl.app/Contents/
+          cp -R .build/release/pulse5ctl_CoreLocalization.bundle pulse5ctl.app/Contents/Resources/
           chmod +x pulse5ctl.app/Contents/MacOS/pulse5ctl
 
       - name: Create zip

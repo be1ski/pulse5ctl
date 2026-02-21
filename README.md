@@ -7,7 +7,7 @@ Control Pulse 5 speaker LED lights over BLE. Themes, patterns, colors, brightnes
 ## macOS App
 
 ```sh
-swift build && .build/debug/pulse5ctl
+make install
 ```
 
 ## CLI
