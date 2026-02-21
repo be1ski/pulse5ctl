@@ -244,31 +244,34 @@ extension PulseMenuView {
 
     var brightnessSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(L10n.controlsBrightness)
-                .font(.headline)
+            VStack(alignment: .leading, spacing: 8) {
+                Text(L10n.controlsBrightness)
+                    .font(.headline)
 
-            HStack(spacing: 10) {
-                Image(systemName: "sun.min")
-                Slider(
-                    value: Binding(
-                        get: { Double(state.brightness) },
-                        set: { feature.send(.controls(.setBrightness($0))) }
-                    ),
-                    in: 20 ... 80,
-                    step: 6
-                )
-                .tint(.orange)
-                .simultaneousGesture(
-                    TapGesture(count: 2).onEnded {
-                        feature.send(.controls(.setBrightness(50)))
-                    }
-                )
-                Image(systemName: "sun.max")
-                Text("\(Int(round(Double(state.brightness - 20) / 60.0 * 100)))%")
-                    .font(.caption)
-                    .monospacedDigit()
-                    .frame(width: 38)
+                HStack(spacing: 10) {
+                    Image(systemName: "sun.min")
+                    Slider(
+                        value: Binding(
+                            get: { Double(state.brightness) },
+                            set: { feature.send(.controls(.setBrightness($0))) }
+                        ),
+                        in: 20 ... 80,
+                        step: 6
+                    )
+                    .tint(.orange)
+                    Image(systemName: "sun.max")
+                    Text("\(Int(round(Double(state.brightness - 20) / 60.0 * 100)))%")
+                        .font(.caption)
+                        .monospacedDigit()
+                        .frame(width: 38)
+                }
             }
+            .contentShape(Rectangle())
+            .simultaneousGesture(
+                TapGesture(count: 2).onEnded {
+                    feature.send(.controls(.setBrightness(50)))
+                }
+            )
 
             HStack(spacing: 12) {
                 Toggle(
