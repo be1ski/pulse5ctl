@@ -7,7 +7,7 @@ Control Pulse 5 speaker LED lights over BLE. Themes, patterns, colors, brightnes
 ## macOS App
 
 ```sh
-make install
+brew install be1ski/tap/pulse5ctl
 ```
 
 ## CLI
