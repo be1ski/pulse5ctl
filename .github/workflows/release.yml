@@ -82,3 +82,14 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: cli/dist/
+
+  homebrew:
+    needs: swift-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mislav/bump-homebrew-formula-action@v3
+        with:
+          formula-name: pulse5ctl
+          homebrew-tap: be1ski/homebrew-pulse5ctl
+        env:
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
