@@ -37,7 +37,7 @@ jobs:
           flags: python
           files: cli/coverage.xml
 
-  swift-test:
+  swift-build:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
