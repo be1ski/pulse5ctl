@@ -32,7 +32,6 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository {
     }
 
     public func connect(to deviceID: UUID) {
-        emit(.connectionChanged(.connecting))
         bluetoothManager.connect(toDeviceWithID: deviceID)
     }
 

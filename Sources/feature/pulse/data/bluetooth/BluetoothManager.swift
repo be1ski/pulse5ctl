@@ -111,6 +111,13 @@ final class BluetoothManager: NSObject {
     }
 
     func disconnect() {
+        bleQueue.async {
+            self.performDisconnect()
+        }
+    }
+
+    /// Must be called on `bleQueue`.
+    private func performDisconnect() {
         shouldReconnect = false
         reconnectTask?.cancel()
         reconnectTask = nil
@@ -259,7 +266,7 @@ extension BluetoothManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         guard let characteristics = service.characteristics else {
             errorContinuation.yield(.characteristicNotFound)
-            disconnect()
+            performDisconnect()
             return
         }
 
@@ -278,7 +285,7 @@ extension BluetoothManager: CBPeripheralDelegate {
             connectionState = .connected
         } else {
             errorContinuation.yield(.characteristicNotFound)
-            disconnect()
+            performDisconnect()
         }
     }
 
