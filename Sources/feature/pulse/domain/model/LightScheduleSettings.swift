@@ -1,4 +1,4 @@
-public struct LightScheduleSettings: Equatable, Codable {
+public struct LightScheduleSettings: Equatable, Codable, Sendable {
     public var enabled: Bool
     public var offHour: Int
     public var offMinute: Int

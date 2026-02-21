@@ -33,7 +33,7 @@ final class FlowHelpersTests: XCTestCase {
     }
 
     func test_sideEffect_runsOperationAndYieldsNothing() async {
-        var didRun = false
+        nonisolated(unsafe) var didRun = false
         let stream: AsyncStream<TestAction> = sideEffect {
             didRun = true
         }

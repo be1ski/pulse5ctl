@@ -1,6 +1,6 @@
 import FeaturePulseDomain
 
-public struct PulseState: Equatable {
+public struct PulseState: Equatable, Sendable {
     public var connectionState: ConnectionState = .disconnected
     public var discoveredDevices: [DiscoveredDevice] = []
     public var brightness: UInt8 = 50

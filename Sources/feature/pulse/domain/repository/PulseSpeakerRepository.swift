@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol PulseSpeakerRepository: AnyObject {
+public protocol PulseSpeakerRepository: AnyObject, Sendable {
     var events: AsyncStream<PulseRepositoryEvent> { get }
 
     func startScan()

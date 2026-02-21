@@ -1,7 +1,7 @@
 import FeaturePulseDomain
 import Foundation
 
-public final class LightScheduleMonitor {
+public final class LightScheduleMonitor: Sendable {
     public init() {}
 
     public func observe(settings: LightScheduleSettings) -> AsyncStream<Bool> {

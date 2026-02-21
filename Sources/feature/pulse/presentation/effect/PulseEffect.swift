@@ -1,7 +1,7 @@
 import FeaturePulseDomain
 import Foundation
 
-public enum PulseEffect: Equatable {
+public enum PulseEffect: Equatable, Sendable {
     case observeRepository
     case startScan
     case disconnect

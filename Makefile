@@ -29,6 +29,7 @@ installGitHooks:
 	@echo "Git hooks installed."
 
 install:
+	-killall pulse5ctl 2>/dev/null
 	swift build -c release
 	rm -rf $(INSTALL_DIR)/$(APP)
 	mkdir -p $(INSTALL_DIR)/$(APP)/Contents/MacOS

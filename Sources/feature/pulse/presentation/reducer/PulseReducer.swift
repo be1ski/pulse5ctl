@@ -1,6 +1,7 @@
 import CoreElm
 
-public let pulseReducer: Reducer<PulseAction, PulseState, PulseEffect, Never> = reducer { action, state, context in
+// swiftlint:disable:next line_length
+nonisolated(unsafe) public let pulseReducer: Reducer<PulseAction, PulseState, PulseEffect, Never> = reducer { action, state, context in
     switch action {
     case let .lifecycle(lifecycleAction):
         pulseLifecycleReducer(lifecycleAction, state, context)

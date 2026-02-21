@@ -2,7 +2,7 @@ import CoreElm
 import FeaturePulseDomain
 import Foundation
 
-public enum PulseAction: ElmAction, Equatable {
+public enum PulseAction: ElmAction, Equatable, Sendable {
     case lifecycle(Lifecycle)
     case connection(Connection)
     case controls(Controls)
@@ -11,17 +11,17 @@ public enum PulseAction: ElmAction, Equatable {
     case settings(Settings)
     case system(System)
 
-    public enum Lifecycle: Equatable {
+    public enum Lifecycle: Equatable, Sendable {
         case started
     }
 
-    public enum Connection: Equatable {
+    public enum Connection: Equatable, Sendable {
         case connectTapped
         case disconnectTapped
         case selectDevice(UUID)
     }
 
-    public enum Controls: Equatable {
+    public enum Controls: Equatable, Sendable {
         case toggleLight
         case selectTheme(LEDTheme)
         case setBrightness(Double)
@@ -34,23 +34,23 @@ public enum PulseAction: ElmAction, Equatable {
         case setColorEffect(ColorEffect)
     }
 
-    public enum AutoTheme: Equatable {
+    public enum AutoTheme: Equatable, Sendable {
         case toggleEnabled
         case setPlayingTheme(LEDTheme)
         case setIdleTheme(LEDTheme)
     }
 
-    public enum LightSchedule: Equatable {
+    public enum LightSchedule: Equatable, Sendable {
         case toggleEnabled
         case setOffTime(hour: Int, minute: Int)
         case setOnTime(hour: Int, minute: Int)
     }
 
-    public enum Settings: Equatable {
+    public enum Settings: Equatable, Sendable {
         case setLanguage(String?)
     }
 
-    public enum System: Equatable {
+    public enum System: Equatable, Sendable {
         case repositoryEvent(PulseRepositoryEvent)
         case nowPlayingChanged(Bool)
         case lightScheduleChanged(Bool)

@@ -1,7 +1,8 @@
 import Foundation
 
 @MainActor
-public final class Feature<Action, State, Command, Notification>: ObservableObject where Action: ElmAction {
+public final class Feature<Action, State, Command, Notification>: ObservableObject
+where Action: ElmAction, Notification: Sendable {
     @Published public private(set) var state: State
     public var notifications: AsyncStream<Notification> { notificationStream }
 

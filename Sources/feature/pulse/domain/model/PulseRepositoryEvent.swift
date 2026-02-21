@@ -1,4 +1,4 @@
-public enum PulseRepositoryEvent: Equatable {
+public enum PulseRepositoryEvent: Equatable, Sendable {
     case connectionChanged(ConnectionState)
     case discoveredDevices([DiscoveredDevice])
     case lightStatus(Bool)

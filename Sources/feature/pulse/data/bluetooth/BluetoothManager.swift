@@ -1,8 +1,8 @@
-import CoreBluetooth
+@preconcurrency import CoreBluetooth
 import FeaturePulseDomain
 import Foundation
 
-final class BluetoothManager: NSObject {
+final class BluetoothManager: NSObject, @unchecked Sendable {
     let stateUpdates: AsyncStream<ConnectionState>
     let discoveredDevices: AsyncStream<DiscoveredDevice>
     let receivedData: AsyncStream<Data>

@@ -1,6 +1,6 @@
 import CoreLocalization
 
-public enum ConnectionState: Equatable {
+public enum ConnectionState: Equatable, Sendable {
     case disconnected
     case scanning
     case connecting

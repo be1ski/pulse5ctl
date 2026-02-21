@@ -13,14 +13,14 @@ public struct PulseDependencies {
     public let requestPulseState: RequestPulseStateUseCase
     public let observeNowPlaying: ObserveNowPlayingUseCase
     public let observeLightSchedule: ObserveLightScheduleUseCase
-    public let loadAutoThemeSettings: () -> AutoThemeSettings
-    public let saveAutoThemeSettings: (AutoThemeSettings) -> Void
-    public let loadLedCustomization: () -> LEDCustomization
-    public let saveLedCustomization: (LEDCustomization) -> Void
-    public let loadLightScheduleSettings: () -> LightScheduleSettings
-    public let saveLightScheduleSettings: (LightScheduleSettings) -> Void
-    public let loadLanguage: () -> String?
-    public let saveLanguage: (String?) -> Void
+    public let loadAutoThemeSettings: @Sendable () -> AutoThemeSettings
+    public let saveAutoThemeSettings: @Sendable (AutoThemeSettings) -> Void
+    public let loadLedCustomization: @Sendable () -> LEDCustomization
+    public let saveLedCustomization: @Sendable (LEDCustomization) -> Void
+    public let loadLightScheduleSettings: @Sendable () -> LightScheduleSettings
+    public let saveLightScheduleSettings: @Sendable (LightScheduleSettings) -> Void
+    public let loadLanguage: @Sendable () -> String?
+    public let saveLanguage: @Sendable (String?) -> Void
 
     public init(
         observePulseEvents: ObservePulseEventsUseCase,
@@ -35,14 +35,14 @@ public struct PulseDependencies {
         requestPulseState: RequestPulseStateUseCase,
         observeNowPlaying: @escaping ObserveNowPlayingUseCase,
         observeLightSchedule: @escaping ObserveLightScheduleUseCase,
-        loadAutoThemeSettings: @escaping () -> AutoThemeSettings,
-        saveAutoThemeSettings: @escaping (AutoThemeSettings) -> Void,
-        loadLedCustomization: @escaping () -> LEDCustomization,
-        saveLedCustomization: @escaping (LEDCustomization) -> Void,
-        loadLightScheduleSettings: @escaping () -> LightScheduleSettings,
-        saveLightScheduleSettings: @escaping (LightScheduleSettings) -> Void,
-        loadLanguage: @escaping () -> String?,
-        saveLanguage: @escaping (String?) -> Void
+        loadAutoThemeSettings: @Sendable @escaping () -> AutoThemeSettings,
+        saveAutoThemeSettings: @Sendable @escaping (AutoThemeSettings) -> Void,
+        loadLedCustomization: @Sendable @escaping () -> LEDCustomization,
+        saveLedCustomization: @Sendable @escaping (LEDCustomization) -> Void,
+        loadLightScheduleSettings: @Sendable @escaping () -> LightScheduleSettings,
+        saveLightScheduleSettings: @Sendable @escaping (LightScheduleSettings) -> Void,
+        loadLanguage: @Sendable @escaping () -> String?,
+        saveLanguage: @Sendable @escaping (String?) -> Void
     ) {
         self.observePulseEvents = observePulseEvents
         self.startPulseScan = startPulseScan

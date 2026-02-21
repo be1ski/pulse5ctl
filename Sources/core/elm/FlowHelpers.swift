@@ -6,7 +6,7 @@ public func action<A: ElmAction>(_ value: A) -> AsyncStream<A> {
 }
 
 public func actions<A: ElmAction>(
-    _ build: @escaping (_ continuation: AsyncStream<A>.Continuation) async -> Void
+    _ build: @Sendable @escaping (_ continuation: AsyncStream<A>.Continuation) async -> Void
 ) -> AsyncStream<A> {
     AsyncStream { continuation in
         Task {
@@ -15,7 +15,7 @@ public func actions<A: ElmAction>(
     }
 }
 
-public func sideEffect<A: ElmAction>(_ operation: @escaping () async -> Void) -> AsyncStream<A> {
+public func sideEffect<A: ElmAction>(_ operation: @Sendable @escaping () async -> Void) -> AsyncStream<A> {
     AsyncStream { continuation in
         Task {
             await operation()

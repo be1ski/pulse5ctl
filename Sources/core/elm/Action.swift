@@ -1,1 +1,1 @@
-public protocol ElmAction {}
+public protocol ElmAction: Sendable {}

@@ -1,6 +1,6 @@
 import CoreLocalization
 
-public enum LEDPattern: UInt8, CaseIterable, Identifiable, Hashable, Codable {
+public enum LEDPattern: UInt8, CaseIterable, Identifiable, Hashable, Codable, Sendable {
     // Nature
     case campfire = 0x01
     case northernLights = 0x02
