@@ -1,6 +1,6 @@
 # pulse5ctl
 
-Control Pulse 5 speaker LED lights over BLE.
+Control Pulse 5 speaker LED lights over BLE. Themes, patterns, colors, brightness, animation speed, auto-reconnect, music-aware theme switching, light schedule, 20 languages.
 
 <img src=".github/preview.png" width="360">
 
