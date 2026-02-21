@@ -132,7 +132,7 @@ public final class PulseEffectHandler {
 
         case let .observeLightSchedule(settings):
             lightScheduleTask?.cancel()
-            var task: Task<Void, Never>?
+            nonisolated(unsafe) var task: Task<Void, Never>?
             let stream = AsyncStream<PulseAction> { [observeLightSchedule] continuation in
                 task = Task {
                     for await isInOffWindow in observeLightSchedule(settings) {
