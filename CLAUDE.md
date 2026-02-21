@@ -46,6 +46,11 @@ make installGitHooks   # Installs pre-commit hook that runs checkAll
 swift test             # Swift tests only
 ```
 
+## Git & GitHub
+
+- PR descriptions are always written in English
+- Never use the speaker manufacturer brand name anywhere in the project (trademark/legal reasons) — always refer to the device as "Pulse 5"
+
 ## Key Conventions
 
 - Reducers are pure functions: `(Action, State, ReducerContext) -> Void`
