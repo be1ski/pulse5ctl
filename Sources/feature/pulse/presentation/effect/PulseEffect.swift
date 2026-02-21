@@ -16,6 +16,7 @@ public enum PulseEffect: Equatable {
     case saveAutoThemeSettings(AutoThemeSettings)
     case saveLedCustomization(LEDCustomization)
     case observeLightSchedule(LightScheduleSettings)
+    case stopLightSchedule
     case saveLightScheduleSettings(LightScheduleSettings)
     case saveLanguage(String?)
 }

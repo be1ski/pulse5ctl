@@ -22,25 +22,28 @@ func pulseLightScheduleReducer(
             context.command(.observeLightSchedule(
                 state.lightScheduleSettings.with(enabled: newEnabled)
             ))
-        } else if state.lightScheduleActive {
-            // Disabling while in off-window: restore lights
-            let bodyLight = state.savedBodyLightOn ?? true
-            let projection = state.savedProjectionOn ?? true
-            context.state { current in
-                var updated = current
-                updated.lightScheduleActive = false
-                updated.bodyLightOn = bodyLight
-                updated.projectionOn = projection
-                updated.savedBodyLightOn = nil
-                updated.savedProjectionOn = nil
-                return updated
-            }
-            if state.connectionState.isConnected {
-                context.command(.setBrightness(
-                    level: state.brightness,
-                    bodyLight: bodyLight,
-                    projection: projection
-                ))
+        } else {
+            context.command(.stopLightSchedule)
+            if state.lightScheduleActive {
+                // Disabling while in off-window: restore lights
+                let bodyLight = state.savedBodyLightOn ?? true
+                let projection = state.savedProjectionOn ?? true
+                context.state { current in
+                    var updated = current
+                    updated.lightScheduleActive = false
+                    updated.bodyLightOn = bodyLight
+                    updated.projectionOn = projection
+                    updated.savedBodyLightOn = nil
+                    updated.savedProjectionOn = nil
+                    return updated
+                }
+                if state.connectionState.isConnected {
+                    context.command(.setBrightness(
+                        level: state.brightness,
+                        bodyLight: bodyLight,
+                        projection: projection
+                    ))
+                }
             }
         }
 

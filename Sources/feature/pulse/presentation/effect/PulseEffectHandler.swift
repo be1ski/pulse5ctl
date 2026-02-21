@@ -22,6 +22,7 @@ public final class PulseEffectHandler {
 
     private var brightnessTask: Task<Void, Never>?
     private var ledPackageTask: Task<Void, Never>?
+    private var lightScheduleTask: Task<Void, Never>?
 
     public init(
         observePulseEvents: ObservePulseEventsUseCase,
@@ -130,11 +131,27 @@ public final class PulseEffectHandler {
             }
 
         case let .observeLightSchedule(settings):
-            return actions { continuation in
-                for await isInOffWindow in self.observeLightSchedule(settings) {
-                    continuation.yield(.system(.lightScheduleChanged(isInOffWindow)))
+            lightScheduleTask?.cancel()
+            var task: Task<Void, Never>?
+            let stream = AsyncStream<PulseAction> { [observeLightSchedule] continuation in
+                task = Task {
+                    for await isInOffWindow in observeLightSchedule(settings) {
+                        guard !Task.isCancelled else { break }
+                        continuation.yield(.system(.lightScheduleChanged(isInOffWindow)))
+                    }
+                    continuation.finish()
+                }
+                continuation.onTermination = { _ in
+                    task?.cancel()
                 }
             }
+            lightScheduleTask = task
+            return stream
+
+        case .stopLightSchedule:
+            lightScheduleTask?.cancel()
+            lightScheduleTask = nil
+            return noActions()
 
         case let .saveLightScheduleSettings(settings):
             return sideEffect {
