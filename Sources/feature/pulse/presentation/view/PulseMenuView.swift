@@ -434,6 +434,7 @@ public struct PulseMenuView: View {
                 )
                 .toggleStyle(.switch)
                 .controlSize(.small)
+                .disabled(state.lightScheduleActive)
 
                 Toggle(
                     L10n.controlsProjection,
@@ -444,9 +445,16 @@ public struct PulseMenuView: View {
                 )
                 .toggleStyle(.switch)
                 .controlSize(.small)
+                .disabled(state.lightScheduleActive)
             }
             .font(.caption)
             .frame(maxWidth: .infinity)
+
+            if state.lightScheduleActive {
+                Text(L10n.controlsScheduleActive)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 

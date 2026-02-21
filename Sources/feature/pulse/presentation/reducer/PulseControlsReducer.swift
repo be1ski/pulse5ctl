@@ -34,6 +34,7 @@ func pulseControlsReducer(
         context.command(.setBrightness(level: clamped, bodyLight: state.bodyLightOn, projection: state.projectionOn))
 
     case .toggleBodyLight:
+        guard !state.lightScheduleActive else { return }
         let toggled = !state.bodyLightOn
         context.state { current in
             var updated = current
@@ -43,6 +44,7 @@ func pulseControlsReducer(
         context.command(.setBrightness(level: state.brightness, bodyLight: toggled, projection: state.projectionOn))
 
     case .toggleProjection:
+        guard !state.lightScheduleActive else { return }
         let toggled = !state.projectionOn
         context.state { current in
             var updated = current

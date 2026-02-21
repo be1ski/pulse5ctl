@@ -26,6 +26,7 @@
 "controls.speed_low" = "Низька";
 "controls.speed_mid" = "Середня";
 "controls.speed_high" = "Висока";
+"controls.schedule_active" = "Світло вимкнено (запланувано)";
 
 /* Settings */
 "settings.title" = "Налаштування";
@@ -35,6 +36,9 @@
 "settings.when_idle" = "У режимі очікування:";
 "settings.idle_theme" = "Тема очікування";
 "settings.language" = "Мова";
+"settings.light_schedule" = "Розклад світла";
+"settings.lights_off_at" = "Світло вимикається о:";
+"settings.lights_on_at" = "Світло ввімикається о:";
 "settings.language_system" = "Системна";
 
 /* Color */

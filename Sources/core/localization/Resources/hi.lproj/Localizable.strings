@@ -26,6 +26,7 @@
 "controls.speed_low" = "धीमी";
 "controls.speed_mid" = "मध्यम";
 "controls.speed_high" = "तेज़";
+"controls.schedule_active" = "लाइट्स बंद (शेड्यूल्ड)";
 
 /* Settings */
 "settings.title" = "सेटिंग्स";
@@ -35,6 +36,9 @@
 "settings.when_idle" = "निष्क्रिय होने पर:";
 "settings.idle_theme" = "निष्क्रिय थीम";
 "settings.language" = "भाषा";
+"settings.light_schedule" = "लाइट शेड्यूल";
+"settings.lights_off_at" = "लाइट्स बंद होना:";
+"settings.lights_on_at" = "लाइट्स चालू होना:";
 "settings.language_system" = "सिस्टम डिफ़ॉल्ट";
 
 /* Color */

@@ -7,6 +7,7 @@ public enum PulseFeatureFactory {
         let snapshot = dependencies.loadPulseSnapshot()
         let autoThemeSettings = dependencies.loadAutoThemeSettings()
         let ledCustomization = dependencies.loadLedCustomization()
+        let lightScheduleSettings = dependencies.loadLightScheduleSettings()
         let savedLanguage = dependencies.loadLanguage()
         L10n.overrideLocale = savedLanguage
 
@@ -22,8 +23,10 @@ public enum PulseFeatureFactory {
             setPulseLedPackage: dependencies.setPulseLedPackage,
             requestPulseState: dependencies.requestPulseState,
             observeNowPlaying: dependencies.observeNowPlaying,
+            observeLightSchedule: dependencies.observeLightSchedule,
             saveAutoThemeSettings: dependencies.saveAutoThemeSettings,
             saveLedCustomization: dependencies.saveLedCustomization,
+            saveLightScheduleSettings: dependencies.saveLightScheduleSettings,
             saveLanguage: dependencies.saveLanguage
         )
 
@@ -43,7 +46,8 @@ public enum PulseFeatureFactory {
                 activePatterns: ledCustomization.activePatternsMap(),
                 colorEffect: ledCustomization.colorEffect,
                 customColor: ledCustomization.customColor,
-                selectedLanguage: savedLanguage
+                selectedLanguage: savedLanguage,
+                lightScheduleSettings: lightScheduleSettings
             ),
             reducer: pulseReducer,
             effectHandler: effectHandler.handle

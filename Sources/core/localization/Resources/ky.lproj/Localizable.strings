@@ -26,6 +26,7 @@
 "controls.speed_low" = "Төмөн";
 "controls.speed_mid" = "Орто";
 "controls.speed_high" = "Жогору";
+"controls.schedule_active" = "Чырактар өчүк (расписание боюнча)";
 
 /* Settings */
 "settings.title" = "Жөндөөлөр";
@@ -35,6 +36,9 @@
 "settings.when_idle" = "Бош турганда:";
 "settings.idle_theme" = "Бош тема";
 "settings.language" = "Тил";
+"settings.light_schedule" = "Чырактар расписаниеси";
+"settings.lights_off_at" = "Чырактар өчүк:";
+"settings.lights_on_at" = "Чырактар күйүк:";
 "settings.language_system" = "Тутум боюнча";
 
 /* Color */

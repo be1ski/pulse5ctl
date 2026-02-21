@@ -16,6 +16,9 @@ func pulseLifecycleReducer(
         }
         context.command(.observeRepository)
         context.command(.observeNowPlaying)
+        if state.lightScheduleSettings.enabled {
+            context.command(.observeLightSchedule(state.lightScheduleSettings))
+        }
         if state.connectionState.isConnected {
             context.command(.requestCurrentState)
         }

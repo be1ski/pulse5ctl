@@ -26,6 +26,7 @@
 "controls.speed_low" = "დაბალი";
 "controls.speed_mid" = "საშუალო";
 "controls.speed_high" = "მაღალი";
+"controls.schedule_active" = "შუქები გამორთული (დაგეგმილი)";
 
 /* Settings */
 "settings.title" = "პარამეტრები";
@@ -35,6 +36,9 @@
 "settings.when_idle" = "უმოქმედობისას:";
 "settings.idle_theme" = "უმოქმედობის თემა";
 "settings.language" = "ენა";
+"settings.light_schedule" = "განათების განრიგი";
+"settings.lights_off_at" = "შუქები გამორთული:";
+"settings.lights_on_at" = "შუქები ჩართული:";
 "settings.language_system" = "სისტემის ნაგულისხმევი";
 
 /* Color */
