@@ -17,11 +17,11 @@ func pulseSystemReducer(
                 }
                 return updated
             }
-            if connectionState == .connected && state.lightScheduleActive {
+            if connectionState == .connected && state.lightScheduleSettings.enabled {
                 context.command(.setBrightness(
                     level: state.brightness,
-                    bodyLight: false,
-                    projection: false
+                    bodyLight: state.bodyLightOn,
+                    projection: state.projectionOn
                 ))
             }
 
