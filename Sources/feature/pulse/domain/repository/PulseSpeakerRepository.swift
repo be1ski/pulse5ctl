@@ -2,7 +2,6 @@ import Foundation
 
 public protocol PulseSpeakerRepository: AnyObject {
     var events: AsyncStream<PulseRepositoryEvent> { get }
-    var snapshot: PulseSpeakerSnapshot { get }
 
     func startScan()
     func stopScan()
@@ -13,7 +12,10 @@ public protocol PulseSpeakerRepository: AnyObject {
     func setLight(enabled: Bool)
     func setBrightness(level: UInt8, bodyLight: Bool, projection: Bool)
     func setSpeed(_ speed: UInt8)
-    func setLedPackage(theme: LEDTheme, activePatterns: [LEDPattern], allPatterns: [LEDPattern], colorEffect: ColorEffect, color: LEDColor)
+    func setLedPackage(
+        theme: LEDTheme, activePatterns: [LEDPattern], allPatterns: [LEDPattern],
+        colorEffect: ColorEffect, color: LEDColor
+    )
 
     func requestCurrentState()
 }

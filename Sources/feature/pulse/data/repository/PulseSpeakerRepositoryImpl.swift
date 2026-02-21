@@ -1,33 +1,27 @@
-import CoreBluetooth
 import FeaturePulseDomain
 import Foundation
 
-public final class PulseSpeakerRepositoryImpl: NSObject, PulseSpeakerRepository {
-    public private(set) var snapshot = PulseSpeakerSnapshot()
+public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository {
     public var events: AsyncStream<PulseRepositoryEvent> { eventStream }
 
     private let bluetoothManager = BluetoothManager()
-    private var peripheralsByID: [UUID: CBPeripheral] = [:]
     private var discoveredDevicesByID: [UUID: DiscoveredDevice] = [:]
 
     private let eventStream: AsyncStream<PulseRepositoryEvent>
     private let eventContinuation: AsyncStream<PulseRepositoryEvent>.Continuation
 
-    public override init() {
+    public init() {
         var continuation: AsyncStream<PulseRepositoryEvent>.Continuation?
         eventStream = AsyncStream { inner in
             continuation = inner
         }
         eventContinuation = continuation!
 
-        super.init()
-        bluetoothManager.delegate = self
+        subscribeToStreams()
     }
 
     public func startScan() {
         discoveredDevicesByID.removeAll()
-        peripheralsByID.removeAll()
-        snapshot.connectionState = .scanning
         emit(.connectionChanged(.scanning))
         emit(.discoveredDevices([]))
         bluetoothManager.startScan()
@@ -38,14 +32,7 @@ public final class PulseSpeakerRepositoryImpl: NSObject, PulseSpeakerRepository 
     }
 
     public func connect(to deviceID: UUID) {
-        guard let peripheral = peripheralsByID[deviceID] else {
-            emit(.error(BluetoothError.unknownDevice.localizedDescription))
-            return
-        }
-
-        snapshot.connectionState = .connecting
-        emit(.connectionChanged(.connecting))
-        bluetoothManager.connect(to: peripheral)
+        bluetoothManager.connect(toDeviceWithID: deviceID)
     }
 
     public func disconnect() {
@@ -53,21 +40,15 @@ public final class PulseSpeakerRepositoryImpl: NSObject, PulseSpeakerRepository 
     }
 
     public func setTheme(_ theme: LEDTheme) {
-        snapshot.selectedTheme = theme
         bluetoothManager.write(PulseProtocol.switchPackage(theme.rawValue))
         emit(.theme(theme))
     }
 
     public func setLight(enabled: Bool) {
-        snapshot.lightOn = enabled
         bluetoothManager.write(PulseProtocol.setLightStatus(enabled))
     }
 
     public func setBrightness(level: UInt8, bodyLight: Bool, projection: Bool) {
-        snapshot.brightness = level
-        snapshot.bodyLightOn = bodyLight
-        snapshot.projectionOn = projection
-
         bluetoothManager.write(
             PulseProtocol.setLedBrightness(
                 level: level,
@@ -78,21 +59,20 @@ public final class PulseSpeakerRepositoryImpl: NSObject, PulseSpeakerRepository 
     }
 
     public func setSpeed(_ speed: UInt8) {
-        snapshot.speed = speed
         bluetoothManager.write(PulseProtocol.setMovementSpeed(speed))
     }
 
-    public func setLedPackage(theme: LEDTheme, activePatterns: [LEDPattern], allPatterns: [LEDPattern], colorEffect: ColorEffect, color: LEDColor) {
-        snapshot.selectedTheme = theme
+    public func setLedPackage(
+        theme: LEDTheme, activePatterns: [LEDPattern], allPatterns: [LEDPattern],
+        colorEffect: ColorEffect, color: LEDColor
+    ) {
         bluetoothManager.write(
             PulseProtocol.setLedPackage(
                 packageID: theme.rawValue,
                 activePatterns: activePatterns.map(\.rawValue),
                 allPatterns: allPatterns.map(\.rawValue),
                 colorEffect: colorEffect.rawValue,
-                red: color.red,
-                green: color.green,
-                blue: color.blue
+                color: color
             )
         )
         emit(.theme(theme))
@@ -126,71 +106,91 @@ public final class PulseSpeakerRepositoryImpl: NSObject, PulseSpeakerRepository 
         let sorted = discoveredDevicesByID.values.sorted { $0.rssi > $1.rssi }
         emit(.discoveredDevices(sorted))
     }
-}
 
-extension PulseSpeakerRepositoryImpl: BluetoothManagerDelegate {
-    func bluetoothManager(_ manager: BluetoothManager, didUpdateState state: ConnectionState) {
-        DispatchQueue.main.async { [weak self] in
+    private func subscribeToStreams() {
+        subscribeToStateUpdates()
+        subscribeToDiscoveredDevices()
+        subscribeToReceivedData()
+        subscribeToErrors()
+    }
+
+    private func subscribeToStateUpdates() {
+        Task { [weak self] in
             guard let self else { return }
-            snapshot.connectionState = state
-            emit(.connectionChanged(state))
-
-            if state.isConnected {
-                requestCurrentState()
+            for await state in bluetoothManager.stateUpdates {
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    emit(.connectionChanged(state))
+                    if state.isConnected {
+                        requestCurrentState()
+                    }
+                }
             }
         }
     }
 
-    func bluetoothManager(_ manager: BluetoothManager, didReceiveData data: Data) {
-        DispatchQueue.main.async { [weak self] in
+    private func subscribeToDiscoveredDevices() {
+        Task { [weak self] in
             guard let self else { return }
-
-            if let lightOn = PulseProtocol.parseLightStatus(data) {
-                snapshot.lightOn = lightOn
-                emit(.lightStatus(lightOn))
+            for await device in bluetoothManager.discoveredDevices {
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    discoveredDevicesByID[device.id] = device
+                    updateDiscoveredDevices()
+                }
             }
+        }
+    }
 
-            if let brightness = PulseProtocol.parseBrightnessState(data) {
-                snapshot.brightness = brightness.level
-                snapshot.bodyLightOn = brightness.bodyLightOn
-                snapshot.projectionOn = brightness.projectionOn
-                emit(
-                    .brightness(
-                        level: brightness.level,
-                        bodyLight: brightness.bodyLightOn,
-                        projection: brightness.projectionOn
-                    )
+    private func subscribeToReceivedData() {
+        Task { [weak self] in
+            guard let self else { return }
+            for await data in bluetoothManager.receivedData {
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    handleReceivedData(data)
+                }
+            }
+        }
+    }
+
+    private func handleReceivedData(_ data: Data) {
+        if let lightOn = PulseProtocol.parseLightStatus(data) {
+            emit(.lightStatus(lightOn))
+        }
+
+        if let brightness = PulseProtocol.parseBrightnessState(data) {
+            emit(
+                .brightness(
+                    level: brightness.level,
+                    bodyLight: brightness.bodyLightOn,
+                    projection: brightness.projectionOn
                 )
-            }
+            )
+        }
 
-            if let speed = PulseProtocol.parseMovementSpeed(data) {
-                snapshot.speed = speed
-                emit(.speed(speed))
-            }
+        if let speed = PulseProtocol.parseMovementSpeed(data) {
+            emit(.speed(speed))
+        }
 
-            if let theme = PulseProtocol.parseSelectedTheme(data) {
-                snapshot.selectedTheme = theme
-                emit(.theme(theme))
-            }
+        if let theme = PulseProtocol.parseSelectedTheme(data) {
+            emit(.theme(theme))
         }
     }
 
-    func bluetoothManager(_ manager: BluetoothManager, didEncounterError error: BluetoothError) {
-        DispatchQueue.main.async { [weak self] in
-            self?.emit(.error(error.localizedDescription))
-        }
-    }
-
-    func bluetoothManager(
-        _ manager: BluetoothManager,
-        didDiscoverDevice device: DiscoveredDevice,
-        peripheral: CBPeripheral
-    ) {
-        DispatchQueue.main.async { [weak self] in
+    private func subscribeToErrors() {
+        Task { [weak self] in
             guard let self else { return }
-            peripheralsByID[device.id] = peripheral
-            discoveredDevicesByID[device.id] = device
-            updateDiscoveredDevices()
+            for await error in bluetoothManager.errors {
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    if let error {
+                        emit(.error(error.localizedDescription))
+                    } else {
+                        emit(.errorCleared)
+                    }
+                }
+            }
         }
     }
 }

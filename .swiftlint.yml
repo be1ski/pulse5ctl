@@ -1,0 +1,14 @@
+included:
+  - Sources
+  - Tests
+
+excluded:
+  - .build
+
+custom_rules:
+  test_naming_convention:
+    name: "Test Naming Convention"
+    regex: '^\s+func\s+(test(?!_)[A-Za-z])'
+    message: "Test functions must use underscore-separated naming: test_unitOfWork_condition_expectedBehavior"
+    severity: error
+    included: ".*Tests\\.swift"

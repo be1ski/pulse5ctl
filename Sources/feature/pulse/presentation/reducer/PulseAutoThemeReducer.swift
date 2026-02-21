@@ -9,10 +9,8 @@ func pulseAutoThemeReducer(
     switch action {
     case .toggleEnabled:
         let newEnabled = !state.autoThemeSettings.enabled
-        context.state { current in
-            var updated = current
-            updated.autoThemeSettings.enabled = newEnabled
-            return updated
+        context.state {
+            $0.autoThemeSettings.enabled = newEnabled
         }
         context.command(.saveAutoThemeSettings(state.autoThemeSettings.with(enabled: newEnabled)))
         if newEnabled && state.connectionState.isConnected {
@@ -23,10 +21,8 @@ func pulseAutoThemeReducer(
         }
 
     case let .setPlayingTheme(theme):
-        context.state { current in
-            var updated = current
-            updated.autoThemeSettings.playingTheme = theme
-            return updated
+        context.state {
+            $0.autoThemeSettings.playingTheme = theme
         }
         context.command(.saveAutoThemeSettings(state.autoThemeSettings.with(playingTheme: theme)))
         if state.autoThemeSettings.enabled && state.isMusicPlaying && state.connectionState.isConnected {
@@ -34,10 +30,8 @@ func pulseAutoThemeReducer(
         }
 
     case let .setIdleTheme(theme):
-        context.state { current in
-            var updated = current
-            updated.autoThemeSettings.idleTheme = theme
-            return updated
+        context.state {
+            $0.autoThemeSettings.idleTheme = theme
         }
         context.command(.saveAutoThemeSettings(state.autoThemeSettings.with(idleTheme: theme)))
         if state.autoThemeSettings.enabled && !state.isMusicPlaying && state.connectionState.isConnected {

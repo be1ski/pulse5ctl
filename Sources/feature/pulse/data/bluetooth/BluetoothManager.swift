@@ -2,19 +2,16 @@ import CoreBluetooth
 import FeaturePulseDomain
 import Foundation
 
-protocol BluetoothManagerDelegate: AnyObject {
-    func bluetoothManager(_ manager: BluetoothManager, didUpdateState state: ConnectionState)
-    func bluetoothManager(_ manager: BluetoothManager, didReceiveData data: Data)
-    func bluetoothManager(_ manager: BluetoothManager, didEncounterError error: BluetoothError)
-    func bluetoothManager(
-        _ manager: BluetoothManager,
-        didDiscoverDevice device: DiscoveredDevice,
-        peripheral: CBPeripheral
-    )
-}
-
 final class BluetoothManager: NSObject {
-    weak var delegate: BluetoothManagerDelegate?
+    let stateUpdates: AsyncStream<ConnectionState>
+    let discoveredDevices: AsyncStream<DiscoveredDevice>
+    let receivedData: AsyncStream<Data>
+    let errors: AsyncStream<BluetoothError?>
+
+    private let stateContinuation: AsyncStream<ConnectionState>.Continuation
+    private let deviceContinuation: AsyncStream<DiscoveredDevice>.Continuation
+    private let dataContinuation: AsyncStream<Data>.Continuation
+    private let errorContinuation: AsyncStream<BluetoothError?>.Continuation
 
     private var centralManager: CBCentralManager!
     private var peripheral: CBPeripheral?
@@ -24,15 +21,32 @@ final class BluetoothManager: NSObject {
 
     private(set) var connectionState: ConnectionState = .disconnected {
         didSet {
-            delegate?.bluetoothManager(self, didUpdateState: connectionState)
+            stateContinuation.yield(connectionState)
         }
     }
 
+    private var discoveredPeripherals: [UUID: CBPeripheral] = [:]
     private var reconnectAttempt = 0
     private var shouldReconnect = false
     private var reconnectTask: Task<Void, Never>?
 
     override init() {
+        var stateCont: AsyncStream<ConnectionState>.Continuation?
+        stateUpdates = AsyncStream { stateCont = $0 }
+        stateContinuation = stateCont!
+
+        var deviceCont: AsyncStream<DiscoveredDevice>.Continuation?
+        discoveredDevices = AsyncStream { deviceCont = $0 }
+        deviceContinuation = deviceCont!
+
+        var dataCont: AsyncStream<Data>.Continuation?
+        receivedData = AsyncStream { dataCont = $0 }
+        dataContinuation = dataCont!
+
+        var errorCont: AsyncStream<BluetoothError?>.Continuation?
+        errors = AsyncStream { errorCont = $0 }
+        errorContinuation = errorCont!
+
         super.init()
         centralManager = CBCentralManager(delegate: self, queue: bleQueue)
     }
@@ -70,7 +84,24 @@ final class BluetoothManager: NSObject {
         }
     }
 
+    func connect(toDeviceWithID id: UUID) {
+        bleQueue.async {
+            guard let peripheral = self.discoveredPeripherals[id] else {
+                self.errorContinuation.yield(.unknownDevice)
+                return
+            }
+            self.connectPeripheral(peripheral)
+        }
+    }
+
     func connect(to peripheral: CBPeripheral) {
+        bleQueue.async {
+            self.connectPeripheral(peripheral)
+        }
+    }
+
+    /// Must be called on `bleQueue`.
+    private func connectPeripheral(_ peripheral: CBPeripheral) {
         self.peripheral = peripheral
         peripheral.delegate = self
         connectionState = .connecting
@@ -80,6 +111,13 @@ final class BluetoothManager: NSObject {
     }
 
     func disconnect() {
+        bleQueue.async {
+            self.performDisconnect()
+        }
+    }
+
+    /// Must be called on `bleQueue`.
+    private func performDisconnect() {
         shouldReconnect = false
         reconnectTask?.cancel()
         reconnectTask = nil
@@ -94,7 +132,7 @@ final class BluetoothManager: NSObject {
 
     func write(_ data: Data) {
         guard let peripheral, let writeCharacteristic else {
-            delegate?.bluetoothManager(self, didEncounterError: .characteristicNotFound)
+            errorContinuation.yield(.characteristicNotFound)
             return
         }
 
@@ -116,7 +154,7 @@ final class BluetoothManager: NSObject {
               let peripheral else {
             if reconnectAttempt >= PulseConstants.maxReconnectAttempts {
                 connectionState = .disconnected
-                delegate?.bluetoothManager(self, didEncounterError: .disconnected)
+                errorContinuation.yield(.disconnected)
             }
             return
         }
@@ -138,6 +176,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
         switch central.state {
         case .poweredOn:
             reconnectAttempt = 0
+            errorContinuation.yield(nil)
             if connectionState != .connected,
                let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
                let uuid = UUID(uuidString: uuidString),
@@ -145,13 +184,13 @@ extension BluetoothManager: CBCentralManagerDelegate {
                 connect(to: cached)
             }
         case .poweredOff:
-            delegate?.bluetoothManager(self, didEncounterError: .poweredOff)
+            errorContinuation.yield(.poweredOff)
             connectionState = .disconnected
         case .unauthorized:
-            delegate?.bluetoothManager(self, didEncounterError: .unauthorized)
+            errorContinuation.yield(.unauthorized)
             connectionState = .disconnected
         case .unsupported:
-            delegate?.bluetoothManager(self, didEncounterError: .unsupported)
+            errorContinuation.yield(.unsupported)
             connectionState = .disconnected
         default:
             break
@@ -171,6 +210,8 @@ extension BluetoothManager: CBCentralManagerDelegate {
 
         let isPulse = hasServiceUUID || name.hasPrefix(PulseConstants.deviceNamePrefix)
 
+        discoveredPeripherals[peripheral.identifier] = peripheral
+
         let device = DiscoveredDevice(
             id: peripheral.identifier,
             name: name,
@@ -178,7 +219,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
             hasPulseService: isPulse
         )
 
-        delegate?.bluetoothManager(self, didDiscoverDevice: device, peripheral: peripheral)
+        deviceContinuation.yield(device)
     }
 
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
@@ -190,7 +231,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
 
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         let reason = error?.localizedDescription ?? "Unknown reason"
-        delegate?.bluetoothManager(self, didEncounterError: .connectionFailed(reason))
+        errorContinuation.yield(.connectionFailed(reason))
         attemptReconnect()
     }
 
@@ -209,7 +250,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
 extension BluetoothManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let service = peripheral.services?.first(where: { $0.uuid == PulseConstants.serviceUUID }) else {
-            delegate?.bluetoothManager(self, didEncounterError: .serviceNotFound)
+            errorContinuation.yield(.serviceNotFound)
             centralManager.cancelPeripheralConnection(peripheral)
             cleanup()
             connectionState = .disconnected
@@ -224,8 +265,8 @@ extension BluetoothManager: CBPeripheralDelegate {
 
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         guard let characteristics = service.characteristics else {
-            delegate?.bluetoothManager(self, didEncounterError: .characteristicNotFound)
-            disconnect()
+            errorContinuation.yield(.characteristicNotFound)
+            performDisconnect()
             return
         }
 
@@ -243,19 +284,19 @@ extension BluetoothManager: CBPeripheralDelegate {
         if writeCharacteristic != nil {
             connectionState = .connected
         } else {
-            delegate?.bluetoothManager(self, didEncounterError: .characteristicNotFound)
-            disconnect()
+            errorContinuation.yield(.characteristicNotFound)
+            performDisconnect()
         }
     }
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         guard let data = characteristic.value else { return }
-        delegate?.bluetoothManager(self, didReceiveData: data)
+        dataContinuation.yield(data)
     }
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         if let error {
-            delegate?.bluetoothManager(self, didEncounterError: .writeFailed(error.localizedDescription))
+            errorContinuation.yield(.writeFailed(error.localizedDescription))
         }
     }
 }

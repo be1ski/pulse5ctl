@@ -5,7 +5,6 @@ import Foundation
 public enum PulseFeatureFactory {
     @MainActor
     public static func create(dependencies: PulseDependencies) -> PulseFeature {
-        let snapshot = dependencies.loadPulseSnapshot()
         let autoThemeSettings = dependencies.loadAutoThemeSettings()
         let ledCustomization = dependencies.loadLedCustomization()
         let lightScheduleSettings = dependencies.loadLightScheduleSettings()
@@ -32,20 +31,11 @@ public enum PulseFeatureFactory {
         )
 
         let hasCachedPeripheral = UserDefaults.standard.string(forKey: "lastPeripheralUUID") != nil
-        let initialConnectionState = hasCachedPeripheral ? ConnectionState.connecting : snapshot.connectionState
+        let initialConnectionState: ConnectionState = hasCachedPeripheral ? .connecting : .disconnected
 
         let feature = PulseFeature(
             initialState: PulseState(
                 connectionState: initialConnectionState,
-                discoveredDevices: [],
-                brightness: snapshot.brightness,
-                bodyLightOn: snapshot.bodyLightOn,
-                projectionOn: snapshot.projectionOn,
-                lightOn: snapshot.lightOn,
-                speed: snapshot.speed,
-                selectedTheme: snapshot.selectedTheme,
-                errorMessage: nil,
-                isObservingRepository: false,
                 autoThemeSettings: autoThemeSettings,
                 activePatterns: ledCustomization.activePatternsMap(),
                 colorEffect: ledCustomization.colorEffect,

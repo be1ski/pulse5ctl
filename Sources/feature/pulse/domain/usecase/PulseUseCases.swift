@@ -12,18 +12,6 @@ public struct ObservePulseEventsUseCase {
     }
 }
 
-public struct LoadPulseSnapshotUseCase {
-    private let repository: any PulseSpeakerRepository
-
-    public init(repository: any PulseSpeakerRepository) {
-        self.repository = repository
-    }
-
-    public func callAsFunction() -> PulseSpeakerSnapshot {
-        repository.snapshot
-    }
-}
-
 public struct StartPulseScanUseCase {
     private let repository: any PulseSpeakerRepository
 
@@ -115,8 +103,14 @@ public struct SetPulseLedPackageUseCase {
         self.repository = repository
     }
 
-    public func callAsFunction(theme: LEDTheme, activePatterns: [LEDPattern], allPatterns: [LEDPattern], colorEffect: ColorEffect, color: LEDColor) {
-        repository.setLedPackage(theme: theme, activePatterns: activePatterns, allPatterns: allPatterns, colorEffect: colorEffect, color: color)
+    public func callAsFunction(
+        theme: LEDTheme, activePatterns: [LEDPattern], allPatterns: [LEDPattern],
+        colorEffect: ColorEffect, color: LEDColor
+    ) {
+        repository.setLedPackage(
+            theme: theme, activePatterns: activePatterns, allPatterns: allPatterns,
+            colorEffect: colorEffect, color: color
+        )
     }
 }
 
