@@ -3,6 +3,7 @@ import FeaturePulseDomain
 @testable import FeaturePulsePresentation
 import XCTest
 
+// swiftlint:disable:next type_body_length
 final class PulseSystemReducerTests: XCTestCase {
 
     // MARK: - Helpers
@@ -88,7 +89,7 @@ final class PulseSystemReducerTests: XCTestCase {
         XCTAssertEqual(result.state.connectedDeviceName, "Pulse 5")
     }
 
-    func test_connectionChanged_toConnectedWithSchedule_emitsBrightness() {
+    func test_connectionChanged_toConnectedWithSchedule_setsSyncFlag() {
         let state = PulseState(
             brightness: 50,
             bodyLightOn: true,
@@ -96,19 +97,28 @@ final class PulseSystemReducerTests: XCTestCase {
             lightScheduleSettings: LightScheduleSettings(enabled: true)
         )
         let result = reduce(.repositoryEvent(.connectionChanged(.connected)), state: state)
-        XCTAssertTrue(result.effects.commands.contains(where: {
-            if case .setBrightness(level: 50, bodyLight: true, projection: false) = $0 { return true }
-            return false
-        }))
-    }
-
-    func test_connectionChanged_toConnectedWithoutSchedule_noBrightness() {
-        let state = PulseState(lightScheduleSettings: LightScheduleSettings(enabled: false))
-        let result = reduce(.repositoryEvent(.connectionChanged(.connected)), state: state)
+        XCTAssertTrue(result.state.needsLightScheduleSync)
         XCTAssertFalse(result.effects.commands.contains(where: {
             if case .setBrightness = $0 { return true }
             return false
         }))
+    }
+
+    func test_connectionChanged_toConnectedWithoutSchedule_noSyncFlag() {
+        let state = PulseState(lightScheduleSettings: LightScheduleSettings(enabled: false))
+        let result = reduce(.repositoryEvent(.connectionChanged(.connected)), state: state)
+        XCTAssertFalse(result.state.needsLightScheduleSync)
+        XCTAssertFalse(result.effects.commands.contains(where: {
+            if case .setBrightness = $0 { return true }
+            return false
+        }))
+    }
+
+    func test_connectionChanged_toDisconnected_clearsSyncFlag() {
+        var state = PulseState(connectionState: .connected)
+        state.needsLightScheduleSync = true
+        let result = reduce(.repositoryEvent(.connectionChanged(.disconnected)), state: state)
+        XCTAssertFalse(result.state.needsLightScheduleSync)
     }
 
     // MARK: - Discovered Devices
@@ -129,6 +139,50 @@ final class PulseSystemReducerTests: XCTestCase {
         XCTAssertEqual(result.state.brightness, 60)
         XCTAssertTrue(result.state.bodyLightOn)
         XCTAssertFalse(result.state.projectionOn)
+    }
+
+    func test_brightnessEvent_withSync_sendsBrightnessWithScheduleState() {
+        var state = PulseState(bodyLightOn: false, projectionOn: false)
+        state.needsLightScheduleSync = true
+        state.lightScheduleActive = true
+        let result = reduce(
+            .repositoryEvent(.brightness(level: 65, bodyLight: true, projection: true)),
+            state: state
+        )
+        XCTAssertEqual(result.state.brightness, 65)
+        XCTAssertFalse(result.state.bodyLightOn)
+        XCTAssertFalse(result.state.projectionOn)
+        XCTAssertFalse(result.state.needsLightScheduleSync)
+        XCTAssertTrue(result.effects.commands.contains(where: {
+            if case .setBrightness(level: 65, bodyLight: false, projection: false) = $0 { return true }
+            return false
+        }))
+    }
+
+    func test_brightnessEvent_withSyncNotInOffWindow_syncsWithCurrentState() {
+        var state = PulseState(bodyLightOn: true, projectionOn: true)
+        state.needsLightScheduleSync = true
+        let result = reduce(
+            .repositoryEvent(.brightness(level: 40, bodyLight: true, projection: true)),
+            state: state
+        )
+        XCTAssertEqual(result.state.brightness, 40)
+        XCTAssertTrue(result.state.bodyLightOn)
+        XCTAssertTrue(result.state.projectionOn)
+        XCTAssertFalse(result.state.needsLightScheduleSync)
+        XCTAssertTrue(result.effects.commands.contains(where: {
+            if case .setBrightness(level: 40, bodyLight: true, projection: true) = $0 { return true }
+            return false
+        }))
+    }
+
+    func test_brightnessEvent_withoutSync_noBrightnessCommand() {
+        let result = reduce(.repositoryEvent(.brightness(level: 50, bodyLight: true, projection: true)))
+        XCTAssertFalse(result.state.needsLightScheduleSync)
+        XCTAssertFalse(result.effects.commands.contains(where: {
+            if case .setBrightness = $0 { return true }
+            return false
+        }))
     }
 
     func test_speedEvent_updatesState() {

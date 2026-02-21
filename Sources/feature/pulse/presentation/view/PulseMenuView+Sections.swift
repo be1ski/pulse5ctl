@@ -255,7 +255,7 @@ extension PulseMenuView {
                         set: { feature.send(.controls(.setBrightness($0))) }
                     ),
                     in: 20 ... 80,
-                    step: 1
+                    step: 6
                 )
                 .tint(.orange)
                 Image(systemName: "sun.max")
@@ -304,17 +304,39 @@ extension PulseMenuView {
             Text(L10n.controlsAnimationSpeed)
                 .font(.headline)
 
-            Picker(L10n.controlsSpeed, selection: Binding(
-                get: { state.speed },
-                set: { feature.send(.controls(.setSpeed($0))) }
-            )) {
-                Text(L10n.controlsSpeedLow).tag(UInt8(1))
-                Text(L10n.controlsSpeedMid).tag(UInt8(2))
-                Text(L10n.controlsSpeedHigh).tag(UInt8(3))
+            HStack(spacing: 6) {
+                ForEach(speedOptions, id: \.value) { option in
+                    let isSelected = state.speed == option.value
+                    Button {
+                        feature.send(.controls(.setSpeed(option.value)))
+                    } label: {
+                        Text(option.label)
+                            .font(.caption2)
+                            .lineLimit(1)
+                            .padding(.vertical, 5)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(isSelected ? Color.accentColor.opacity(0.15) : Color(.controlBackgroundColor))
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(isSelected ? Color.accentColor : Color(.separatorColor), lineWidth: 1)
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .animation(.easeInOut(duration: 0.15), value: isSelected)
+                }
             }
-            .pickerStyle(.segmented)
-            .labelsHidden()
         }
+    }
+
+    private var speedOptions: [(label: String, value: UInt8)] {
+        [
+            (L10n.controlsSpeedLow, 1),
+            (L10n.controlsSpeedMid, 2),
+            (L10n.controlsSpeedHigh, 3)
+        ]
     }
 }
 

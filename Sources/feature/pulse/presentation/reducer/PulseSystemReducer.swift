@@ -35,10 +35,21 @@ private func handleRepositoryEvent(
             $0.lightOn = lightOn
         }
     case let .brightness(level, bodyLight, projection):
+        let shouldSync = state.needsLightScheduleSync
         context.state {
             $0.brightness = level
-            $0.bodyLightOn = bodyLight
-            $0.projectionOn = projection
+            if !shouldSync {
+                $0.bodyLightOn = bodyLight
+                $0.projectionOn = projection
+            }
+            $0.needsLightScheduleSync = false
+        }
+        if shouldSync {
+            context.command(.setBrightness(
+                level: level,
+                bodyLight: state.bodyLightOn,
+                projection: state.projectionOn
+            ))
         }
     case let .speed(speed):
         context.state {
@@ -62,18 +73,16 @@ private func handleConnectionChanged(
     _ state: PulseState,
     _ context: ReducerContext<PulseState, PulseEffect, Never>
 ) {
+    let needsSync = connectionState == .connected && state.lightScheduleSettings.enabled
     context.state {
         $0.connectionState = connectionState
         if connectionState == .disconnected {
             $0.connectedDeviceName = nil
+            $0.needsLightScheduleSync = false
         }
-    }
-    if connectionState == .connected && state.lightScheduleSettings.enabled {
-        context.command(.setBrightness(
-            level: state.brightness,
-            bodyLight: state.bodyLightOn,
-            projection: state.projectionOn
-        ))
+        if needsSync {
+            $0.needsLightScheduleSync = true
+        }
     }
 }
 
