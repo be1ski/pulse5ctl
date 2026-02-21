@@ -26,7 +26,7 @@
 "controls.speed_low" = "Niedrig";
 "controls.speed_mid" = "Mittel";
 "controls.speed_high" = "Hoch";
-"controls.schedule_active" = "Lights off (scheduled)";
+"controls.schedule_active" = "Lichter aus (geplant)";
 
 /* Settings */
 "settings.title" = "Einstellungen";
@@ -36,9 +36,9 @@
 "settings.when_idle" = "Im Ruhezustand:";
 "settings.idle_theme" = "Ruhezustand-Thema";
 "settings.language" = "Sprache";
-"settings.light_schedule" = "Light Schedule";
-"settings.lights_off_at" = "Lights off at:";
-"settings.lights_on_at" = "Lights on at:";
+"settings.light_schedule" = "Lichtzeitplan";
+"settings.lights_off_at" = "Lichter aus um:";
+"settings.lights_on_at" = "Lichter an um:";
 "settings.language_system" = "Systemstandard";
 
 /* Color */

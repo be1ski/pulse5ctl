@@ -26,7 +26,7 @@
 "controls.speed_low" = "Mică";
 "controls.speed_mid" = "Medie";
 "controls.speed_high" = "Mare";
-"controls.schedule_active" = "Lights off (scheduled)";
+"controls.schedule_active" = "Luminile stinse (programate)";
 
 /* Settings */
 "settings.title" = "Setări";
@@ -36,9 +36,9 @@
 "settings.when_idle" = "Când e inactiv:";
 "settings.idle_theme" = "Temă de inactivitate";
 "settings.language" = "Limbă";
-"settings.light_schedule" = "Light Schedule";
-"settings.lights_off_at" = "Lights off at:";
-"settings.lights_on_at" = "Lights on at:";
+"settings.light_schedule" = "Program de iluminare";
+"settings.lights_off_at" = "Luminile stinse la:";
+"settings.lights_on_at" = "Luminile aprinse la:";
 "settings.language_system" = "Implicit sistem";
 
 /* Color */

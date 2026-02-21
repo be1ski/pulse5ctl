@@ -26,7 +26,7 @@
 "controls.speed_low" = "Баяу";
 "controls.speed_mid" = "Орташа";
 "controls.speed_high" = "Жоғары";
-"controls.schedule_active" = "Lights off (scheduled)";
+"controls.schedule_active" = "Огнь өшірілген (қарау бойынша)";
 
 /* Settings */
 "settings.title" = "Параметрлер";
@@ -36,9 +36,9 @@
 "settings.when_idle" = "Күту режимінде:";
 "settings.idle_theme" = "Күту тақырыбы";
 "settings.language" = "Тіл";
-"settings.light_schedule" = "Light Schedule";
-"settings.lights_off_at" = "Lights off at:";
-"settings.lights_on_at" = "Lights on at:";
+"settings.light_schedule" = "Жарық ісіктігі";
+"settings.lights_off_at" = "Огнь өшіңіз:";
+"settings.lights_on_at" = "Огнь қосыңыз:";
 "settings.language_system" = "Жүйе бойынша";
 
 /* Color */

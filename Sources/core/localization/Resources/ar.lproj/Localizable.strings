@@ -26,7 +26,7 @@
 "controls.speed_low" = "منخفضة";
 "controls.speed_mid" = "متوسطة";
 "controls.speed_high" = "عالية";
-"controls.schedule_active" = "Lights off (scheduled)";
+"controls.schedule_active" = "الأضواء مطفأة (مجدولة)";
 
 /* Settings */
 "settings.title" = "الإعدادات";
@@ -36,9 +36,9 @@
 "settings.when_idle" = "في وضع الخمول:";
 "settings.idle_theme" = "سمة الخمول";
 "settings.language" = "اللغة";
-"settings.light_schedule" = "Light Schedule";
-"settings.lights_off_at" = "Lights off at:";
-"settings.lights_on_at" = "Lights on at:";
+"settings.light_schedule" = "جدول الإضاءة";
+"settings.lights_off_at" = "إطفاء الأضواء في:";
+"settings.lights_on_at" = "إضاءة الأضواء في:";
 "settings.language_system" = "النظام الافتراضي";
 
 /* Color */

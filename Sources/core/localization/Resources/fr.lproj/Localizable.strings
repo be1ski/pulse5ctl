@@ -26,7 +26,7 @@
 "controls.speed_low" = "Lente";
 "controls.speed_mid" = "Moyenne";
 "controls.speed_high" = "Rapide";
-"controls.schedule_active" = "Lights off (scheduled)";
+"controls.schedule_active" = "Lumières éteintes (programmées)";
 
 /* Settings */
 "settings.title" = "Réglages";
@@ -36,9 +36,9 @@
 "settings.when_idle" = "En veille :";
 "settings.idle_theme" = "Thème de veille";
 "settings.language" = "Langue";
-"settings.light_schedule" = "Light Schedule";
-"settings.lights_off_at" = "Lights off at:";
-"settings.lights_on_at" = "Lights on at:";
+"settings.light_schedule" = "Calendrier d'éclairage";
+"settings.lights_off_at" = "Lumières éteintes à :";
+"settings.lights_on_at" = "Lumières allumées à :";
 "settings.language_system" = "Par défaut du système";
 
 /* Color */

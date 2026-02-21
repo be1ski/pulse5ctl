@@ -26,7 +26,7 @@
 "controls.speed_low" = "低";
 "controls.speed_mid" = "中";
 "controls.speed_high" = "高";
-"controls.schedule_active" = "Lights off (scheduled)";
+"controls.schedule_active" = "关闭灯（已计划）";
 
 /* Settings */
 "settings.title" = "设置";
@@ -36,9 +36,9 @@
 "settings.when_idle" = "空闲时：";
 "settings.idle_theme" = "空闲主题";
 "settings.language" = "语言";
-"settings.light_schedule" = "Light Schedule";
-"settings.lights_off_at" = "Lights off at:";
-"settings.lights_on_at" = "Lights on at:";
+"settings.light_schedule" = "灯光计划";
+"settings.lights_off_at" = "灯关闭时间：";
+"settings.lights_on_at" = "灯打开时间：";
 "settings.language_system" = "系统默认";
 
 /* Color */

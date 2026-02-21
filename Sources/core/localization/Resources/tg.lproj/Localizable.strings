@@ -26,7 +26,7 @@
 "controls.speed_low" = "Паст";
 "controls.speed_mid" = "Миёна";
 "controls.speed_high" = "Баланд";
-"controls.schedule_active" = "Lights off (scheduled)";
+"controls.schedule_active" = "Чроғ хомӯш (график)";
 
 /* Settings */
 "settings.title" = "Танзимот";
@@ -36,9 +36,9 @@
 "settings.when_idle" = "Ҳангоми бекорӣ:";
 "settings.idle_theme" = "Мавзӯи бекорӣ";
 "settings.language" = "Забон";
-"settings.light_schedule" = "Light Schedule";
-"settings.lights_off_at" = "Lights off at:";
-"settings.lights_on_at" = "Lights on at:";
+"settings.light_schedule" = "График чроғ";
+"settings.lights_off_at" = "Чроғ хомӯш дар:";
+"settings.lights_on_at" = "Чроғ фаъол дар:";
 "settings.language_system" = "Пешфарзи система";
 
 /* Color */

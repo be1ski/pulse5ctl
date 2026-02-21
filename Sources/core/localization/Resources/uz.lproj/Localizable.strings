@@ -26,7 +26,7 @@
 "controls.speed_low" = "Past";
 "controls.speed_mid" = "O'rta";
 "controls.speed_high" = "Yuqori";
-"controls.schedule_active" = "Lights off (scheduled)";
+"controls.schedule_active" = "Yorug'lik o'chirilgan (rejalashtirilgan)";
 
 /* Settings */
 "settings.title" = "Sozlamalar";
@@ -36,9 +36,9 @@
 "settings.when_idle" = "Kutish rejimida:";
 "settings.idle_theme" = "Kutish mavzusi";
 "settings.language" = "Til";
-"settings.light_schedule" = "Light Schedule";
-"settings.lights_off_at" = "Lights off at:";
-"settings.lights_on_at" = "Lights on at:";
+"settings.light_schedule" = "Yorug'lik jadavali";
+"settings.lights_off_at" = "Yorug'lik o'chiriladigan vaqti:";
+"settings.lights_on_at" = "Yorug'lik yoqiladigan vaqti:";
 "settings.language_system" = "Tizim boʻyicha";
 
 /* Color */
