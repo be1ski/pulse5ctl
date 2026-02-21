@@ -9,10 +9,10 @@ public final class AppGraph {
 
     public let appDependencies: AppDependencies
 
-    private static let autoThemeKey = "autoThemeSettings"
-    private static let ledCustomizationKey = "ledCustomization"
-    private static let lightScheduleKey = "lightScheduleSettings"
-    private static let languageKey = "selectedLanguage"
+    nonisolated private static let autoThemeKey = "autoThemeSettings"
+    nonisolated private static let ledCustomizationKey = "ledCustomization"
+    nonisolated private static let lightScheduleKey = "lightScheduleSettings"
+    nonisolated private static let languageKey = "selectedLanguage"
 
     private init() {
         let repository = PulseSpeakerRepositoryImpl()
@@ -52,12 +52,12 @@ public final class AppGraph {
         appDependencies = AppDependencies(pulseFeature: pulseFeature)
     }
 
-    private static func load<T: Decodable>(forKey key: String) -> T? {
+    nonisolated private static func load<T: Decodable>(forKey key: String) -> T? {
         guard let data = UserDefaults.standard.data(forKey: key) else { return nil }
         return try? JSONDecoder().decode(T.self, from: data)
     }
 
-    private static func save<T: Encodable>(_ value: T, forKey key: String) {
+    nonisolated private static func save<T: Encodable>(_ value: T, forKey key: String) {
         if let data = try? JSONEncoder().encode(value) {
             UserDefaults.standard.set(data, forKey: key)
         }

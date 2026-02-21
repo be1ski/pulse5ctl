@@ -1,7 +1,7 @@
 import FeaturePulseDomain
 import Foundation
 
-public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository {
+public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecked Sendable {
     public var events: AsyncStream<PulseRepositoryEvent> { eventStream }
 
     private let bluetoothManager = BluetoothManager()

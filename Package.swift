@@ -3,6 +3,7 @@ import PackageDescription
 
 let strictConcurrency: [SwiftSetting] = [
     .enableUpcomingFeature("StrictConcurrency"),
+    .unsafeFlags(["-warnings-as-errors"]),
 ]
 
 let package = Package(

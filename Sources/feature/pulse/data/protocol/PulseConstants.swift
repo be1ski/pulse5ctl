@@ -1,4 +1,4 @@
-import CoreBluetooth
+@preconcurrency import CoreBluetooth
 
 enum PulseConstants {
     static let serviceUUID = CBUUID(string: "65786365-6c70-6f69-6e74-2e636f6d0000")

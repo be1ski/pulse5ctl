@@ -1,6 +1,6 @@
 import Foundation
 
-public struct DiscoveredDevice: Identifiable, Equatable {
+public struct DiscoveredDevice: Identifiable, Equatable, Sendable {
     public let id: UUID
     public let name: String
     public let rssi: Int

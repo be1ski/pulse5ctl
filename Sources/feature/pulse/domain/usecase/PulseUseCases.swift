@@ -114,9 +114,9 @@ public struct SetPulseLedPackageUseCase {
     }
 }
 
-public typealias ObserveNowPlayingUseCase = () -> AsyncStream<Bool>
+public typealias ObserveNowPlayingUseCase = @Sendable () -> AsyncStream<Bool>
 
-public typealias ObserveLightScheduleUseCase = (LightScheduleSettings) -> AsyncStream<Bool>
+public typealias ObserveLightScheduleUseCase = @Sendable (LightScheduleSettings) -> AsyncStream<Bool>
 
 public struct RequestPulseStateUseCase {
     private let repository: any PulseSpeakerRepository

@@ -1,24 +1,25 @@
 import CoreAudio
 import FeaturePulseDomain
 import Foundation
+@preconcurrency import ObjectiveC
 
-public final class NowPlayingMonitor {
+public final class NowPlayingMonitor: Sendable {
     private let center = DistributedNotificationCenter.default()
 
     public init() {}
 
     public func observe() -> AsyncStream<Bool> {
         AsyncStream { continuation in
-            var spotifyPlaying = false
-            var musicPlaying = false
+            nonisolated(unsafe) var spotifyPlaying = false
+            nonisolated(unsafe) var musicPlaying = false
 
-            func update() {
+            @Sendable func update() {
                 let isPlaying = spotifyPlaying || musicPlaying
                 let throughPulse = isPlaying && Self.isDefaultOutputPulse()
                 continuation.yield(throughPulse)
             }
 
-            let spotifyObserver = center.addObserver(
+            nonisolated(unsafe) let spotifyObserver = center.addObserver(
                 forName: Notification.Name("com.spotify.client.PlaybackStateChanged"),
                 object: nil,
                 queue: .main
@@ -28,7 +29,7 @@ public final class NowPlayingMonitor {
                 update()
             }
 
-            let musicObserver = center.addObserver(
+            nonisolated(unsafe) let musicObserver = center.addObserver(
                 forName: Notification.Name("com.apple.Music.playerInfo"),
                 object: nil,
                 queue: .main
@@ -38,7 +39,7 @@ public final class NowPlayingMonitor {
                 update()
             }
 
-            let removeAudioListener = Self.addOutputDeviceListener { update() }
+            nonisolated(unsafe) let removeAudioListener = Self.addOutputDeviceListener { update() }
 
             continuation.onTermination = { [center] _ in
                 center.removeObserver(spotifyObserver)

@@ -1,4 +1,4 @@
-public struct LEDCustomization: Codable, Equatable {
+public struct LEDCustomization: Codable, Equatable, Sendable {
     public var activePatterns: [UInt8: [UInt8]]
     public var colorEffect: ColorEffect
     public var customColor: LEDColor

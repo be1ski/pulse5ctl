@@ -1,4 +1,4 @@
-public struct LEDColor: Equatable, Codable {
+public struct LEDColor: Equatable, Codable, Sendable {
     public let red: UInt8
     public let green: UInt8
     public let blue: UInt8
@@ -10,7 +10,7 @@ public struct LEDColor: Equatable, Codable {
     }
 }
 
-public enum ColorEffect: UInt8, Equatable, Codable {
+public enum ColorEffect: UInt8, Equatable, Codable, Sendable {
     case staticColor = 0
     case colorLoop = 1
 }

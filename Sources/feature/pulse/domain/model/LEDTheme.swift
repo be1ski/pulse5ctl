@@ -1,6 +1,6 @@
 import CoreLocalization
 
-public enum LEDTheme: UInt8, CaseIterable, Identifiable, Codable {
+public enum LEDTheme: UInt8, CaseIterable, Identifiable, Codable, Sendable {
     case nature = 0x01
     case party = 0x02
     case spiritual = 0x03

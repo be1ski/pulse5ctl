@@ -8,7 +8,7 @@ public enum L10n {
         "ka", "kk", "ky", "pt-BR", "ro", "ru", "tg", "tk", "uk", "uz", "zh-Hans"
     ]
 
-    public static var overrideLocale: String? {
+    nonisolated(unsafe) public static var overrideLocale: String? {
         didSet {
             guard let code = overrideLocale else {
                 _overrideBundle = nil
@@ -28,7 +28,7 @@ public enum L10n {
         }
     }
 
-    private static var _overrideBundle: Bundle?
+    nonisolated(unsafe) private static var _overrideBundle: Bundle?
 
     // MARK: - General
 

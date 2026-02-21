@@ -2,7 +2,7 @@ import CoreElm
 import FeaturePulseDomain
 import Foundation
 
-public final class PulseEffectHandler {
+public final class PulseEffectHandler: @unchecked Sendable {
     private let observePulseEvents: ObservePulseEventsUseCase
     private let startPulseScan: StartPulseScanUseCase
     private let connectPulseSpeaker: ConnectPulseSpeakerUseCase
@@ -15,10 +15,10 @@ public final class PulseEffectHandler {
     private let requestPulseState: RequestPulseStateUseCase
     private let observeNowPlaying: ObserveNowPlayingUseCase
     private let observeLightSchedule: ObserveLightScheduleUseCase
-    private let saveAutoThemeSettings: (AutoThemeSettings) -> Void
-    private let saveLedCustomization: (LEDCustomization) -> Void
-    private let saveLightScheduleSettings: (LightScheduleSettings) -> Void
-    private let saveLanguage: (String?) -> Void
+    private let saveAutoThemeSettings: @Sendable (AutoThemeSettings) -> Void
+    private let saveLedCustomization: @Sendable (LEDCustomization) -> Void
+    private let saveLightScheduleSettings: @Sendable (LightScheduleSettings) -> Void
+    private let saveLanguage: @Sendable (String?) -> Void
 
     private var brightnessTask: Task<Void, Never>?
     private var ledPackageTask: Task<Void, Never>?
@@ -37,10 +37,10 @@ public final class PulseEffectHandler {
         requestPulseState: RequestPulseStateUseCase,
         observeNowPlaying: @escaping ObserveNowPlayingUseCase,
         observeLightSchedule: @escaping ObserveLightScheduleUseCase,
-        saveAutoThemeSettings: @escaping (AutoThemeSettings) -> Void,
-        saveLedCustomization: @escaping (LEDCustomization) -> Void,
-        saveLightScheduleSettings: @escaping (LightScheduleSettings) -> Void,
-        saveLanguage: @escaping (String?) -> Void
+        saveAutoThemeSettings: @Sendable @escaping (AutoThemeSettings) -> Void,
+        saveLedCustomization: @Sendable @escaping (LEDCustomization) -> Void,
+        saveLightScheduleSettings: @Sendable @escaping (LightScheduleSettings) -> Void,
+        saveLanguage: @Sendable @escaping (String?) -> Void
     ) {
         self.observePulseEvents = observePulseEvents
         self.startPulseScan = startPulseScan
