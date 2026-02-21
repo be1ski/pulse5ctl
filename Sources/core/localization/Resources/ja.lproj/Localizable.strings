@@ -26,6 +26,7 @@
 "controls.speed_low" = "低";
 "controls.speed_mid" = "中";
 "controls.speed_high" = "高";
+"controls.schedule_active" = "ライト消灯中（スケジュール済み）";
 
 /* Settings */
 "settings.title" = "設定";
@@ -35,6 +36,9 @@
 "settings.when_idle" = "待機時:";
 "settings.idle_theme" = "待機テーマ";
 "settings.language" = "言語";
+"settings.light_schedule" = "ライトスケジュール";
+"settings.lights_off_at" = "ライト消灯時刻：";
+"settings.lights_on_at" = "ライト点灯時刻：";
 "settings.language_system" = "システムデフォルト";
 
 /* Color */

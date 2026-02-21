@@ -26,6 +26,7 @@
 "controls.speed_low" = "Baixa";
 "controls.speed_mid" = "Média";
 "controls.speed_high" = "Alta";
+"controls.schedule_active" = "Luzes desligadas (programadas)";
 
 /* Settings */
 "settings.title" = "Configurações";
@@ -35,6 +36,9 @@
 "settings.when_idle" = "Em repouso:";
 "settings.idle_theme" = "Tema em repouso";
 "settings.language" = "Idioma";
+"settings.light_schedule" = "Cronograma de luzes";
+"settings.lights_off_at" = "Desligar luzes às:";
+"settings.lights_on_at" = "Ligar luzes às:";
 "settings.language_system" = "Padrão do sistema";
 
 /* Color */

@@ -17,6 +17,13 @@ func pulseSystemReducer(
                 }
                 return updated
             }
+            if connectionState == .connected && state.lightScheduleActive {
+                context.command(.setBrightness(
+                    level: state.brightness,
+                    bodyLight: false,
+                    projection: false
+                ))
+            }
 
         case let .discoveredDevices(devices):
             context.state { current in
@@ -74,6 +81,47 @@ func pulseSystemReducer(
                 ? state.autoThemeSettings.playingTheme
                 : state.autoThemeSettings.idleTheme
             context.command(.setTheme(theme))
+        }
+
+    case let .lightScheduleChanged(isInOffWindow):
+        if isInOffWindow && !state.lightScheduleActive {
+            // Entering off-window: save state and turn off lights
+            context.state { current in
+                var updated = current
+                updated.savedBodyLightOn = current.bodyLightOn
+                updated.savedProjectionOn = current.projectionOn
+                updated.lightScheduleActive = true
+                updated.bodyLightOn = false
+                updated.projectionOn = false
+                return updated
+            }
+            if state.connectionState.isConnected {
+                context.command(.setBrightness(
+                    level: state.brightness,
+                    bodyLight: false,
+                    projection: false
+                ))
+            }
+        } else if !isInOffWindow && state.lightScheduleActive {
+            // Exiting off-window: restore saved state
+            let bodyLight = state.savedBodyLightOn ?? true
+            let projection = state.savedProjectionOn ?? true
+            context.state { current in
+                var updated = current
+                updated.lightScheduleActive = false
+                updated.bodyLightOn = bodyLight
+                updated.projectionOn = projection
+                updated.savedBodyLightOn = nil
+                updated.savedProjectionOn = nil
+                return updated
+            }
+            if state.connectionState.isConnected {
+                context.command(.setBrightness(
+                    level: state.brightness,
+                    bodyLight: bodyLight,
+                    projection: projection
+                ))
+            }
         }
 
     case .dismissError:

@@ -26,6 +26,7 @@
 "controls.speed_low" = "Aşağı";
 "controls.speed_mid" = "Orta";
 "controls.speed_high" = "Yüksək";
+"controls.schedule_active" = "Işıqlar söndürülüb (cədvələ salınıb)";
 
 /* Settings */
 "settings.title" = "Parametrlər";
@@ -35,6 +36,9 @@
 "settings.when_idle" = "Boş olanda:";
 "settings.idle_theme" = "Boş mövzu";
 "settings.language" = "Dil";
+"settings.light_schedule" = "Işıq cədvəli";
+"settings.lights_off_at" = "Işıqlar söndürülür:";
+"settings.lights_on_at" = "Işıqlar yandırılır:";
 "settings.language_system" = "Sistem standartı";
 
 /* Color */

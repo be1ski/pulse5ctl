@@ -14,12 +14,15 @@ public final class PulseEffectHandler {
     private let setPulseLedPackage: SetPulseLedPackageUseCase
     private let requestPulseState: RequestPulseStateUseCase
     private let observeNowPlaying: ObserveNowPlayingUseCase
+    private let observeLightSchedule: ObserveLightScheduleUseCase
     private let saveAutoThemeSettings: (AutoThemeSettings) -> Void
     private let saveLedCustomization: (LEDCustomization) -> Void
+    private let saveLightScheduleSettings: (LightScheduleSettings) -> Void
     private let saveLanguage: (String?) -> Void
 
     private var brightnessTask: Task<Void, Never>?
     private var ledPackageTask: Task<Void, Never>?
+    private var lightScheduleTask: Task<Void, Never>?
 
     public init(
         observePulseEvents: ObservePulseEventsUseCase,
@@ -33,8 +36,10 @@ public final class PulseEffectHandler {
         setPulseLedPackage: SetPulseLedPackageUseCase,
         requestPulseState: RequestPulseStateUseCase,
         observeNowPlaying: @escaping ObserveNowPlayingUseCase,
+        observeLightSchedule: @escaping ObserveLightScheduleUseCase,
         saveAutoThemeSettings: @escaping (AutoThemeSettings) -> Void,
         saveLedCustomization: @escaping (LEDCustomization) -> Void,
+        saveLightScheduleSettings: @escaping (LightScheduleSettings) -> Void,
         saveLanguage: @escaping (String?) -> Void
     ) {
         self.observePulseEvents = observePulseEvents
@@ -48,8 +53,10 @@ public final class PulseEffectHandler {
         self.setPulseLedPackage = setPulseLedPackage
         self.requestPulseState = requestPulseState
         self.observeNowPlaying = observeNowPlaying
+        self.observeLightSchedule = observeLightSchedule
         self.saveAutoThemeSettings = saveAutoThemeSettings
         self.saveLedCustomization = saveLedCustomization
+        self.saveLightScheduleSettings = saveLightScheduleSettings
         self.saveLanguage = saveLanguage
     }
 
@@ -121,6 +128,34 @@ public final class PulseEffectHandler {
                 for await isPlaying in self.observeNowPlaying() {
                     continuation.yield(.system(.nowPlayingChanged(isPlaying)))
                 }
+            }
+
+        case let .observeLightSchedule(settings):
+            lightScheduleTask?.cancel()
+            nonisolated(unsafe) var task: Task<Void, Never>?
+            let stream = AsyncStream<PulseAction> { [observeLightSchedule] continuation in
+                task = Task {
+                    for await isInOffWindow in observeLightSchedule(settings) {
+                        guard !Task.isCancelled else { break }
+                        continuation.yield(.system(.lightScheduleChanged(isInOffWindow)))
+                    }
+                    continuation.finish()
+                }
+                continuation.onTermination = { _ in
+                    task?.cancel()
+                }
+            }
+            lightScheduleTask = task
+            return stream
+
+        case .stopLightSchedule:
+            lightScheduleTask?.cancel()
+            lightScheduleTask = nil
+            return noActions()
+
+        case let .saveLightScheduleSettings(settings):
+            return sideEffect {
+                self.saveLightScheduleSettings(settings)
             }
 
         case let .saveAutoThemeSettings(settings):

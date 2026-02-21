@@ -11,11 +11,13 @@ public final class AppGraph {
 
     private static let autoThemeKey = "autoThemeSettings"
     private static let ledCustomizationKey = "ledCustomization"
+    private static let lightScheduleKey = "lightScheduleSettings"
     private static let languageKey = "selectedLanguage"
 
     private init() {
         let repository = PulseSpeakerRepositoryImpl()
         let nowPlayingMonitor = NowPlayingMonitor()
+        let lightScheduleMonitor = LightScheduleMonitor()
 
         let pulseDependencies = PulseDependencies(
             observePulseEvents: ObservePulseEventsUseCase(repository: repository),
@@ -30,6 +32,7 @@ public final class AppGraph {
             setPulseLedPackage: SetPulseLedPackageUseCase(repository: repository),
             requestPulseState: RequestPulseStateUseCase(repository: repository),
             observeNowPlaying: { nowPlayingMonitor.observe() },
+            observeLightSchedule: { settings in lightScheduleMonitor.observe(settings: settings) },
             loadAutoThemeSettings: {
                 guard let data = UserDefaults.standard.data(forKey: AppGraph.autoThemeKey),
                       let settings = try? JSONDecoder().decode(AutoThemeSettings.self, from: data) else {
@@ -52,6 +55,18 @@ public final class AppGraph {
             saveLedCustomization: { customization in
                 if let data = try? JSONEncoder().encode(customization) {
                     UserDefaults.standard.set(data, forKey: AppGraph.ledCustomizationKey)
+                }
+            },
+            loadLightScheduleSettings: {
+                guard let data = UserDefaults.standard.data(forKey: AppGraph.lightScheduleKey),
+                      let settings = try? JSONDecoder().decode(LightScheduleSettings.self, from: data) else {
+                    return LightScheduleSettings()
+                }
+                return settings
+            },
+            saveLightScheduleSettings: { settings in
+                if let data = try? JSONEncoder().encode(settings) {
+                    UserDefaults.standard.set(data, forKey: AppGraph.lightScheduleKey)
                 }
             },
             loadLanguage: {

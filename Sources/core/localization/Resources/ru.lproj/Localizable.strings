@@ -26,6 +26,7 @@
 "controls.speed_low" = "Низкая";
 "controls.speed_mid" = "Средняя";
 "controls.speed_high" = "Высокая";
+"controls.schedule_active" = "Свет выключен (по расписанию)";
 
 /* Settings */
 "settings.title" = "Настройки";
@@ -35,6 +36,9 @@
 "settings.when_idle" = "В режиме ожидания:";
 "settings.idle_theme" = "Тема ожидания";
 "settings.language" = "Язык";
+"settings.light_schedule" = "Расписание освещения";
+"settings.lights_off_at" = "Свет выключается в:";
+"settings.lights_on_at" = "Свет включается в:";
 "settings.language_system" = "Системный";
 
 /* Color */
