@@ -22,6 +22,7 @@ public struct PulseState: Equatable {
     public var lightScheduleActive: Bool = false
     public var savedBodyLightOn: Bool?
     public var savedProjectionOn: Bool?
+    public var needsLightScheduleSync: Bool = false
 
     public init(
         connectionState: ConnectionState = .disconnected,
