@@ -56,6 +56,7 @@ final class BluetoothManager: NSObject {
             return
         }
 
+        discoveredPeripherals.removeAll()
         connectionState = .scanning
 
         let connected = centralManager.retrieveConnectedPeripherals(withServices: [PulseConstants.serviceUUID])
@@ -208,7 +209,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
         let hasServiceUUID = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID])?
             .contains(PulseConstants.serviceUUID) ?? false
 
-        let isPulse = hasServiceUUID || name.hasPrefix(PulseConstants.deviceNamePrefix)
+        let isPulse = hasServiceUUID || name.hasPrefix(PulseConstants.deviceName)
 
         discoveredPeripherals[peripheral.identifier] = peripheral
 

@@ -92,9 +92,9 @@ class TestScan:
     @pytest.mark.asyncio
     async def test_scan_discovers_device_by_service_uuid(self):
         """A device advertising the Pulse 5 service UUID should be discovered."""
-        device = _make_ble_device("AA:BB:CC:DD:EE:FF", "JBL Pulse 5")
+        device = _make_ble_device("AA:BB:CC:DD:EE:FF", C.DEVICE_NAME)
         adv = _make_adv_data(
-            local_name="JBL Pulse 5",
+            local_name=C.DEVICE_NAME,
             rssi=-45,
             service_uuids=[C.SERVICE_UUID],
         )
@@ -107,14 +107,14 @@ class TestScan:
 
         assert len(result) == 1
         assert result[0].address == "AA:BB:CC:DD:EE:FF"
-        assert result[0].name == "JBL Pulse 5"
+        assert result[0].name == C.DEVICE_NAME
         assert result[0].rssi == -45
 
     @pytest.mark.asyncio
     async def test_scan_discovers_device_by_name_prefix(self):
-        """A device whose name starts with DEVICE_NAME_PREFIX should be discovered."""
-        device = _make_ble_device("11:22:33:44:55:66", "JBL Pulse 5")
-        adv = _make_adv_data(local_name="JBL Pulse 5", rssi=-50, service_uuids=[])
+        """A device whose name starts with DEVICE_NAME should be discovered."""
+        device = _make_ble_device("11:22:33:44:55:66", C.DEVICE_NAME)
+        adv = _make_adv_data(local_name=C.DEVICE_NAME, rssi=-50, service_uuids=[])
         Scanner = _fake_scanner_factory([(device, adv)])
 
         with patch("pulse5.ble.BleakScanner", Scanner), \
@@ -123,7 +123,7 @@ class TestScan:
             result = await scan(timeout=0.0)
 
         assert len(result) == 1
-        assert result[0].name == "JBL Pulse 5"
+        assert result[0].name == C.DEVICE_NAME
 
     @pytest.mark.asyncio
     async def test_scan_ignores_non_pulse_device(self):
@@ -143,13 +143,13 @@ class TestScan:
     async def test_scan_sorts_by_rssi_descending(self):
         """Returned devices should be sorted by RSSI, strongest first."""
         dev1 = _make_ble_device("AA:AA:AA:AA:AA:01")
-        adv1 = _make_adv_data(local_name="JBL Pulse 5 Far", rssi=-80, service_uuids=[C.SERVICE_UUID])
+        adv1 = _make_adv_data(local_name=f"{C.DEVICE_NAME} Far", rssi=-80, service_uuids=[C.SERVICE_UUID])
 
         dev2 = _make_ble_device("AA:AA:AA:AA:AA:02")
-        adv2 = _make_adv_data(local_name="JBL Pulse 5 Close", rssi=-30, service_uuids=[C.SERVICE_UUID])
+        adv2 = _make_adv_data(local_name=f"{C.DEVICE_NAME} Close", rssi=-30, service_uuids=[C.SERVICE_UUID])
 
         dev3 = _make_ble_device("AA:AA:AA:AA:AA:03")
-        adv3 = _make_adv_data(local_name="JBL Pulse 5 Mid", rssi=-55, service_uuids=[C.SERVICE_UUID])
+        adv3 = _make_adv_data(local_name=f"{C.DEVICE_NAME} Mid", rssi=-55, service_uuids=[C.SERVICE_UUID])
 
         Scanner = _fake_scanner_factory([(dev1, adv1), (dev2, adv2), (dev3, adv3)])
 
@@ -167,8 +167,8 @@ class TestScan:
     async def test_scan_deduplicates_by_address(self):
         """If the same address is reported twice, only the latest entry is kept."""
         device = _make_ble_device("AA:BB:CC:DD:EE:FF")
-        adv1 = _make_adv_data(local_name="JBL Pulse 5", rssi=-60, service_uuids=[C.SERVICE_UUID])
-        adv2 = _make_adv_data(local_name="JBL Pulse 5", rssi=-40, service_uuids=[C.SERVICE_UUID])
+        adv1 = _make_adv_data(local_name=C.DEVICE_NAME, rssi=-60, service_uuids=[C.SERVICE_UUID])
+        adv2 = _make_adv_data(local_name=C.DEVICE_NAME, rssi=-40, service_uuids=[C.SERVICE_UUID])
         Scanner = _fake_scanner_factory([(device, adv1), (device, adv2)])
 
         with patch("pulse5.ble.BleakScanner", Scanner), \
@@ -183,7 +183,7 @@ class TestScan:
     async def test_scan_null_rssi_defaults_to_minus_100(self):
         """If advertisement RSSI is None, it should default to -100."""
         device = _make_ble_device("AA:BB:CC:DD:EE:FF")
-        adv = _make_adv_data(local_name="JBL Pulse 5", rssi=None, service_uuids=[C.SERVICE_UUID])
+        adv = _make_adv_data(local_name=C.DEVICE_NAME, rssi=None, service_uuids=[C.SERVICE_UUID])
         Scanner = _fake_scanner_factory([(device, adv)])
 
         with patch("pulse5.ble.BleakScanner", Scanner), \
@@ -209,7 +209,7 @@ class TestScan:
     @pytest.mark.asyncio
     async def test_scan_missing_local_name_uses_device_name(self):
         """When local_name is None, fallback to device.name."""
-        device = _make_ble_device("AA:BB:CC:DD:EE:FF", "JBL Pulse 5")
+        device = _make_ble_device("AA:BB:CC:DD:EE:FF", C.DEVICE_NAME)
         adv = _make_adv_data(local_name=None, rssi=-50, service_uuids=[C.SERVICE_UUID])
         Scanner = _fake_scanner_factory([(device, adv)])
 
@@ -219,7 +219,7 @@ class TestScan:
             result = await scan(timeout=0.0)
 
         assert len(result) == 1
-        assert result[0].name == "JBL Pulse 5"
+        assert result[0].name == C.DEVICE_NAME
 
     @pytest.mark.asyncio
     async def test_scan_no_name_at_all_uses_unknown(self):

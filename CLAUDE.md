@@ -49,7 +49,8 @@ swift test             # Swift tests only
 ## Git & GitHub
 
 - PR descriptions are always written in English
-- Never use the speaker manufacturer brand name anywhere in the project (trademark/legal reasons) — always refer to the device as "Pulse 5"
+- The device is referred to as "Pulse 5" everywhere — code, docs, commits, PR descriptions
+- Commit messages: short summary line, optional 1–2 sentence body max — no essays
 
 ## Key Conventions
 

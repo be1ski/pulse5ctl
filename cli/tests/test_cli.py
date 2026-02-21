@@ -13,6 +13,7 @@ from click.testing import CliRunner
 
 from pulse5.ble import DiscoveredDevice
 from pulse5.cli import _get_address, cli
+from pulse5.protocol.constants import PulseConstants as C
 
 
 @pytest.fixture
@@ -43,8 +44,8 @@ class TestScanCommand:
     def test_scan_finds_devices(self, runner):
         """scan should list discovered devices and save the best one."""
         devices = [
-            DiscoveredDevice(address="AA:BB:CC:DD:EE:01", name="JBL Pulse 5", rssi=-30),
-            DiscoveredDevice(address="AA:BB:CC:DD:EE:02", name="JBL Pulse 5 Far", rssi=-70),
+            DiscoveredDevice(address="AA:BB:CC:DD:EE:01", name=C.DEVICE_NAME, rssi=-30),
+            DiscoveredDevice(address="AA:BB:CC:DD:EE:02", name=f"{C.DEVICE_NAME} Far", rssi=-70),
         ]
 
         async def mock_scan(timeout=5.0):
@@ -56,10 +57,10 @@ class TestScanCommand:
 
         assert result.exit_code == 0
         assert "Found 2 device(s)" in result.output
-        assert "JBL Pulse 5" in result.output
+        assert C.DEVICE_NAME in result.output
         assert "AA:BB:CC:DD:EE:01" in result.output
         assert "-30 dBm" in result.output
-        mock_save.assert_called_once_with("AA:BB:CC:DD:EE:01", "JBL Pulse 5")
+        mock_save.assert_called_once_with("AA:BB:CC:DD:EE:01", C.DEVICE_NAME)
 
     def test_scan_no_devices(self, runner):
         """scan should display a message when no devices are found."""

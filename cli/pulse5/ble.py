@@ -47,7 +47,7 @@ async def scan(timeout: float = 5.0) -> list[DiscoveredDevice]:
     def callback(device: BLEDevice, adv: AdvertisementData) -> None:
         name = adv.local_name or device.name or ""
         has_service = C.SERVICE_UUID.lower() in [s.lower() for s in (adv.service_uuids or [])]
-        is_pulse = has_service or name.startswith(C.DEVICE_NAME_PREFIX)
+        is_pulse = has_service or name.startswith(C.DEVICE_NAME)
         if is_pulse:
             devices[device.address] = DiscoveredDevice(
                 address=device.address,
