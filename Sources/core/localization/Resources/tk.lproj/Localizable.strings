@@ -26,6 +26,7 @@
 "controls.speed_low" = "Pes";
 "controls.speed_mid" = "Orta";
 "controls.speed_high" = "Ýokary";
+"controls.schedule_active" = "Işyklar söndürildi (iş amalynda)";
 
 /* Settings */
 "settings.title" = "Sazlamalar";
@@ -35,6 +36,9 @@
 "settings.when_idle" = "Boş wagty:";
 "settings.idle_theme" = "Garaşyk temasy";
 "settings.language" = "Dil";
+"settings.light_schedule" = "Işyk scheduli";
+"settings.lights_off_at" = "Işyklar söndürilýär:";
+"settings.lights_on_at" = "Işyklar ýanýar:";
 "settings.language_system" = "Ulgam boýunça";
 
 /* Color */

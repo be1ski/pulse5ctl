@@ -78,6 +78,52 @@ public struct SettingsView: View {
 
             Divider()
 
+            HStack {
+                Text(L10n.settingsLightSchedule)
+                Spacer()
+                Toggle(
+                    "",
+                    isOn: Binding(
+                        get: { feature.state.lightScheduleSettings.enabled },
+                        set: { _ in feature.send(.lightSchedule(.toggleEnabled)) }
+                    )
+                )
+                .toggleStyle(.switch)
+                .labelsHidden()
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+                DatePicker(
+                    L10n.settingsLightsOffAt,
+                    selection: Binding(
+                        get: { Self.dateFromTime(hour: feature.state.lightScheduleSettings.offHour, minute: feature.state.lightScheduleSettings.offMinute) },
+                        set: { date in
+                            let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
+                            feature.send(.lightSchedule(.setOffTime(hour: comps.hour ?? 2, minute: comps.minute ?? 0)))
+                        }
+                    ),
+                    displayedComponents: .hourAndMinute
+                )
+                .font(.subheadline)
+                .disabled(!feature.state.lightScheduleSettings.enabled)
+
+                DatePicker(
+                    L10n.settingsLightsOnAt,
+                    selection: Binding(
+                        get: { Self.dateFromTime(hour: feature.state.lightScheduleSettings.onHour, minute: feature.state.lightScheduleSettings.onMinute) },
+                        set: { date in
+                            let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
+                            feature.send(.lightSchedule(.setOnTime(hour: comps.hour ?? 10, minute: comps.minute ?? 0)))
+                        }
+                    ),
+                    displayedComponents: .hourAndMinute
+                )
+                .font(.subheadline)
+                .disabled(!feature.state.lightScheduleSettings.enabled)
+            }
+
+            Divider()
+
             VStack(alignment: .leading, spacing: 8) {
                 Text(L10n.settingsLanguage)
                     .font(.subheadline)
@@ -101,6 +147,13 @@ public struct SettingsView: View {
 
     private var isEnabled: Bool {
         feature.state.autoThemeSettings.enabled
+    }
+
+    private static func dateFromTime(hour: Int, minute: Int) -> Date {
+        var components = DateComponents()
+        components.hour = hour
+        components.minute = minute
+        return Calendar.current.date(from: components) ?? Date()
     }
 
     private static func autonym(for code: String) -> String {

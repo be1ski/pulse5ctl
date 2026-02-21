@@ -13,10 +13,13 @@ public struct PulseDependencies {
     public let setPulseLedPackage: SetPulseLedPackageUseCase
     public let requestPulseState: RequestPulseStateUseCase
     public let observeNowPlaying: ObserveNowPlayingUseCase
+    public let observeLightSchedule: ObserveLightScheduleUseCase
     public let loadAutoThemeSettings: () -> AutoThemeSettings
     public let saveAutoThemeSettings: (AutoThemeSettings) -> Void
     public let loadLedCustomization: () -> LEDCustomization
     public let saveLedCustomization: (LEDCustomization) -> Void
+    public let loadLightScheduleSettings: () -> LightScheduleSettings
+    public let saveLightScheduleSettings: (LightScheduleSettings) -> Void
     public let loadLanguage: () -> String?
     public let saveLanguage: (String?) -> Void
 
@@ -33,10 +36,13 @@ public struct PulseDependencies {
         setPulseLedPackage: SetPulseLedPackageUseCase,
         requestPulseState: RequestPulseStateUseCase,
         observeNowPlaying: @escaping ObserveNowPlayingUseCase,
+        observeLightSchedule: @escaping ObserveLightScheduleUseCase,
         loadAutoThemeSettings: @escaping () -> AutoThemeSettings,
         saveAutoThemeSettings: @escaping (AutoThemeSettings) -> Void,
         loadLedCustomization: @escaping () -> LEDCustomization,
         saveLedCustomization: @escaping (LEDCustomization) -> Void,
+        loadLightScheduleSettings: @escaping () -> LightScheduleSettings,
+        saveLightScheduleSettings: @escaping (LightScheduleSettings) -> Void,
         loadLanguage: @escaping () -> String?,
         saveLanguage: @escaping (String?) -> Void
     ) {
@@ -52,10 +58,13 @@ public struct PulseDependencies {
         self.setPulseLedPackage = setPulseLedPackage
         self.requestPulseState = requestPulseState
         self.observeNowPlaying = observeNowPlaying
+        self.observeLightSchedule = observeLightSchedule
         self.loadAutoThemeSettings = loadAutoThemeSettings
         self.saveAutoThemeSettings = saveAutoThemeSettings
         self.loadLedCustomization = loadLedCustomization
         self.saveLedCustomization = saveLedCustomization
+        self.loadLightScheduleSettings = loadLightScheduleSettings
+        self.saveLightScheduleSettings = saveLightScheduleSettings
         self.loadLanguage = loadLanguage
         self.saveLanguage = saveLanguage
     }
