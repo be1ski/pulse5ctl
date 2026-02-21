@@ -1,5 +1,6 @@
 import CoreLocalization
 import FeaturePulseDomain
+import Foundation
 
 public enum PulseFeatureFactory {
     @MainActor
@@ -30,9 +31,12 @@ public enum PulseFeatureFactory {
             saveLanguage: dependencies.saveLanguage
         )
 
+        let hasCachedPeripheral = UserDefaults.standard.string(forKey: "lastPeripheralUUID") != nil
+        let initialConnectionState = hasCachedPeripheral ? ConnectionState.connecting : snapshot.connectionState
+
         let feature = PulseFeature(
             initialState: PulseState(
-                connectionState: snapshot.connectionState,
+                connectionState: initialConnectionState,
                 discoveredDevices: [],
                 brightness: snapshot.brightness,
                 bodyLightOn: snapshot.bodyLightOn,
