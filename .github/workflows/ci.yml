@@ -51,8 +51,19 @@ jobs:
       - name: Run Swift tests
         run: swift test --enable-code-coverage
 
+      - name: Convert Swift coverage to lcov
+        run: |
+          BIN=$(swift build --show-bin-path)
+          PROFDATA=$(find .build -name 'default.profdata' -path '*/codecov/*')
+          XCTEST=$(find "$BIN" -name '*.xctest' -type d | head -1)
+          xcrun llvm-cov export \
+            "$XCTEST/Contents/MacOS/$(basename "$XCTEST" .xctest)" \
+            -instr-profile="$PROFDATA" \
+            -format=lcov > coverage.lcov
+
       - name: Upload Swift coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: swift
+          files: coverage.lcov
