@@ -9,10 +9,8 @@ func pulseLifecycleReducer(
     case .started:
         guard !state.isObservingRepository else { return }
 
-        context.state { current in
-            var updated = current
-            updated.isObservingRepository = true
-            return updated
+        context.state {
+            $0.isObservingRepository = true
         }
         context.command(.observeRepository)
         context.command(.observeNowPlaying)

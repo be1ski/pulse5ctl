@@ -22,18 +22,37 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install -e . pytest pytest-asyncio ruff
+        run: pip install -e . pytest pytest-asyncio pytest-cov ruff
 
       - name: Lint with ruff
         run: ruff check pulse5/ tests/
 
-      - name: Run tests
-        run: pytest
+      - name: Run tests with coverage
+        run: pytest --cov --cov-branch --cov-report=xml
 
-  swift-build:
+      - name: Upload Python coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: python
+          files: cli/coverage.xml
+
+  swift-test:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Swift package
-        run: swift build
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Lint Swift
+        run: swiftlint lint --strict
+
+      - name: Run Swift tests
+        run: swift test --enable-code-coverage
+
+      - name: Upload Swift coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: swift

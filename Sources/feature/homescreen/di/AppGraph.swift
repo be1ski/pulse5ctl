@@ -21,7 +21,6 @@ public final class AppGraph {
 
         let pulseDependencies = PulseDependencies(
             observePulseEvents: ObservePulseEventsUseCase(repository: repository),
-            loadPulseSnapshot: LoadPulseSnapshotUseCase(repository: repository),
             startPulseScan: StartPulseScanUseCase(repository: repository),
             connectPulseSpeaker: ConnectPulseSpeakerUseCase(repository: repository),
             disconnectPulseSpeaker: DisconnectPulseSpeakerUseCase(repository: repository),
@@ -33,55 +32,34 @@ public final class AppGraph {
             requestPulseState: RequestPulseStateUseCase(repository: repository),
             observeNowPlaying: { nowPlayingMonitor.observe() },
             observeLightSchedule: { settings in lightScheduleMonitor.observe(settings: settings) },
-            loadAutoThemeSettings: {
-                guard let data = UserDefaults.standard.data(forKey: AppGraph.autoThemeKey),
-                      let settings = try? JSONDecoder().decode(AutoThemeSettings.self, from: data) else {
-                    return AutoThemeSettings()
-                }
-                return settings
-            },
-            saveAutoThemeSettings: { settings in
-                if let data = try? JSONEncoder().encode(settings) {
-                    UserDefaults.standard.set(data, forKey: AppGraph.autoThemeKey)
-                }
-            },
-            loadLedCustomization: {
-                guard let data = UserDefaults.standard.data(forKey: AppGraph.ledCustomizationKey),
-                      let customization = try? JSONDecoder().decode(LEDCustomization.self, from: data) else {
-                    return LEDCustomization()
-                }
-                return customization
-            },
-            saveLedCustomization: { customization in
-                if let data = try? JSONEncoder().encode(customization) {
-                    UserDefaults.standard.set(data, forKey: AppGraph.ledCustomizationKey)
-                }
-            },
-            loadLightScheduleSettings: {
-                guard let data = UserDefaults.standard.data(forKey: AppGraph.lightScheduleKey),
-                      let settings = try? JSONDecoder().decode(LightScheduleSettings.self, from: data) else {
-                    return LightScheduleSettings()
-                }
-                return settings
-            },
-            saveLightScheduleSettings: { settings in
-                if let data = try? JSONEncoder().encode(settings) {
-                    UserDefaults.standard.set(data, forKey: AppGraph.lightScheduleKey)
-                }
-            },
-            loadLanguage: {
-                UserDefaults.standard.string(forKey: AppGraph.languageKey)
-            },
+            loadAutoThemeSettings: { Self.load(forKey: Self.autoThemeKey) ?? AutoThemeSettings() },
+            saveAutoThemeSettings: { Self.save($0, forKey: Self.autoThemeKey) },
+            loadLedCustomization: { Self.load(forKey: Self.ledCustomizationKey) ?? LEDCustomization() },
+            saveLedCustomization: { Self.save($0, forKey: Self.ledCustomizationKey) },
+            loadLightScheduleSettings: { Self.load(forKey: Self.lightScheduleKey) ?? LightScheduleSettings() },
+            saveLightScheduleSettings: { Self.save($0, forKey: Self.lightScheduleKey) },
+            loadLanguage: { UserDefaults.standard.string(forKey: Self.languageKey) },
             saveLanguage: { locale in
                 if let locale {
-                    UserDefaults.standard.set(locale, forKey: AppGraph.languageKey)
+                    UserDefaults.standard.set(locale, forKey: Self.languageKey)
                 } else {
-                    UserDefaults.standard.removeObject(forKey: AppGraph.languageKey)
+                    UserDefaults.standard.removeObject(forKey: Self.languageKey)
                 }
             }
         )
 
         let pulseFeature = PulseFeatureFactory.create(dependencies: pulseDependencies)
         appDependencies = AppDependencies(pulseFeature: pulseFeature)
+    }
+
+    private static func load<T: Decodable>(forKey key: String) -> T? {
+        guard let data = UserDefaults.standard.data(forKey: key) else { return nil }
+        return try? JSONDecoder().decode(T.self, from: data)
+    }
+
+    private static func save<T: Encodable>(_ value: T, forKey key: String) {
+        if let data = try? JSONEncoder().encode(value) {
+            UserDefaults.standard.set(data, forKey: key)
+        }
     }
 }

@@ -38,37 +38,45 @@ public final class NowPlayingMonitor {
                 update()
             }
 
-            // Re-evaluate when the default audio output device changes
-            var audioAddress = AudioObjectPropertyAddress(
-                mSelector: kAudioHardwarePropertyDefaultOutputDevice,
-                mScope: kAudioObjectPropertyScopeGlobal,
-                mElement: kAudioObjectPropertyElementMain
-            )
-            let audioBlock: AudioObjectPropertyListenerBlock = { _, _ in
-                update()
-            }
-            AudioObjectAddPropertyListenerBlock(
-                AudioObjectID(kAudioObjectSystemObject),
-                &audioAddress,
-                DispatchQueue.main,
-                audioBlock
-            )
+            let removeAudioListener = Self.addOutputDeviceListener { update() }
 
             continuation.onTermination = { [center] _ in
                 center.removeObserver(spotifyObserver)
                 center.removeObserver(musicObserver)
-                var addr = AudioObjectPropertyAddress(
-                    mSelector: kAudioHardwarePropertyDefaultOutputDevice,
-                    mScope: kAudioObjectPropertyScopeGlobal,
-                    mElement: kAudioObjectPropertyElementMain
-                )
-                AudioObjectRemovePropertyListenerBlock(
-                    AudioObjectID(kAudioObjectSystemObject),
-                    &addr,
-                    DispatchQueue.main,
-                    audioBlock
-                )
+                removeAudioListener()
             }
+        }
+    }
+
+    private static func addOutputDeviceListener(
+        onDeviceChange: @escaping () -> Void
+    ) -> (() -> Void) {
+        var audioAddress = AudioObjectPropertyAddress(
+            mSelector: kAudioHardwarePropertyDefaultOutputDevice,
+            mScope: kAudioObjectPropertyScopeGlobal,
+            mElement: kAudioObjectPropertyElementMain
+        )
+        let audioBlock: AudioObjectPropertyListenerBlock = { _, _ in
+            onDeviceChange()
+        }
+        AudioObjectAddPropertyListenerBlock(
+            AudioObjectID(kAudioObjectSystemObject),
+            &audioAddress,
+            DispatchQueue.main,
+            audioBlock
+        )
+        return {
+            var addr = AudioObjectPropertyAddress(
+                mSelector: kAudioHardwarePropertyDefaultOutputDevice,
+                mScope: kAudioObjectPropertyScopeGlobal,
+                mElement: kAudioObjectPropertyElementMain
+            )
+            AudioObjectRemovePropertyListenerBlock(
+                AudioObjectID(kAudioObjectSystemObject),
+                &addr,
+                DispatchQueue.main,
+                audioBlock
+            )
         }
     }
 
@@ -111,6 +119,6 @@ public final class NowPlayingMonitor {
         }
 
         let deviceName = buffer.withMemoryRebound(to: CFString.self, capacity: 1) { $0.pointee } as String
-        return deviceName.localizedCaseInsensitiveContains("JBL Pulse")
+        return deviceName.localizedCaseInsensitiveContains(PulseConstants.deviceNamePrefix)
     }
 }

@@ -6,4 +6,5 @@ public enum PulseRepositoryEvent: Equatable {
     case speed(UInt8)
     case theme(LEDTheme?)
     case error(String)
+    case errorCleared
 }

@@ -9,7 +9,32 @@ permissions:
   id-token: write
 
 jobs:
+  swift-test:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Swift tests
+        run: swift test
+
+  python-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cli
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -e . pytest pytest-asyncio ruff
+      - name: Lint with ruff
+        run: ruff check pulse5/ tests/
+      - name: Run tests
+        run: pytest
+
   macos-app:
+    needs: swift-test
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
@@ -35,6 +60,7 @@ jobs:
         run: gh release upload ${{ github.event.release.tag_name }} pulse5ctl-${{ github.event.release.tag_name }}.zip
 
   pypi:
+    needs: python-tests
     runs-on: ubuntu-latest
     environment: pypi
     steps:

@@ -96,7 +96,12 @@ public struct SettingsView: View {
                 DatePicker(
                     L10n.settingsLightsOffAt,
                     selection: Binding(
-                        get: { Self.dateFromTime(hour: feature.state.lightScheduleSettings.offHour, minute: feature.state.lightScheduleSettings.offMinute) },
+                        get: {
+                            Self.dateFromTime(
+                                hour: feature.state.lightScheduleSettings.offHour,
+                                minute: feature.state.lightScheduleSettings.offMinute
+                            )
+                        },
                         set: { date in
                             let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
                             feature.send(.lightSchedule(.setOffTime(hour: comps.hour ?? 2, minute: comps.minute ?? 0)))
@@ -110,7 +115,12 @@ public struct SettingsView: View {
                 DatePicker(
                     L10n.settingsLightsOnAt,
                     selection: Binding(
-                        get: { Self.dateFromTime(hour: feature.state.lightScheduleSettings.onHour, minute: feature.state.lightScheduleSettings.onMinute) },
+                        get: {
+                            Self.dateFromTime(
+                                hour: feature.state.lightScheduleSettings.onHour,
+                                minute: feature.state.lightScheduleSettings.onMinute
+                            )
+                        },
                         set: { date in
                             let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
                             feature.send(.lightSchedule(.setOnTime(hour: comps.hour ?? 10, minute: comps.minute ?? 0)))

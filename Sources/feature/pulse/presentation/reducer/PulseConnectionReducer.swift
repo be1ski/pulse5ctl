@@ -7,31 +7,25 @@ func pulseConnectionReducer(
 ) {
     switch action {
     case .connectTapped:
-        context.state { current in
-            var updated = current
-            updated.connectionState = .scanning
-            updated.errorMessage = nil
-            return updated
+        context.state {
+            $0.connectionState = .scanning
+            $0.errorMessage = nil
         }
         context.command(.startScan)
 
     case .disconnectTapped:
-        context.state { current in
-            var updated = current
-            updated.connectionState = .disconnected
-            updated.connectedDeviceName = nil
-            updated.discoveredDevices = []
-            return updated
+        context.state {
+            $0.connectionState = .disconnected
+            $0.connectedDeviceName = nil
+            $0.discoveredDevices = []
         }
         context.command(.disconnect)
 
     case let .selectDevice(deviceID):
-        context.state { current in
-            var updated = current
-            updated.connectionState = .connecting
-            updated.errorMessage = nil
-            updated.connectedDeviceName = current.discoveredDevices.first(where: { $0.id == deviceID })?.name
-            return updated
+        context.state {
+            $0.connectionState = .connecting
+            $0.errorMessage = nil
+            $0.connectedDeviceName = $0.discoveredDevices.first(where: { $0.id == deviceID })?.name
         }
         context.command(.connect(deviceID))
     }

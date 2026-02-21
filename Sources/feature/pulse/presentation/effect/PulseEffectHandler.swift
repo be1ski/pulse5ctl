@@ -62,74 +62,80 @@ public final class PulseEffectHandler {
 
     public func handle(_ effect: PulseEffect) -> AsyncStream<PulseAction> {
         switch effect {
+        case .observeRepository, .startScan, .disconnect, .connect:
+            return handleConnection(effect)
+        case .setLight, .setTheme, .setBrightness, .setLedPackage, .setSpeed:
+            return handleLighting(effect)
+        case .requestCurrentState, .observeNowPlaying, .observeLightSchedule, .stopLightSchedule:
+            return handleState(effect)
+        case .saveLightScheduleSettings, .saveAutoThemeSettings, .saveLedCustomization, .saveLanguage:
+            return handlePersistence(effect)
+        }
+    }
+
+    private func handleConnection(_ effect: PulseEffect) -> AsyncStream<PulseAction> {
+        switch effect {
         case .observeRepository:
             return actions { continuation in
                 for await event in self.observePulseEvents() {
                     continuation.yield(.system(.repositoryEvent(event)))
                 }
             }
-
         case .startScan:
-            return sideEffect {
-                self.startPulseScan()
-            }
-
+            return sideEffect { self.startPulseScan() }
         case .disconnect:
-            return sideEffect {
-                self.disconnectPulseSpeaker()
-            }
-
+            return sideEffect { self.disconnectPulseSpeaker() }
         case let .connect(deviceID):
-            return sideEffect {
-                self.connectPulseSpeaker(deviceID: deviceID)
-            }
+            return sideEffect { self.connectPulseSpeaker(deviceID: deviceID) }
+        default:
+            return noActions()
+        }
+    }
 
+    private func handleLighting(_ effect: PulseEffect) -> AsyncStream<PulseAction> {
+        switch effect {
         case let .setLight(isEnabled):
-            return sideEffect {
-                self.setPulseLightStatus(enabled: isEnabled)
-            }
-
+            return sideEffect { self.setPulseLightStatus(enabled: isEnabled) }
         case let .setTheme(theme):
             ledPackageTask?.cancel()
-            return sideEffect {
-                self.setPulseTheme(theme: theme)
-            }
-
+            ledPackageTask = nil
+            return sideEffect { self.setPulseTheme(theme: theme) }
         case let .setBrightness(level, bodyLight, projection):
             brightnessTask?.cancel()
             brightnessTask = Task { [setPulseBrightness] in
-                try? await Task.sleep(nanoseconds: 150_000_000)
+                try? await Task.sleep(for: .milliseconds(150))
                 guard !Task.isCancelled else { return }
                 setPulseBrightness(level: level, bodyLight: bodyLight, projection: projection)
             }
             return noActions()
-
         case let .setLedPackage(theme, activePatterns, allPatterns, colorEffect, color):
             ledPackageTask?.cancel()
             ledPackageTask = Task { [setPulseLedPackage] in
-                try? await Task.sleep(nanoseconds: 150_000_000)
+                try? await Task.sleep(for: .milliseconds(150))
                 guard !Task.isCancelled else { return }
-                setPulseLedPackage(theme: theme, activePatterns: activePatterns, allPatterns: allPatterns, colorEffect: colorEffect, color: color)
+                setPulseLedPackage(
+                    theme: theme, activePatterns: activePatterns,
+                    allPatterns: allPatterns, colorEffect: colorEffect, color: color
+                )
             }
             return noActions()
-
         case let .setSpeed(speed):
-            return sideEffect {
-                self.setPulseSpeed(speed: speed)
-            }
+            return sideEffect { self.setPulseSpeed(speed: speed) }
+        default:
+            return noActions()
+        }
+    }
 
+    private func handleState(_ effect: PulseEffect) -> AsyncStream<PulseAction> {
+        switch effect {
         case .requestCurrentState:
-            return sideEffect {
-                self.requestPulseState()
-            }
-
+            return sideEffect { self.requestPulseState() }
         case .observeNowPlaying:
             return actions { continuation in
                 for await isPlaying in self.observeNowPlaying() {
                     continuation.yield(.system(.nowPlayingChanged(isPlaying)))
                 }
             }
-
         case let .observeLightSchedule(settings):
             lightScheduleTask?.cancel()
             nonisolated(unsafe) var task: Task<Void, Never>?
@@ -147,31 +153,27 @@ public final class PulseEffectHandler {
             }
             lightScheduleTask = task
             return stream
-
         case .stopLightSchedule:
             lightScheduleTask?.cancel()
             lightScheduleTask = nil
             return noActions()
+        default:
+            return noActions()
+        }
+    }
 
+    private func handlePersistence(_ effect: PulseEffect) -> AsyncStream<PulseAction> {
+        switch effect {
         case let .saveLightScheduleSettings(settings):
-            return sideEffect {
-                self.saveLightScheduleSettings(settings)
-            }
-
+            return sideEffect { self.saveLightScheduleSettings(settings) }
         case let .saveAutoThemeSettings(settings):
-            return sideEffect {
-                self.saveAutoThemeSettings(settings)
-            }
-
+            return sideEffect { self.saveAutoThemeSettings(settings) }
         case let .saveLedCustomization(customization):
-            return sideEffect {
-                self.saveLedCustomization(customization)
-            }
-
+            return sideEffect { self.saveLedCustomization(customization) }
         case let .saveLanguage(locale):
-            return sideEffect {
-                self.saveLanguage(locale)
-            }
+            return sideEffect { self.saveLanguage(locale) }
+        default:
+            return noActions()
         }
     }
 }

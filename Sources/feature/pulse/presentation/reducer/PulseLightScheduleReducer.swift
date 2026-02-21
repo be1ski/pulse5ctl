@@ -8,70 +8,81 @@ func pulseLightScheduleReducer(
 ) {
     switch action {
     case .toggleEnabled:
-        let newEnabled = !state.lightScheduleSettings.enabled
-        context.state { current in
-            var updated = current
-            updated.lightScheduleSettings.enabled = newEnabled
-            return updated
-        }
-        context.command(.saveLightScheduleSettings(
+        handleToggleEnabled(state, context)
+    case let .setOffTime(hour, minute):
+        handleSetTime(hour: hour, minute: minute, kind: .offTime, state: state, context: context)
+    case let .setOnTime(hour, minute):
+        handleSetTime(hour: hour, minute: minute, kind: .onTime, state: state, context: context)
+    }
+}
+
+private enum TimeKind { case offTime, onTime }
+
+private func handleToggleEnabled(
+    _ state: PulseState,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    let newEnabled = !state.lightScheduleSettings.enabled
+    context.state {
+        $0.lightScheduleSettings.enabled = newEnabled
+    }
+    context.command(.saveLightScheduleSettings(
+        state.lightScheduleSettings.with(enabled: newEnabled)
+    ))
+
+    if newEnabled {
+        context.command(.observeLightSchedule(
             state.lightScheduleSettings.with(enabled: newEnabled)
         ))
-
-        if newEnabled {
-            context.command(.observeLightSchedule(
-                state.lightScheduleSettings.with(enabled: newEnabled)
-            ))
-        } else {
-            context.command(.stopLightSchedule)
-            if state.lightScheduleActive {
-                // Disabling while in off-window: restore lights
-                let bodyLight = state.savedBodyLightOn ?? true
-                let projection = state.savedProjectionOn ?? true
-                context.state { current in
-                    var updated = current
-                    updated.lightScheduleActive = false
-                    updated.bodyLightOn = bodyLight
-                    updated.projectionOn = projection
-                    updated.savedBodyLightOn = nil
-                    updated.savedProjectionOn = nil
-                    return updated
-                }
-                if state.connectionState.isConnected {
-                    context.command(.setBrightness(
-                        level: state.brightness,
-                        bodyLight: bodyLight,
-                        projection: projection
-                    ))
-                }
+    } else {
+        context.command(.stopLightSchedule)
+        if state.lightScheduleActive {
+            // Disabling while in off-window: restore lights
+            let bodyLight = state.savedBodyLightOn ?? true
+            let projection = state.savedProjectionOn ?? true
+            context.state {
+                $0.lightScheduleActive = false
+                $0.bodyLightOn = bodyLight
+                $0.projectionOn = projection
+                $0.savedBodyLightOn = nil
+                $0.savedProjectionOn = nil
+            }
+            if state.connectionState.isConnected {
+                context.command(.setBrightness(
+                    level: state.brightness,
+                    bodyLight: bodyLight,
+                    projection: projection
+                ))
             }
         }
+    }
+}
 
-    case let .setOffTime(hour, minute):
-        let newSettings = state.lightScheduleSettings.with(offHour: hour, offMinute: minute)
-        context.state { current in
-            var updated = current
-            updated.lightScheduleSettings.offHour = hour
-            updated.lightScheduleSettings.offMinute = minute
-            return updated
+private func handleSetTime(
+    hour: Int,
+    minute: Int,
+    kind: TimeKind,
+    state: PulseState,
+    context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    let newSettings: LightScheduleSettings
+    switch kind {
+    case .offTime:
+        newSettings = state.lightScheduleSettings.with(offHour: hour, offMinute: minute)
+        context.state {
+            $0.lightScheduleSettings.offHour = hour
+            $0.lightScheduleSettings.offMinute = minute
         }
-        context.command(.saveLightScheduleSettings(newSettings))
-        if state.lightScheduleSettings.enabled {
-            context.command(.observeLightSchedule(newSettings))
+    case .onTime:
+        newSettings = state.lightScheduleSettings.with(onHour: hour, onMinute: minute)
+        context.state {
+            $0.lightScheduleSettings.onHour = hour
+            $0.lightScheduleSettings.onMinute = minute
         }
-
-    case let .setOnTime(hour, minute):
-        let newSettings = state.lightScheduleSettings.with(onHour: hour, onMinute: minute)
-        context.state { current in
-            var updated = current
-            updated.lightScheduleSettings.onHour = hour
-            updated.lightScheduleSettings.onMinute = minute
-            return updated
-        }
-        context.command(.saveLightScheduleSettings(newSettings))
-        if state.lightScheduleSettings.enabled {
-            context.command(.observeLightSchedule(newSettings))
-        }
+    }
+    context.command(.saveLightScheduleSettings(newSettings))
+    if state.lightScheduleSettings.enabled {
+        context.command(.observeLightSchedule(newSettings))
     }
 }
 
