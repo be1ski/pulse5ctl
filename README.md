@@ -4,6 +4,13 @@ Control Pulse 5 speaker LED lights over BLE.
 
 <img src=".github/preview.png" width="360">
 
+## Features
+
+- Themes, patterns, colors, brightness, speed
+- Auto theme switching based on music playback
+- Light schedule to auto-disable LEDs overnight
+- Auto-reconnect, 20 languages
+
 ## macOS App
 
 ```sh
