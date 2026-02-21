@@ -174,7 +174,8 @@ final class PulseSystemReducerTests: XCTestCase {
     func test_nowPlayingStopped_withAutoThemeEnabled_setsIdleTheme() {
         let state = PulseState(
             connectionState: .connected,
-            autoThemeSettings: AutoThemeSettings(enabled: true, playingTheme: .party, idleTheme: .nature)
+            autoThemeSettings: AutoThemeSettings(enabled: true, playingTheme: .party, idleTheme: .nature),
+            isMusicPlaying: true
         )
         let result = reduce(.nowPlayingChanged(false), state: state)
         XCTAssertTrue(result.effects.commands.contains(where: {
@@ -193,6 +194,16 @@ final class PulseSystemReducerTests: XCTestCase {
             if case .setTheme = $0 { return true }
             return false
         }))
+    }
+
+    func test_nowPlayingChanged_sameValue_isIgnored() {
+        let state = PulseState(
+            connectionState: .connected,
+            autoThemeSettings: AutoThemeSettings(enabled: true, playingTheme: .party, idleTheme: .nature)
+        )
+        let result = reduce(.nowPlayingChanged(false), state: state)
+        XCTAssertFalse(result.state.isMusicPlaying)
+        XCTAssertTrue(result.effects.commands.isEmpty)
     }
 
     func test_nowPlayingChanged_whileDisconnected_noThemeChange() {

@@ -92,6 +92,7 @@ private func handleNowPlayingChanged(
     _ state: PulseState,
     _ context: ReducerContext<PulseState, PulseEffect, Never>
 ) {
+    guard isPlaying != state.isMusicPlaying else { return }
     context.state {
         $0.isMusicPlaying = isPlaying
     }
