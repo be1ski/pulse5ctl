@@ -258,6 +258,11 @@ extension PulseMenuView {
                     step: 6
                 )
                 .tint(.orange)
+                .simultaneousGesture(
+                    TapGesture(count: 2).onEnded {
+                        feature.send(.controls(.setBrightness(50)))
+                    }
+                )
                 Image(systemName: "sun.max")
                 Text("\(Int(round(Double(state.brightness - 20) / 60.0 * 100)))%")
                     .font(.caption)
