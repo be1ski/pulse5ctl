@@ -36,7 +36,7 @@ enum PulseConstants {
     static let maxBrightness: UInt8 = 80
 
     static let manufacturerID: UInt16 = 87
-    static let deviceNamePrefix = "JBL"
+    static let deviceName = "JBL Pulse 5"
 
     static let maxReconnectAttempts = 3
     static let baseReconnectDelay: UInt64 = 1_000_000_000

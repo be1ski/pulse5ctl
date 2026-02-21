@@ -119,6 +119,6 @@ public final class NowPlayingMonitor {
         }
 
         let deviceName = buffer.withMemoryRebound(to: CFString.self, capacity: 1) { $0.pointee } as String
-        return deviceName.localizedCaseInsensitiveContains(PulseConstants.deviceNamePrefix)
+        return deviceName.localizedCaseInsensitiveContains(PulseConstants.deviceName)
     }
 }
