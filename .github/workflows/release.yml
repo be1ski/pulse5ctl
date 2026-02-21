@@ -89,6 +89,6 @@ jobs:
       - uses: mislav/bump-homebrew-formula-action@v3
         with:
           formula-name: pulse5ctl
-          homebrew-tap: be1ski/homebrew-pulse5ctl
+          homebrew-tap: be1ski/homebrew-tap
         env:
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
