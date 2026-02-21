@@ -137,7 +137,13 @@ extension BluetoothManager: CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
-            break
+            reconnectAttempt = 0
+            if connectionState != .connected,
+               let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
+               let uuid = UUID(uuidString: uuidString),
+               let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first {
+                connect(to: cached)
+            }
         case .poweredOff:
             delegate?.bluetoothManager(self, didEncounterError: .poweredOff)
             connectionState = .disconnected

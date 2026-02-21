@@ -45,7 +45,7 @@ public struct PulseMenuView: View {
 
     @ViewBuilder
     private var disconnectedContent: some View {
-        if state.connectionState == .scanning || !state.discoveredDevices.isEmpty {
+        if state.connectionState.isActive || !state.discoveredDevices.isEmpty {
             scanningContent
         } else {
             heroSection
