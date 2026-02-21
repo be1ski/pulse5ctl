@@ -1,5 +1,9 @@
 # pulse5ctl
 
+[![CI](https://github.com/be1ski/pulse5ctl/actions/workflows/ci.yml/badge.svg)](https://github.com/be1ski/pulse5ctl/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/be1ski/pulse5ctl/graph/badge.svg)](https://codecov.io/gh/be1ski/pulse5ctl)
+[![Release](https://img.shields.io/github/v/release/be1ski/pulse5ctl)](https://github.com/be1ski/pulse5ctl/releases/latest)
+
 Control Pulse 5 speaker LED lights over BLE. Themes, patterns, colors, brightness, animation speed, auto-reconnect, music-aware theme switching, light schedule, 20 languages.
 
 <img src=".github/preview.png" width="360">
