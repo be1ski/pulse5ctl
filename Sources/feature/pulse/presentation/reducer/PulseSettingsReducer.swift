@@ -9,10 +9,8 @@ func pulseSettingsReducer(
     switch action {
     case let .setLanguage(locale):
         L10n.overrideLocale = locale
-        context.state { current in
-            var updated = current
-            updated.selectedLanguage = locale
-            return updated
+        context.state {
+            $0.selectedLanguage = locale
         }
         context.command(.saveLanguage(locale))
     }

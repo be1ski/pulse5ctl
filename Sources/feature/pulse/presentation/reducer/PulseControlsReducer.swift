@@ -8,110 +8,159 @@ func pulseControlsReducer(
 ) {
     switch action {
     case .toggleLight:
-        let toggled = !state.lightOn
-        context.state { current in
-            var updated = current
-            updated.lightOn = toggled
-            return updated
-        }
-        context.command(.setLight(toggled))
-
+        handleToggleLight(state, context)
     case let .selectTheme(theme):
-        context.state { current in
-            var updated = current
-            updated.selectedTheme = theme
-            return updated
-        }
-        context.command(.setTheme(theme))
-
+        handleSelectTheme(theme, state, context)
     case let .setBrightness(value):
-        let clamped = clampBrightness(value)
-        context.state { current in
-            var updated = current
-            updated.brightness = clamped
-            return updated
-        }
-        context.command(.setBrightness(level: clamped, bodyLight: state.bodyLightOn, projection: state.projectionOn))
-
+        handleSetBrightness(value, state, context)
     case .toggleBodyLight:
-        guard !state.lightScheduleActive else { return }
-        let toggled = !state.bodyLightOn
-        context.state { current in
-            var updated = current
-            updated.bodyLightOn = toggled
-            return updated
-        }
-        context.command(.setBrightness(level: state.brightness, bodyLight: toggled, projection: state.projectionOn))
-
+        handleToggleBodyLight(state, context)
     case .toggleProjection:
-        guard !state.lightScheduleActive else { return }
-        let toggled = !state.projectionOn
-        context.state { current in
-            var updated = current
-            updated.projectionOn = toggled
-            return updated
-        }
-        context.command(.setBrightness(level: state.brightness, bodyLight: state.bodyLightOn, projection: toggled))
-
+        handleToggleProjection(state, context)
     case let .setSpeed(speed):
-        context.state { current in
-            var updated = current
-            updated.speed = speed
-            return updated
-        }
-        context.command(.setSpeed(speed))
-
+        handleSetSpeed(speed, context)
     case let .togglePattern(pattern, theme):
-        let current = state.activePatternsForTheme(theme)
-        if current.contains(pattern) && current.count <= 1 { return }
-
-        let updated: Set<LEDPattern>
-        if current.contains(pattern) {
-            updated = current.subtracting([pattern])
-        } else {
-            updated = current.union([pattern])
-        }
-
-        context.state { current in
-            var s = current
-            s.activePatterns[theme] = updated
-            return s
-        }
-        emitLedPackage(for: theme, activeOverride: updated, state: state, context: context)
-        emitSaveCustomization(activeOverride: (theme, updated), state: state, context: context)
-
+        handleTogglePattern(pattern, theme, state, context)
     case let .soloPattern(pattern, theme):
-        let updated: Set<LEDPattern> = [pattern]
-        context.state { current in
-            var s = current
-            s.activePatterns[theme] = updated
-            return s
-        }
-        emitLedPackage(for: theme, activeOverride: updated, state: state, context: context)
-        emitSaveCustomization(activeOverride: (theme, updated), state: state, context: context)
-
+        handleSoloPattern(pattern, theme, state, context)
     case let .setCustomColor(color):
-        context.state { current in
-            var updated = current
-            updated.customColor = color
-            return updated
-        }
-        if let theme = state.selectedTheme {
-            emitLedPackage(for: theme, colorOverride: color, state: state, context: context)
-        }
-        emitSaveCustomization(colorOverride: color, state: state, context: context)
-
+        handleSetCustomColor(color, state, context)
     case let .setColorEffect(effect):
-        context.state { current in
-            var updated = current
-            updated.colorEffect = effect
-            return updated
-        }
-        if let theme = state.selectedTheme {
-            emitLedPackage(for: theme, colorEffectOverride: effect, state: state, context: context)
-        }
-        emitSaveCustomization(colorEffectOverride: effect, state: state, context: context)
+        handleSetColorEffect(effect, state, context)
     }
+}
+
+private func handleToggleLight(
+    _ state: PulseState,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    let toggled = !state.lightOn
+    context.state {
+        $0.lightOn = toggled
+    }
+    context.command(.setLight(toggled))
+}
+
+private func handleSelectTheme(
+    _ theme: LEDTheme,
+    _ state: PulseState,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    context.state {
+        $0.selectedTheme = theme
+    }
+    context.command(.setTheme(theme))
+}
+
+private func handleSetBrightness(
+    _ value: Double,
+    _ state: PulseState,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    let clamped = clampBrightness(value)
+    context.state {
+        $0.brightness = clamped
+    }
+    context.command(.setBrightness(level: clamped, bodyLight: state.bodyLightOn, projection: state.projectionOn))
+}
+
+private func handleToggleBodyLight(
+    _ state: PulseState,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    guard !state.lightScheduleActive else { return }
+    let toggled = !state.bodyLightOn
+    context.state {
+        $0.bodyLightOn = toggled
+    }
+    context.command(.setBrightness(level: state.brightness, bodyLight: toggled, projection: state.projectionOn))
+}
+
+private func handleToggleProjection(
+    _ state: PulseState,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    guard !state.lightScheduleActive else { return }
+    let toggled = !state.projectionOn
+    context.state {
+        $0.projectionOn = toggled
+    }
+    context.command(.setBrightness(level: state.brightness, bodyLight: state.bodyLightOn, projection: toggled))
+}
+
+private func handleSetSpeed(
+    _ speed: UInt8,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    context.state {
+        $0.speed = speed
+    }
+    context.command(.setSpeed(speed))
+}
+
+private func handleTogglePattern(
+    _ pattern: LEDPattern,
+    _ theme: LEDTheme,
+    _ state: PulseState,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    let activeSet = state.activePatternsForTheme(theme)
+    if activeSet.contains(pattern) && activeSet.count <= 1 { return }
+
+    let updated: Set<LEDPattern>
+    if activeSet.contains(pattern) {
+        updated = activeSet.subtracting([pattern])
+    } else {
+        updated = activeSet.union([pattern])
+    }
+
+    context.state {
+        $0.activePatterns[theme] = updated
+    }
+    emitLedPackage(for: theme, activeOverride: updated, state: state, context: context)
+    emitSaveCustomization(activeOverride: (theme, updated), state: state, context: context)
+}
+
+private func handleSoloPattern(
+    _ pattern: LEDPattern,
+    _ theme: LEDTheme,
+    _ state: PulseState,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    let updated: Set<LEDPattern> = [pattern]
+    context.state {
+        $0.activePatterns[theme] = updated
+    }
+    emitLedPackage(for: theme, activeOverride: updated, state: state, context: context)
+    emitSaveCustomization(activeOverride: (theme, updated), state: state, context: context)
+}
+
+private func handleSetCustomColor(
+    _ color: LEDColor,
+    _ state: PulseState,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    context.state {
+        $0.customColor = color
+    }
+    if let theme = state.selectedTheme {
+        emitLedPackage(for: theme, colorOverride: color, state: state, context: context)
+    }
+    emitSaveCustomization(colorOverride: color, state: state, context: context)
+}
+
+private func handleSetColorEffect(
+    _ effect: ColorEffect,
+    _ state: PulseState,
+    _ context: ReducerContext<PulseState, PulseEffect, Never>
+) {
+    context.state {
+        $0.colorEffect = effect
+    }
+    if let theme = state.selectedTheme {
+        emitLedPackage(for: theme, colorEffectOverride: effect, state: state, context: context)
+    }
+    emitSaveCustomization(colorEffectOverride: effect, state: state, context: context)
 }
 
 private func emitLedPackage(

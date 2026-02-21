@@ -1,0 +1,17 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 90%
+        threshold: 2%
+    patch:
+      default:
+        target: 93%
+
+ignore:
+  - "**/di/**"
+  - "**/view/**"
+  - "Sources/app/**"
+  - "**/*Action.swift"
+  - "**/*Effect.swift"
+  - "**/*State.swift"

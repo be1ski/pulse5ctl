@@ -6,8 +6,8 @@ enum PulseProtocol {
         Data([PulseConstants.header, PulseConstants.cmdReqSpeakerInfo, 0x00])
     }
 
-    static func setLightStatus(_ on: Bool) -> Data {
-        Data([PulseConstants.header, PulseConstants.cmdSetLightStatus, 0x01, on ? 1 : 0])
+    static func setLightStatus(_ enabled: Bool) -> Data {
+        Data([PulseConstants.header, PulseConstants.cmdSetLightStatus, 0x01, enabled ? 1 : 0])
     }
 
     static func requestLightStatus() -> Data {
@@ -26,7 +26,7 @@ enum PulseProtocol {
             0x03,
             clamped,
             bodyLight ? 1 : 0,
-            projection ? 1 : 0,
+            projection ? 1 : 0
         ])
     }
 
@@ -51,9 +51,7 @@ enum PulseProtocol {
         activePatterns: [UInt8],
         allPatterns: [UInt8],
         colorEffect: UInt8,
-        red: UInt8,
-        green: UInt8,
-        blue: UInt8
+        color: LEDColor
     ) -> Data {
         let allCount = UInt8(allPatterns.count)
         let activeCount = UInt8(activePatterns.count)
@@ -65,10 +63,10 @@ enum PulseProtocol {
             length,
             packageID,
             activeCount,
-            allCount,
+            allCount
         ]
         bytes.append(contentsOf: allPatterns)
-        bytes.append(contentsOf: [colorEffect, red, green, blue])
+        bytes.append(contentsOf: [colorEffect, color.red, color.green, color.blue])
         return Data(bytes)
     }
 

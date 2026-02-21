@@ -20,8 +20,8 @@ public struct PulseState: Equatable {
     public var selectedLanguage: String?
     public var lightScheduleSettings: LightScheduleSettings = .init()
     public var lightScheduleActive: Bool = false
-    public var savedBodyLightOn: Bool? = nil
-    public var savedProjectionOn: Bool? = nil
+    public var savedBodyLightOn: Bool?
+    public var savedProjectionOn: Bool?
 
     public init(
         connectionState: ConnectionState = .disconnected,

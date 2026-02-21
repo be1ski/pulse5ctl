@@ -2,7 +2,6 @@ import FeaturePulseDomain
 
 public struct PulseDependencies {
     public let observePulseEvents: ObservePulseEventsUseCase
-    public let loadPulseSnapshot: LoadPulseSnapshotUseCase
     public let startPulseScan: StartPulseScanUseCase
     public let connectPulseSpeaker: ConnectPulseSpeakerUseCase
     public let disconnectPulseSpeaker: DisconnectPulseSpeakerUseCase
@@ -25,7 +24,6 @@ public struct PulseDependencies {
 
     public init(
         observePulseEvents: ObservePulseEventsUseCase,
-        loadPulseSnapshot: LoadPulseSnapshotUseCase,
         startPulseScan: StartPulseScanUseCase,
         connectPulseSpeaker: ConnectPulseSpeakerUseCase,
         disconnectPulseSpeaker: DisconnectPulseSpeakerUseCase,
@@ -47,7 +45,6 @@ public struct PulseDependencies {
         saveLanguage: @escaping (String?) -> Void
     ) {
         self.observePulseEvents = observePulseEvents
-        self.loadPulseSnapshot = loadPulseSnapshot
         self.startPulseScan = startPulseScan
         self.connectPulseSpeaker = connectPulseSpeaker
         self.disconnectPulseSpeaker = disconnectPulseSpeaker

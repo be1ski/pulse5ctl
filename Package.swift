@@ -55,6 +55,31 @@ let package = Package(
                     "-Xlinker", "Sources/app/macos/Info.plist",
                 ])
             ]
-        )
+        ),
+        .testTarget(
+            name: "CoreElmTests",
+            dependencies: ["CoreElm"],
+            path: "Tests/CoreElmTests"
+        ),
+        .testTarget(
+            name: "PulseProtocolTests",
+            dependencies: ["FeaturePulseData", "FeaturePulseDomain"],
+            path: "Tests/PulseProtocolTests"
+        ),
+        .testTarget(
+            name: "PulseReducerTests",
+            dependencies: ["CoreElm", "FeaturePulsePresentation", "FeaturePulseDomain"],
+            path: "Tests/PulseReducerTests"
+        ),
+        .testTarget(
+            name: "PulseDomainTests",
+            dependencies: ["FeaturePulseDomain", "FeaturePulseData"],
+            path: "Tests/PulseDomainTests"
+        ),
+        .testTarget(
+            name: "PulseDataTests",
+            dependencies: ["FeaturePulseData"],
+            path: "Tests/PulseDataTests"
+        ),
     ]
 )

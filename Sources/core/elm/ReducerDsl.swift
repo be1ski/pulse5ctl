@@ -9,6 +9,14 @@ public final class ReducerContext<State, Command, Notification> {
         stateUpdate = transform
     }
 
+    public func state(_ mutate: @escaping (inout State) -> Void) {
+        stateUpdate = { current in
+            var copy = current
+            mutate(&copy)
+            return copy
+        }
+    }
+
     public func state(_ newState: State) {
         stateUpdate = { _ in newState }
     }
@@ -42,7 +50,9 @@ public final class ReducerContext<State, Command, Notification> {
 }
 
 public func reducer<Action, State, Command, Notification>(
-    _ reduce: @escaping (_ action: Action, _ state: State, _ context: ReducerContext<State, Command, Notification>) -> Void
+    _ reduce: @escaping (
+        _ action: Action, _ state: State, _ context: ReducerContext<State, Command, Notification>
+    ) -> Void
 ) -> Reducer<Action, State, Command, Notification> {
     { action, state in
         let context = ReducerContext<State, Command, Notification>()
