@@ -11,7 +11,8 @@ Sources/
   core/localization/  — L10n strings + resources
   feature/pulse/
     domain/           — Models, repository protocol, use cases
-    data/             — BluetoothManager, PulseProtocol, repository impl
+    data/             — PulseProtocol, schedule monitor
+    data/platform/    — Untestable: BluetoothManager, NowPlaying, repository impl
     presentation/     — Reducers, state, actions, effects, effect handler
   feature/homescreen/ — DI wiring, SwiftUI views
   app/macos/          — App entry point, menu bar controller
@@ -48,6 +49,7 @@ swift test             # Swift tests only
 
 ## Git & GitHub
 
+- **Always `git fetch origin` before starting work** — rebase onto latest `origin/main` before creating branches or committing
 - PR descriptions are always written in English
 - The device is referred to as "Pulse 5" everywhere — code, docs, commits, PR descriptions
 - Commit messages: short summary line, optional 1–2 sentence body max — no essays
