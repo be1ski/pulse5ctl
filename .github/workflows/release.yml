@@ -1,14 +1,53 @@
 name: Release
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 permissions:
   contents: write
   id-token: write
 
 jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Calculate next version
+        id: version
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          case "${{ inputs.bump }}" in
+            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            patch) PATCH=$((PATCH + 1)) ;;
+          esac
+          NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
+          echo "tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${MAJOR}.${MINOR}.${PATCH}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create ${{ steps.version.outputs.tag }} --generate-notes
+
   swift-test:
     runs-on: macos-14
     steps:
@@ -34,10 +73,15 @@ jobs:
         run: pytest
 
   macos-app:
-    needs: swift-test
+    needs: [swift-test, create-release]
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
+
+      - name: Inject version into Info.plist
+        run: |
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${{ needs.create-release.outputs.version }}" Sources/app/macos/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${{ needs.create-release.outputs.version }}" Sources/app/macos/Info.plist
 
       - name: Build release binary
         run: swift build -c release --product pulse5ctl
@@ -51,15 +95,15 @@ jobs:
           chmod +x pulse5ctl.app/Contents/MacOS/pulse5ctl
 
       - name: Create zip
-        run: ditto -c -k --keepParent pulse5ctl.app pulse5ctl-${{ github.event.release.tag_name }}.zip
+        run: ditto -c -k --keepParent pulse5ctl.app pulse5ctl-${{ needs.create-release.outputs.tag }}.zip
 
       - name: Upload to release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload ${{ github.event.release.tag_name }} pulse5ctl-${{ github.event.release.tag_name }}.zip
+        run: gh release upload ${{ needs.create-release.outputs.tag }} pulse5ctl-${{ needs.create-release.outputs.tag }}.zip
 
   pypi:
-    needs: python-tests
+    needs: [python-tests, create-release]
     runs-on: ubuntu-latest
     environment: pypi
     steps:
@@ -71,7 +115,7 @@ jobs:
 
       - name: Set version from tag
         working-directory: cli
-        run: sed -i "s/version = \"0.0.0\"/version = \"${GITHUB_REF_NAME#v}\"/" pyproject.toml
+        run: sed -i "s/version = \"0.0.0\"/version = \"${{ needs.create-release.outputs.version }}\"/" pyproject.toml
 
       - name: Build package
         working-directory: cli
@@ -83,12 +127,13 @@ jobs:
           packages-dir: cli/dist/
 
   homebrew:
-    needs: swift-test
+    needs: [macos-app, create-release]
     runs-on: ubuntu-latest
     steps:
       - uses: mislav/bump-homebrew-formula-action@v3
         with:
           formula-name: pulse5ctl
           homebrew-tap: be1ski/homebrew-tap
+          tag-name: ${{ needs.create-release.outputs.tag }}
         env:
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
