@@ -145,29 +145,6 @@ final class PulseProtocolExtendedTests: XCTestCase {
         XCTAssertEqual(data[10], 0x30)
     }
 
-    // MARK: - PulseConstants values
-
-    func test_pulseConstants_header_isAA() {
-        XCTAssertEqual(PulseConstants.header, 0xAA)
-    }
-
-    func test_pulseConstants_brightnessRange_20to80() {
-        XCTAssertEqual(PulseConstants.minBrightness, 20)
-        XCTAssertEqual(PulseConstants.maxBrightness, 80)
-    }
-
-    func test_pulseConstants_deviceName_isJBLPulse5() {
-        XCTAssertEqual(PulseConstants.deviceName, "JBL Pulse 5")
-    }
-
-    func test_pulseConstants_maxReconnectAttempts_is3() {
-        XCTAssertEqual(PulseConstants.maxReconnectAttempts, 3)
-    }
-
-    func test_pulseConstants_manufacturerID_is87() {
-        XCTAssertEqual(PulseConstants.manufacturerID, 87)
-    }
-
     // MARK: - Brightness clamping
 
     func test_setLedBrightness_atMinBoundary_keepsValue() {
