@@ -11,6 +11,7 @@ public func actions<A: ElmAction>(
     AsyncStream { continuation in
         Task {
             await build(continuation)
+            continuation.finish()
         }
     }
 }

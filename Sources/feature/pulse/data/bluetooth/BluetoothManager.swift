@@ -29,6 +29,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
     private var reconnectAttempt = 0
     private var shouldReconnect = false
     private var reconnectTask: Task<Void, Never>?
+    private var connectionTimeoutTask: Task<Void, Never>?
 
     override init() {
         var stateCont: AsyncStream<ConnectionState>.Continuation?
@@ -109,6 +110,27 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         shouldReconnect = true
         centralManager.stopScan()
         centralManager.connect(peripheral, options: nil)
+        startConnectionTimeout()
+    }
+
+    private func startConnectionTimeout() {
+        connectionTimeoutTask?.cancel()
+        connectionTimeoutTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: PulseConstants.connectionTimeout)
+            guard !Task.isCancelled, let self else { return }
+            self.bleQueue.async {
+                guard self.connectionState == .connecting || self.connectionState == .scanning else { return }
+                if let peripheral = self.peripheral {
+                    self.centralManager.cancelPeripheralConnection(peripheral)
+                }
+                self.attemptReconnect()
+            }
+        }
+    }
+
+    private func cancelConnectionTimeout() {
+        connectionTimeoutTask?.cancel()
+        connectionTimeoutTask = nil
     }
 
     func disconnect() {
@@ -120,6 +142,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
     /// Must be called on `bleQueue`.
     private func performDisconnect() {
         shouldReconnect = false
+        cancelConnectionTimeout()
         reconnectTask?.cancel()
         reconnectTask = nil
 
@@ -176,10 +199,16 @@ extension BluetoothManager: CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
+            cancelConnectionTimeout()
+            reconnectTask?.cancel()
+            reconnectTask = nil
             reconnectAttempt = 0
+            if let peripheral {
+                centralManager.cancelPeripheralConnection(peripheral)
+            }
+            cleanup()
             errorContinuation.yield(nil)
-            if connectionState != .connected,
-               let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
+            if let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
                let uuid = UUID(uuidString: uuidString),
                let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first {
                 connect(to: cached)
@@ -224,6 +253,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
     }
 
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        cancelConnectionTimeout()
         reconnectAttempt = 0
         connectionState = .discoveringServices
         UserDefaults.standard.set(peripheral.identifier.uuidString, forKey: PulseConstants.lastPeripheralUUIDKey)
@@ -231,6 +261,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
     }
 
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        cancelConnectionTimeout()
         let reason = error?.localizedDescription ?? "Unknown reason"
         errorContinuation.yield(.connectionFailed(reason))
         attemptReconnect()

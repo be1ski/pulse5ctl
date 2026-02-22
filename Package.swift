@@ -89,7 +89,7 @@ let package = Package(
         ),
         .testTarget(
             name: "PulseDomainTests",
-            dependencies: ["FeaturePulseDomain", "FeaturePulseData"],
+            dependencies: ["FeaturePulseDomain", "FeaturePulseData", "CoreLocalization"],
             path: "Tests/PulseDomainTests",
             swiftSettings: strictConcurrency
         ),

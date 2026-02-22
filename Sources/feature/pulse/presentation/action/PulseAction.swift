@@ -13,6 +13,7 @@ public enum PulseAction: ElmAction, Equatable, Sendable {
 
     public enum Lifecycle: Equatable, Sendable {
         case started
+        case systemDidWake
     }
 
     public enum Connection: Equatable, Sendable {

@@ -1,5 +1,5 @@
 APP = pulse5ctl.app
-INSTALL_DIR = /Applications
+INSTALL_DIR = $(HOME)/Applications
 
 checkAll: checkSwift checkPython
 
