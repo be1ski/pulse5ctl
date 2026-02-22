@@ -21,6 +21,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusBarController: StatusBarController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        for window in NSApplication.shared.windows {
+            window.isRestorable = false
+            window.close()
+        }
+
         let dependencies = AppGraph.shared.appDependencies
         dependencies.pulseFeature.send(.lifecycle(.started))
         statusBarController = StatusBarController(dependencies: dependencies)
