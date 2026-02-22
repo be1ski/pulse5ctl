@@ -11,7 +11,8 @@ Sources/
   core/localization/  — L10n strings + resources
   feature/pulse/
     domain/           — Models, repository protocol, use cases
-    data/             — BluetoothManager, PulseProtocol, repository impl
+    data/             — PulseProtocol, schedule monitor
+    data/platform/    — Untestable: BluetoothManager, NowPlaying, repository impl
     presentation/     — Reducers, state, actions, effects, effect handler
   feature/homescreen/ — DI wiring, SwiftUI views
   app/macos/          — App entry point, menu bar controller

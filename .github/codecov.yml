@@ -15,8 +15,4 @@ ignore:
   - "**/*Action.swift"
   - "**/*Effect.swift"
   - "**/*State.swift"
-  # Platform-specific (CoreBluetooth, CoreAudio) — untestable without hardware
-  - "**/bluetooth/BluetoothManager.swift"
-  - "**/nowplaying/**"
-  - "Sources/core/platform/**"
-  - "**/repository/PulseSpeakerRepositoryImpl.swift"
+  - "**/platform/**"
