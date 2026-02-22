@@ -48,6 +48,7 @@ swift test             # Swift tests only
 
 ## Git & GitHub
 
+- **Always `git fetch origin` before starting work** — rebase onto latest `origin/main` before creating branches or committing
 - PR descriptions are always written in English
 - The device is referred to as "Pulse 5" everywhere — code, docs, commits, PR descriptions
 - Commit messages: short summary line, optional 1–2 sentence body max — no essays
