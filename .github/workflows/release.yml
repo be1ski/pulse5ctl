@@ -130,10 +130,51 @@ jobs:
     needs: [macos-app, create-release]
     runs-on: ubuntu-latest
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v3
-        with:
-          formula-name: pulse5ctl
-          homebrew-tap: be1ski/homebrew-tap
-          tag-name: ${{ needs.create-release.outputs.tag }}
+      - name: Update Homebrew Cask
         env:
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          VERSION: ${{ needs.create-release.outputs.tag }}
+        run: |
+          APP_VERSION="${VERSION#v}"
+          ZIP_URL="https://github.com/be1ski/pulse5ctl/releases/download/${VERSION}/pulse5ctl-${VERSION}.zip"
+
+          curl -sL "$ZIP_URL" -o pulse5ctl.zip
+          SHA256=$(shasum -a 256 pulse5ctl.zip | awk '{print $1}')
+          rm pulse5ctl.zip
+
+          git clone "https://x-access-token:${COMMITTER_TOKEN}@github.com/be1ski/homebrew-tap.git" tap
+          cd tap
+          mkdir -p Casks
+
+          cat > Casks/pulse5ctl.rb << CASK
+          cask "pulse5ctl" do
+            version "$APP_VERSION"
+            sha256 "$SHA256"
+
+            url "https://github.com/be1ski/pulse5ctl/releases/download/v#{version}/pulse5ctl-v#{version}.zip"
+            name "pulse5ctl"
+            desc "Pulse 5 speaker controller — macOS menu bar app"
+            homepage "https://github.com/be1ski/pulse5ctl"
+
+            depends_on macos: ">= :ventura"
+
+            app "pulse5ctl.app"
+
+            postflight do
+              system "xattr", "-cr", "#{appdir}/pulse5ctl.app"
+            end
+
+            zap trash: [
+              "~/Library/Preferences/space.be1ski.pulse5ctl.plist",
+            ]
+          end
+          CASK
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Casks/pulse5ctl.rb
+          git rm -f Formula/pulse5ctl.rb 2>/dev/null || true
+          if ! git diff --staged --quiet; then
+            git commit -m "pulse5ctl $APP_VERSION"
+            git push
+          fi
