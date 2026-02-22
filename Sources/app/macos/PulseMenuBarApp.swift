@@ -36,6 +36,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        false
+    }
+
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        false
+    }
 }
 
 @MainActor
