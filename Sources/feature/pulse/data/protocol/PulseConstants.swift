@@ -40,6 +40,7 @@ enum PulseConstants {
 
     static let maxReconnectAttempts = 3
     static let baseReconnectDelay: UInt64 = 1_000_000_000
+    static let connectionTimeout: UInt64 = 10_000_000_000
 
     static let lastPeripheralUUIDKey = "lastPeripheralUUID"
 }

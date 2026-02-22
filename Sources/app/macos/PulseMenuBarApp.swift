@@ -24,6 +24,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let dependencies = AppGraph.shared.appDependencies
         dependencies.pulseFeature.send(.lifecycle(.started))
         statusBarController = StatusBarController(dependencies: dependencies)
+
+        let feature = dependencies.pulseFeature
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didWakeNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            MainActor.assumeIsolated {
+                feature.send(.lifecycle(.systemDidWake))
+            }
+        }
     }
 }
 

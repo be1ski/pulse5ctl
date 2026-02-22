@@ -67,4 +67,23 @@ final class PulseLifecycleReducerTests: XCTestCase {
         // Should not change anything — guard prevents re-registration
         XCTAssertTrue(result.effects.commands.isEmpty)
     }
+
+    // MARK: - System Did Wake
+
+    func test_systemDidWake_whenObserving_emitsDisconnect() {
+        let state = PulseState(isObservingRepository: true)
+        let result = reduce(.systemDidWake, state: state)
+        XCTAssertTrue(result.effects.commands.contains(.disconnect))
+    }
+
+    func test_systemDidWake_whenObserving_emitsStartScan() {
+        let state = PulseState(isObservingRepository: true)
+        let result = reduce(.systemDidWake, state: state)
+        XCTAssertTrue(result.effects.commands.contains(.startScan))
+    }
+
+    func test_systemDidWake_whenNotObserving_isNoop() {
+        let result = reduce(.systemDidWake)
+        XCTAssertTrue(result.effects.commands.isEmpty)
+    }
 }

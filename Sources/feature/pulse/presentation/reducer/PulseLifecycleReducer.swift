@@ -20,5 +20,10 @@ func pulseLifecycleReducer(
         if state.connectionState.isConnected {
             context.command(.requestCurrentState)
         }
+
+    case .systemDidWake:
+        guard state.isObservingRepository else { return }
+        context.command(.disconnect)
+        context.command(.startScan)
     }
 }
