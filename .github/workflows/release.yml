@@ -87,12 +87,7 @@ jobs:
         run: swift build -c release --product pulse5ctl
 
       - name: Package app bundle
-        run: |
-          mkdir -p pulse5ctl.app/Contents/MacOS
-          cp .build/release/pulse5ctl pulse5ctl.app/Contents/MacOS/
-          cp Sources/app/macos/Info.plist pulse5ctl.app/Contents/
-          cp -R .build/release/pulse5ctl_CoreLocalization.bundle pulse5ctl.app/
-          chmod +x pulse5ctl.app/Contents/MacOS/pulse5ctl
+        run: make package
 
       - name: Create zip
         run: ditto -c -k --keepParent pulse5ctl.app pulse5ctl-${{ needs.create-release.outputs.tag }}.zip
