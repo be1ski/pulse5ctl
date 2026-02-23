@@ -58,7 +58,7 @@ let package = Package(
             name: "pulse5ctl",
             dependencies: ["FeatureHomescreen", "FeaturePulseDomain"],
             path: "Sources/app/macos",
-            exclude: ["Info.plist"],
+            exclude: ["Info.plist", "AppIcon.icns"],
             swiftSettings: strictConcurrency,
             linkerSettings: [
                 .unsafeFlags([

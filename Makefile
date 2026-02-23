@@ -34,6 +34,8 @@ install:
 	rm -rf $(INSTALL_DIR)/$(APP)
 	mkdir -p $(INSTALL_DIR)/$(APP)/Contents/MacOS
 	cp .build/release/pulse5ctl $(INSTALL_DIR)/$(APP)/Contents/MacOS/
+	mkdir -p $(INSTALL_DIR)/$(APP)/Contents/Resources
 	cp Sources/app/macos/Info.plist $(INSTALL_DIR)/$(APP)/Contents/
+	cp Sources/app/macos/AppIcon.icns $(INSTALL_DIR)/$(APP)/Contents/Resources/
 	cp -R .build/release/pulse5ctl_CoreLocalization.bundle $(INSTALL_DIR)/$(APP)/
 	chmod +x $(INSTALL_DIR)/$(APP)/Contents/MacOS/pulse5ctl
