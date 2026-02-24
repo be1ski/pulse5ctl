@@ -24,7 +24,7 @@ jobs:
       tag: ${{ steps.version.outputs.tag }}
       version: ${{ steps.version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -49,9 +49,9 @@ jobs:
         run: gh release create ${{ steps.version.outputs.tag }} --generate-notes
 
   swift-test:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run Swift tests
         run: swift test
 
@@ -61,8 +61,8 @@ jobs:
       run:
         working-directory: cli
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.14"
       - name: Install dependencies
@@ -74,9 +74,9 @@ jobs:
 
   macos-app:
     needs: [swift-test, create-release]
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Inject version into Info.plist
         run: |
@@ -102,9 +102,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: pypi
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.14"
 
