@@ -26,7 +26,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         didSet {
             let old = String(describing: oldValue)
             let new = String(describing: self.connectionState)
-            log.notice("connectionState: \(old) -> \(new)")
+            log.notice("\(old, privacy: .public) -> \(new, privacy: .public)")
             stateContinuation.yield(connectionState)
         }
     }
@@ -60,7 +60,8 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
 
     func startScan() {
         guard centralManager.state == .poweredOn else {
-            log.error("startScan() called but central state is \(self.centralManager.state.rawValue) — not poweredOn")
+            let state = self.centralManager.state.rawValue
+            log.error("startScan() but central state is \(state, privacy: .public) — not poweredOn")
             return
         }
 
@@ -71,7 +72,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
 
         let connected = centralManager.retrieveConnectedPeripherals(withServices: [PulseConstants.serviceUUID])
         if let firstConnected = connected.first {
-            log.notice("startScan: found already-connected peripheral \(firstConnected.identifier)")
+            log.notice("startScan: found connected \(firstConnected.identifier, privacy: .public)")
             connect(to: firstConnected)
             return
         }
@@ -79,7 +80,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         if let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
            let uuid = UUID(uuidString: uuidString),
            let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first {
-            log.notice("startScan: found cached peripheral \(uuid), connecting")
+            log.notice("startScan: found cached \(uuid, privacy: .public), connecting")
             connect(to: cached)
             return
         }
@@ -116,7 +117,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
 
     /// Must be called on `bleQueue`.
     private func connectPeripheral(_ peripheral: CBPeripheral) {
-        log.notice("connectPeripheral(\(peripheral.identifier))")
+        log.notice("connectPeripheral(\(peripheral.identifier, privacy: .public))")
         self.peripheral = peripheral
         peripheral.delegate = self
         connectionState = .connecting
@@ -135,7 +136,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
             self.bleQueue.async {
                 guard self.connectionState == .connecting || self.connectionState == .scanning else { return }
                 let state = String(describing: self.connectionState)
-                log.notice("Connection timeout fired, connectionState: \(state)")
+                log.notice("Connection timeout fired: \(state, privacy: .public)")
                 if let peripheral = self.peripheral {
                     self.centralManager.cancelPeripheralConnection(peripheral)
                 }
@@ -158,7 +159,8 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
 
     /// Must be called on `bleQueue`.
     private func performDisconnect() {
-        log.notice("performDisconnect(), peripheral: \(self.peripheral?.identifier.uuidString ?? "nil")")
+        let id = self.peripheral?.identifier.uuidString ?? "nil"
+        log.notice("performDisconnect(), peripheral: \(id, privacy: .public)")
         shouldReconnect = false
         cancelConnectionTimeout()
         reconnectTask?.cancel()
@@ -197,9 +199,8 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
             let peripheralID = peripheral?.identifier.uuidString ?? "nil"
             let attempt = self.reconnectAttempt
             let max = PulseConstants.maxReconnectAttempts
-            log.notice(
-                "reconnect guard — shouldReconnect: \(self.shouldReconnect), \(attempt)/\(max), peer: \(peripheralID)"
-            )
+            let msg = "\(shouldReconnect) \(attempt)/\(max) peer: \(peripheralID)"
+            log.notice("reconnect guard — \(msg, privacy: .public)")
             if reconnectAttempt >= PulseConstants.maxReconnectAttempts {
                 connectionState = .disconnected
                 errorContinuation.yield(.disconnected)
@@ -208,7 +209,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         }
 
         reconnectAttempt += 1
-        log.notice("attemptReconnect #\(self.reconnectAttempt)")
+        log.notice("attemptReconnect #\(self.reconnectAttempt, privacy: .public)")
         connectionState = .reconnecting(attempt: reconnectAttempt)
 
         let delay = PulseConstants.baseReconnectDelay * UInt64(1 << (reconnectAttempt - 1))
@@ -225,9 +226,8 @@ extension BluetoothManager: CBCentralManagerDelegate {
         let cachedUUID = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey)
         let peripheralID = self.peripheral?.identifier.uuidString ?? "nil"
         let cachedDisplay = cachedUUID ?? "nil"
-        log.notice(
-            "didUpdateState: \(central.state.rawValue), peripheral: \(peripheralID), cached: \(cachedDisplay)"
-        )
+        let msg = "didUpdateState: \(central.state.rawValue) peer: \(peripheralID) cached: \(cachedDisplay)"
+        log.notice("\(msg, privacy: .public)")
 
         switch central.state {
         case .poweredOn:
@@ -243,7 +243,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
             if let uuidString = cachedUUID,
                let uuid = UUID(uuidString: uuidString),
                let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first {
-                log.notice("poweredOn: auto-connecting to cached peripheral \(uuid)")
+                log.notice("poweredOn: auto-connecting to \(uuid, privacy: .public)")
                 connect(to: cached)
             }
         case .poweredOff:
@@ -273,7 +273,8 @@ extension BluetoothManager: CBCentralManagerDelegate {
 
         let isPulse = hasServiceUUID || name.hasPrefix(PulseConstants.deviceName)
 
-        log.info("didDiscover: \(name) (\(peripheral.identifier)), isPulse: \(isPulse), RSSI: \(RSSI)")
+        let msg = "didDiscover: \(name) \(peripheral.identifier) pulse: \(isPulse) RSSI: \(RSSI)"
+        log.info("\(msg, privacy: .public)")
 
         discoveredPeripherals[peripheral.identifier] = peripheral
 
@@ -288,7 +289,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
     }
 
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        log.notice("didConnect: \(peripheral.identifier)")
+        log.notice("didConnect: \(peripheral.identifier, privacy: .public)")
         cancelConnectionTimeout()
         reconnectAttempt = 0
         connectionState = .discoveringServices
@@ -298,7 +299,8 @@ extension BluetoothManager: CBCentralManagerDelegate {
 
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         let reason = error?.localizedDescription ?? "Unknown reason"
-        log.error("didFailToConnect: \(peripheral.identifier), reason: \(reason)")
+        let msg = "didFailToConnect: \(peripheral.identifier) reason: \(reason)"
+        log.error("\(msg, privacy: .public)")
         cancelConnectionTimeout()
         errorContinuation.yield(.connectionFailed(reason))
         attemptReconnect()
@@ -306,9 +308,8 @@ extension BluetoothManager: CBCentralManagerDelegate {
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         let errorDesc = error?.localizedDescription ?? "nil"
-        log.notice(
-            "didDisconnect: \(peripheral.identifier), reconnect: \(self.shouldReconnect), error: \(errorDesc)"
-        )
+        let msg = "didDisconnect: \(peripheral.identifier) retry: \(shouldReconnect) err: \(errorDesc)"
+        log.notice("\(msg, privacy: .public)")
         writeCharacteristic = nil
         readCharacteristic = nil
 
@@ -324,7 +325,7 @@ extension BluetoothManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let service = peripheral.services?.first(where: { $0.uuid == PulseConstants.serviceUUID }) else {
             let uuids = peripheral.services?.map(\.uuid) ?? []
-            log.error("didDiscoverServices: Pulse service not found, services: \(uuids)")
+            log.error("didDiscoverServices: service not found: \(uuids, privacy: .public)")
             errorContinuation.yield(.serviceNotFound)
             centralManager.cancelPeripheralConnection(peripheral)
             cleanup()
