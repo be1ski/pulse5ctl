@@ -64,7 +64,8 @@ public final class PulseEffectHandler: @unchecked Sendable {
     }
 
     public func handle(_ effect: PulseEffect) -> AsyncStream<PulseAction> {
-        log.notice("Handling effect: \(String(describing: effect))")
+        let desc = String(describing: effect)
+        log.notice("Handling effect: \(desc, privacy: .public)")
         switch effect {
         case .observeRepository, .startScan, .disconnect, .connect:
             return handleConnection(effect)

@@ -36,7 +36,7 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
     }
 
     public func connect(to deviceID: UUID) {
-        log.notice("connect(to: \(deviceID))")
+        log.notice("connect(to: \(deviceID, privacy: .public))")
         bluetoothManager.connect(toDeviceWithID: deviceID)
     }
 
@@ -124,7 +124,8 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
         Task { [weak self] in
             guard let self else { return }
             for await state in bluetoothManager.stateUpdates {
-                log.notice("state event: \(String(describing: state))")
+                let desc = String(describing: state)
+                log.notice("state event: \(desc, privacy: .public)")
                 await MainActor.run { [weak self] in
                     guard let self else { return }
                     emit(.connectionChanged(state))
@@ -189,7 +190,8 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
         Task { [weak self] in
             guard let self else { return }
             for await error in bluetoothManager.errors {
-                log.notice("error event: \(error?.localizedDescription ?? "cleared")")
+                let desc = error?.localizedDescription ?? "cleared"
+                log.notice("error event: \(desc, privacy: .public)")
                 await MainActor.run { [weak self] in
                     guard let self else { return }
                     if let error {
