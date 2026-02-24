@@ -1,6 +1,9 @@
 import CoreElm
 import FeaturePulseDomain
 import Foundation
+import os
+
+private let log = Logger(subsystem: "com.pulse5ctl", category: "effects")
 
 public final class PulseEffectHandler: @unchecked Sendable {
     private let observePulseEvents: ObservePulseEventsUseCase
@@ -61,6 +64,7 @@ public final class PulseEffectHandler: @unchecked Sendable {
     }
 
     public func handle(_ effect: PulseEffect) -> AsyncStream<PulseAction> {
+        log.notice("Handling effect: \(String(describing: effect))")
         switch effect {
         case .observeRepository, .startScan, .disconnect, .connect:
             return handleConnection(effect)

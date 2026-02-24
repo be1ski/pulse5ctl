@@ -4,6 +4,7 @@ import FeatureHomescreen
 import FeaturePulseDomain
 import FeaturePulsePresentation
 import SwiftUI
+import os
 
 @main
 struct PulseMenuBarApp: App {
@@ -15,6 +16,8 @@ struct PulseMenuBarApp: App {
         }
     }
 }
+
+private let log = Logger(subsystem: "com.pulse5ctl", category: "app")
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -37,6 +40,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             queue: .main
         ) { _ in
             MainActor.assumeIsolated {
+                log.notice("System wake notification received")
                 feature.send(.lifecycle(.systemDidWake))
             }
         }

@@ -1,5 +1,8 @@
 import FeaturePulseDomain
 import Foundation
+import os
+
+private let log = Logger(subsystem: "com.pulse5ctl", category: "repository")
 
 public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecked Sendable {
     public var events: AsyncStream<PulseRepositoryEvent> { eventStream }
@@ -21,6 +24,7 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
     }
 
     public func startScan() {
+        log.notice("startScan()")
         discoveredDevicesByID.removeAll()
         emit(.connectionChanged(.scanning))
         emit(.discoveredDevices([]))
@@ -32,10 +36,12 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
     }
 
     public func connect(to deviceID: UUID) {
+        log.notice("connect(to: \(deviceID))")
         bluetoothManager.connect(toDeviceWithID: deviceID)
     }
 
     public func disconnect() {
+        log.notice("disconnect()")
         bluetoothManager.disconnect()
     }
 
@@ -118,6 +124,7 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
         Task { [weak self] in
             guard let self else { return }
             for await state in bluetoothManager.stateUpdates {
+                log.notice("state event: \(String(describing: state))")
                 await MainActor.run { [weak self] in
                     guard let self else { return }
                     emit(.connectionChanged(state))
@@ -182,6 +189,7 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
         Task { [weak self] in
             guard let self else { return }
             for await error in bluetoothManager.errors {
+                log.notice("error event: \(error?.localizedDescription ?? "cleared")")
                 await MainActor.run { [weak self] in
                     guard let self else { return }
                     if let error {
