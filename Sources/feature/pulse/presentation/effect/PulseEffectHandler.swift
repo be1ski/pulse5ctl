@@ -64,8 +64,13 @@ public final class PulseEffectHandler: @unchecked Sendable {
     }
 
     public func handle(_ effect: PulseEffect) -> AsyncStream<PulseAction> {
-        let desc = String(describing: effect)
-        log.notice("Handling effect: \(desc, privacy: .public)")
+        switch effect {
+        case .setBrightness, .setLedPackage:
+            break
+        default:
+            let desc = String(describing: effect)
+            log.notice("Handling effect: \(desc, privacy: .public)")
+        }
         switch effect {
         case .observeRepository, .startScan, .disconnect, .connect:
             return handleConnection(effect)
@@ -110,6 +115,7 @@ public final class PulseEffectHandler: @unchecked Sendable {
             brightnessTask = Task { [setPulseBrightness] in
                 try? await Task.sleep(for: .milliseconds(150))
                 guard !Task.isCancelled else { return }
+                log.notice("setBrightness: \(level, privacy: .public)")
                 setPulseBrightness(level: level, bodyLight: bodyLight, projection: projection)
             }
             return noActions()
@@ -118,6 +124,7 @@ public final class PulseEffectHandler: @unchecked Sendable {
             ledPackageTask = Task { [setPulseLedPackage] in
                 try? await Task.sleep(for: .milliseconds(150))
                 guard !Task.isCancelled else { return }
+                log.notice("setLedPackage: \(String(describing: theme), privacy: .public)")
                 setPulseLedPackage(
                     theme: theme, activePatterns: activePatterns,
                     allPatterns: allPatterns, colorEffect: colorEffect, color: color

@@ -32,8 +32,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
     }
 
     private var discoveredPeripherals: [UUID: CBPeripheral] = [:]
-    private var reconnectAttempt = 0
-    private var shouldReconnect = false
+    private var reconnectionPolicy = ReconnectionPolicy()
     private var reconnectTask: Task<Void, Never>?
     private var connectionTimeoutTask: Task<Void, Never>?
 
@@ -121,7 +120,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         self.peripheral = peripheral
         peripheral.delegate = self
         connectionState = .connecting
-        shouldReconnect = true
+        reconnectionPolicy.connectionStarted()
         centralManager.stopScan()
         centralManager.connect(peripheral, options: nil)
         startConnectionTimeout()
@@ -134,13 +133,23 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
             try? await Task.sleep(nanoseconds: PulseConstants.connectionTimeout)
             guard !Task.isCancelled, let self else { return }
             self.bleQueue.async {
-                guard self.connectionState == .connecting || self.connectionState == .scanning else { return }
+                let decision = self.reconnectionPolicy.timeoutAction(
+                    hasPeripheral: self.peripheral != nil,
+                    state: self.connectionState
+                )
                 let state = String(describing: self.connectionState)
-                log.notice("Connection timeout fired: \(state, privacy: .public)")
-                if let peripheral = self.peripheral {
-                    self.centralManager.cancelPeripheralConnection(peripheral)
+                let action = String(describing: decision)
+                log.notice("Connection timeout: \(state, privacy: .public) → \(action, privacy: .public)")
+                switch decision {
+                case .cancelConnection:
+                    if let peripheral = self.peripheral {
+                        self.centralManager.cancelPeripheralConnection(peripheral)
+                    }
+                case .reconnectDirectly:
+                    self.attemptReconnect()
+                case .ignore:
+                    break
                 }
-                self.attemptReconnect()
             }
         }
     }
@@ -161,7 +170,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
     private func performDisconnect() {
         let id = self.peripheral?.identifier.uuidString ?? "nil"
         log.notice("performDisconnect(), peripheral: \(id, privacy: .public)")
-        shouldReconnect = false
+        reconnectionPolicy.userDisconnected()
         cancelConnectionTimeout()
         reconnectTask?.cancel()
         reconnectTask = nil
@@ -193,30 +202,25 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
     }
 
     private func attemptReconnect() {
-        guard shouldReconnect,
-              reconnectAttempt < PulseConstants.maxReconnectAttempts,
-              let peripheral else {
-            let peripheralID = peripheral?.identifier.uuidString ?? "nil"
-            let attempt = self.reconnectAttempt
-            let max = PulseConstants.maxReconnectAttempts
-            let msg = "\(shouldReconnect) \(attempt)/\(max) peer: \(peripheralID)"
-            log.notice("reconnect guard — \(msg, privacy: .public)")
-            if reconnectAttempt >= PulseConstants.maxReconnectAttempts {
-                connectionState = .disconnected
-                errorContinuation.yield(.disconnected)
+        let decision = reconnectionPolicy.nextAttempt(hasPeripheral: peripheral != nil)
+        switch decision {
+        case let .reconnect(delay, attempt):
+            log.notice("attemptReconnect #\(attempt, privacy: .public)")
+            connectionState = .reconnecting(attempt: attempt)
+            reconnectTask = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: delay)
+                guard !Task.isCancelled, let self else { return }
+                guard let peripheral = self.peripheral else { return }
+                self.centralManager.connect(peripheral, options: nil)
+                self.startConnectionTimeout()
             }
-            return
-        }
-
-        reconnectAttempt += 1
-        log.notice("attemptReconnect #\(self.reconnectAttempt, privacy: .public)")
-        connectionState = .reconnecting(attempt: reconnectAttempt)
-
-        let delay = PulseConstants.baseReconnectDelay * UInt64(1 << (reconnectAttempt - 1))
-        reconnectTask = Task {
-            try? await Task.sleep(nanoseconds: delay)
-            guard !Task.isCancelled else { return }
-            centralManager.connect(peripheral, options: nil)
+        case .giveUp:
+            log.notice("attemptReconnect: giving up after max attempts")
+            connectionState = .disconnected
+            errorContinuation.yield(.disconnected)
+        case .skip:
+            let peripheralID = peripheral?.identifier.uuidString ?? "nil"
+            log.notice("attemptReconnect: skip (peer: \(peripheralID, privacy: .public))")
         }
     }
 }
@@ -234,7 +238,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
             cancelConnectionTimeout()
             reconnectTask?.cancel()
             reconnectTask = nil
-            reconnectAttempt = 0
+            reconnectionPolicy.reset()
             if let peripheral {
                 centralManager.cancelPeripheralConnection(peripheral)
             }
@@ -291,7 +295,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         log.notice("didConnect: \(peripheral.identifier, privacy: .public)")
         cancelConnectionTimeout()
-        reconnectAttempt = 0
+        reconnectionPolicy.connectionSucceeded()
         connectionState = .discoveringServices
         UserDefaults.standard.set(peripheral.identifier.uuidString, forKey: PulseConstants.lastPeripheralUUIDKey)
         peripheral.discoverServices(nil)
@@ -308,12 +312,13 @@ extension BluetoothManager: CBCentralManagerDelegate {
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         let errorDesc = error?.localizedDescription ?? "nil"
-        let msg = "didDisconnect: \(peripheral.identifier) retry: \(shouldReconnect) err: \(errorDesc)"
+        let retry = reconnectionPolicy.shouldReconnect
+        let msg = "didDisconnect: \(peripheral.identifier) retry: \(retry) err: \(errorDesc)"
         log.notice("\(msg, privacy: .public)")
         writeCharacteristic = nil
         readCharacteristic = nil
 
-        if shouldReconnect {
+        if reconnectionPolicy.shouldReconnect {
             attemptReconnect()
         } else {
             connectionState = .disconnected
