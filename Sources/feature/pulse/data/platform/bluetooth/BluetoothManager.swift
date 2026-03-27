@@ -57,11 +57,12 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         centralManager = CBCentralManager(delegate: self, queue: bleQueue)
     }
 
-    func startScan() {
+    @discardableResult
+    func startScan() -> Bool {
         guard centralManager.state == .poweredOn else {
             let state = self.centralManager.state.rawValue
             log.error("startScan() but central state is \(state, privacy: .public) — not poweredOn")
-            return
+            return false
         }
 
         log.notice("startScan() called, central state: poweredOn")
@@ -73,15 +74,16 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         if let firstConnected = connected.first {
             log.notice("startScan: found connected \(firstConnected.identifier, privacy: .public)")
             connect(to: firstConnected)
-            return
+            return true
         }
 
         if let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
            let uuid = UUID(uuidString: uuidString),
-           let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first {
-            log.notice("startScan: found cached \(uuid, privacy: .public), connecting")
+           let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first,
+           cached.state == .connected {
+            log.notice("startScan: cached \(uuid, privacy: .public) already connected, reusing")
             connect(to: cached)
-            return
+            return true
         }
 
         log.notice("startScan: no connected/cached peripheral, starting full BLE scan")
@@ -89,6 +91,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
             withServices: nil,
             options: [CBCentralManagerScanOptionAllowDuplicatesKey: false]
         )
+        return true
     }
 
     func stopScan() {
@@ -279,6 +282,8 @@ extension BluetoothManager: CBCentralManagerDelegate {
 
         let msg = "didDiscover: \(name) \(peripheral.identifier) pulse: \(isPulse) RSSI: \(RSSI)"
         log.info("\(msg, privacy: .public)")
+
+        guard isPulse else { return }
 
         discoveredPeripherals[peripheral.identifier] = peripheral
 

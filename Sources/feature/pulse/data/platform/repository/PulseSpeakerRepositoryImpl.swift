@@ -9,6 +9,7 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
 
     private let bluetoothManager = BluetoothManager()
     private var discoveredDevicesByID: [UUID: DiscoveredDevice] = [:]
+    private var stateReadTask: Task<Void, Never>?
 
     private let eventStream: AsyncStream<PulseRepositoryEvent>
     private let eventContinuation: AsyncStream<PulseRepositoryEvent>.Continuation
@@ -26,9 +27,11 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
     public func startScan() {
         log.notice("startScan()")
         discoveredDevicesByID.removeAll()
-        emit(.connectionChanged(.scanning))
         emit(.discoveredDevices([]))
-        bluetoothManager.startScan()
+        let started = bluetoothManager.startScan()
+        if !started {
+            emit(.error(BluetoothError.poweredOff.localizedDescription))
+        }
     }
 
     public func stopScan() {
@@ -42,6 +45,8 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
 
     public func disconnect() {
         log.notice("disconnect()")
+        stateReadTask?.cancel()
+        stateReadTask = nil
         bluetoothManager.disconnect()
     }
 
@@ -85,21 +90,24 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
     }
 
     public func requestCurrentState() {
-        bluetoothManager.write(PulseProtocol.requestSpeakerInfo())
+        stateReadTask?.cancel()
+        stateReadTask = Task { [weak self] in
+            self?.bluetoothManager.write(PulseProtocol.requestSpeakerInfo())
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            guard !Task.isCancelled else { return }
             self?.bluetoothManager.write(PulseProtocol.requestLightStatus())
-        }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            guard !Task.isCancelled else { return }
             self?.bluetoothManager.write(PulseProtocol.requestLedBrightness())
-        }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            guard !Task.isCancelled else { return }
             self?.bluetoothManager.write(PulseProtocol.requestMovementSpeed())
-        }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            guard !Task.isCancelled else { return }
             self?.bluetoothManager.write(PulseProtocol.requestLedPackageInfo())
         }
     }
@@ -131,6 +139,9 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
                     emit(.connectionChanged(state))
                     if state.isConnected {
                         requestCurrentState()
+                    } else if state == .disconnected {
+                        stateReadTask?.cancel()
+                        stateReadTask = nil
                     }
                 }
             }
