@@ -280,6 +280,8 @@ extension BluetoothManager: CBCentralManagerDelegate {
         let msg = "didDiscover: \(name) \(peripheral.identifier) pulse: \(isPulse) RSSI: \(RSSI)"
         log.info("\(msg, privacy: .public)")
 
+        guard isPulse else { return }
+
         discoveredPeripherals[peripheral.identifier] = peripheral
 
         let device = DiscoveredDevice(
