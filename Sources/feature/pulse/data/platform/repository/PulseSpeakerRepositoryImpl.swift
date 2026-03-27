@@ -139,6 +139,9 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
                     emit(.connectionChanged(state))
                     if state.isConnected {
                         requestCurrentState()
+                    } else if state == .disconnected {
+                        stateReadTask?.cancel()
+                        stateReadTask = nil
                     }
                 }
             }
