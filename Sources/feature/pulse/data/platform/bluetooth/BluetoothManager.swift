@@ -78,8 +78,9 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
 
         if let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
            let uuid = UUID(uuidString: uuidString),
-           let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first {
-            log.notice("startScan: found cached \(uuid, privacy: .public), connecting")
+           let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first,
+           cached.state == .connected {
+            log.notice("startScan: cached \(uuid, privacy: .public) already connected, reusing")
             connect(to: cached)
             return
         }
