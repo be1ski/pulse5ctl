@@ -36,12 +36,12 @@ final class ReducerContextTests: XCTestCase {
         XCTAssertEqual(result.state.y, "hello")
     }
 
-    func test_state_withMultipleUpdates_lastUpdateWins() {
+    func test_state_withMultipleUpdates_composesInOrder() {
         let context = ReducerContext<Int, String, String>()
         context.state { $0 + 1 }
         context.state { $0 * 2 }
         let result = context.result(initialState: 5)
-        XCTAssertEqual(result.state, 10)
+        XCTAssertEqual(result.state, 12) // (5 + 1) * 2
     }
 
     // MARK: - Commands

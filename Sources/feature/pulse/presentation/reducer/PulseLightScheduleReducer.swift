@@ -37,7 +37,6 @@ private func handleToggleEnabled(
     } else {
         context.command(.stopLightSchedule)
         if state.lightScheduleActive {
-            // Disabling while in off-window: restore lights
             let bodyLight = state.savedBodyLightOn ?? true
             let projection = state.savedProjectionOn ?? true
             context.state {

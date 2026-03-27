@@ -92,6 +92,18 @@ final class PulseLightScheduleReducerTests: XCTestCase {
         }))
     }
 
+    func test_toggleEnabled_offWhileInOffWindow_disablesSchedule() {
+        var state = PulseState(
+            lightScheduleSettings: LightScheduleSettings(enabled: true)
+        )
+        state.lightScheduleActive = true
+        state.savedBodyLightOn = true
+        state.savedProjectionOn = true
+
+        let result = reduce(.toggleEnabled, state: state)
+        XCTAssertFalse(result.state.lightScheduleSettings.enabled)
+    }
+
     func test_toggleEnabled_offWhileNotInOffWindow_noRestore() {
         let state = PulseState(
             bodyLightOn: true,

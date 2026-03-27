@@ -92,9 +92,11 @@ final class StatusBarController: NSObject {
 
     private func observeFeatureState() {
         stateCancellable = dependencies.pulseFeature.$state
+            .map(\.connectionState)
+            .removeDuplicates()
             .receive(on: RunLoop.main)
-            .sink { [weak self] state in
-                self?.updateIcon(for: state.connectionState)
+            .sink { [weak self] connectionState in
+                self?.updateIcon(for: connectionState)
             }
     }
 

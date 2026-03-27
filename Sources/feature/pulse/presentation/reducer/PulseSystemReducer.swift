@@ -14,7 +14,7 @@ func pulseSystemReducer(
     case let .lightScheduleChanged(isInOffWindow):
         handleLightScheduleChanged(isInOffWindow, state, context)
     case .dismissError:
-        handleDismissError(state, context)
+        handleErrorCleared(state, context)
     }
 }
 
@@ -119,7 +119,6 @@ private func handleLightScheduleChanged(
     _ context: ReducerContext<PulseState, PulseEffect, Never>
 ) {
     if isInOffWindow && !state.lightScheduleActive {
-        // Entering off-window: save state and turn off lights
         context.state {
             $0.savedBodyLightOn = state.bodyLightOn
             $0.savedProjectionOn = state.projectionOn
@@ -135,7 +134,6 @@ private func handleLightScheduleChanged(
             ))
         }
     } else if !isInOffWindow && state.lightScheduleActive {
-        // Exiting off-window: restore saved state
         let bodyLight = state.savedBodyLightOn ?? true
         let projection = state.savedProjectionOn ?? true
         context.state {
@@ -152,15 +150,5 @@ private func handleLightScheduleChanged(
                 projection: projection
             ))
         }
-    }
-}
-
-private func handleDismissError(
-    _ state: PulseState,
-    _ context: ReducerContext<PulseState, PulseEffect, Never>
-) {
-    guard state.errorMessage != nil else { return }
-    context.state {
-        $0.errorMessage = nil
     }
 }

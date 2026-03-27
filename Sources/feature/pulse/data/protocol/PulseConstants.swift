@@ -16,11 +16,6 @@ enum PulseConstants {
     static let cmdReqLedPackageInfo: UInt8 = 0x83
     static let cmdRetLedPackageInfo: UInt8 = 0x84
     static let cmdSetLedPackage: UInt8 = 0x85
-    static let cmdSetLedCanvasPackage: UInt8 = 0x86
-    static let cmdNotifyLedPackageInfo: UInt8 = 0x87
-    static let cmdNotifyLedPatternInfo: UInt8 = 0x88
-    static let cmdEnableNotifyLedPatternInfo: UInt8 = 0x89
-
     static let cmdSetLedBrightness: UInt8 = 0x8A
     static let cmdReqLedBrightness: UInt8 = 0x8B
     static let cmdRetLedBrightness: UInt8 = 0x8C
@@ -35,7 +30,6 @@ enum PulseConstants {
     static let minBrightness: UInt8 = 20
     static let maxBrightness: UInt8 = 80
 
-    static let manufacturerID: UInt16 = 87
     static let deviceName = "JBL Pulse 5"
 
     static let maxReconnectAttempts = 3
