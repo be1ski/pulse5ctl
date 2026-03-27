@@ -75,13 +75,20 @@ where Action: ElmAction, Notification: Sendable {
     private func enqueueCommand(_ command: Command) {
         let stream = effectHandler(command)
 
+        var taskRef: Task<Void, Never>?
         let task = Task { [weak self] in
             for await action in stream {
                 await MainActor.run {
                     self?.send(action)
                 }
             }
+            await MainActor.run { [weak self] in
+                if let task = taskRef {
+                    self?.commandTasks.removeAll { $0 == task }
+                }
+            }
         }
+        taskRef = task
 
         commandTasks.append(task)
     }

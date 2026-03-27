@@ -20,11 +20,6 @@ let package = Package(
             swiftSettings: strictConcurrency
         ),
         .target(
-            name: "CorePlatform",
-            path: "Sources/core/platform",
-            swiftSettings: strictConcurrency
-        ),
-        .target(
             name: "CoreLocalization",
             path: "Sources/core/localization",
             resources: [.process("Resources")],
@@ -32,7 +27,7 @@ let package = Package(
         ),
         .target(
             name: "FeaturePulseDomain",
-            dependencies: ["CorePlatform", "CoreLocalization"],
+            dependencies: ["CoreLocalization"],
             path: "Sources/feature/pulse/domain",
             swiftSettings: strictConcurrency
         ),

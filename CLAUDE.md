@@ -7,7 +7,6 @@ Pulse 5 speaker controller — macOS menu bar app (Swift) + CLI (Python).
 ```
 Sources/
   core/elm/           — CoreElm framework (Reducer, Feature, Effects, FlowHelpers)
-  core/platform/      — Platform abstractions
   core/localization/  — L10n strings + resources
   feature/pulse/
     domain/           — Models, repository protocol, use cases
@@ -26,7 +25,7 @@ Tests/                — Swift test targets
 app → FeatureHomescreen → FeaturePulseData + FeaturePulsePresentation
 FeaturePulsePresentation → CoreElm + FeaturePulseDomain
 FeaturePulseData → FeaturePulseDomain
-FeaturePulseDomain → CorePlatform + CoreLocalization
+FeaturePulseDomain → CoreLocalization
 ```
 
 Test targets may depend on any source target. Use `@testable import` for internal access.

@@ -6,12 +6,16 @@ public final class ReducerContext<State, Command, Notification> {
     public init() {}
 
     public func state(_ transform: @escaping (State) -> State) {
-        stateUpdate = transform
+        let previous = stateUpdate
+        stateUpdate = { current in
+            transform(previous?(current) ?? current)
+        }
     }
 
     public func state(_ mutate: @escaping (inout State) -> Void) {
+        let previous = stateUpdate
         stateUpdate = { current in
-            var copy = current
+            var copy = previous?(current) ?? current
             mutate(&copy)
             return copy
         }

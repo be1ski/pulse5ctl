@@ -12,6 +12,22 @@ private enum TestCommand: Equatable {
 
 final class ReducerDslTests: XCTestCase {
 
+    func test_context_multipleStateCalls_composesTransforms() {
+        let context = ReducerContext<[String: Int], Never, Never>()
+        context.state { var state = $0; state["a"] = 1; return state }
+        context.state { var state = $0; state["b"] = 2; return state }
+        let result = context.result(initialState: [:])
+        XCTAssertEqual(result.state, ["a": 1, "b": 2])
+    }
+
+    func test_context_multipleInoutStateCalls_composesTransforms() {
+        let context = ReducerContext<[String: Int], Never, Never>()
+        context.state { $0["a"] = 1 }
+        context.state { $0["b"] = 2 }
+        let result = context.result(initialState: [:])
+        XCTAssertEqual(result.state, ["a": 1, "b": 2])
+    }
+
     func test_reducer_createsWorkingReducer() {
         let testReducer: Reducer<TestAction, Int, TestCommand, Never> = reducer { action, _, context in
             switch action {
