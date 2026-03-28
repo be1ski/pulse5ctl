@@ -57,26 +57,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         discoveredPeripherals.removeAll()
         connectionState = .scanning
 
-        let connected = centralManager.retrieveConnectedPeripherals(withServices: [PulseConstants.serviceUUID])
-        let cached = cachedPeripheralForReconnect()
-
-        switch ReusablePeripheralChoice.select(
-            hasConnectedServicePeripheral: connected.first != nil,
-            cachedPeripheralState: cached?.state
-        ) {
-        case .connectedService:
-            let firstConnected = connected[0]
-            log.notice("startScan: found connected \(firstConnected.identifier, privacy: .public)")
-            connectPeripheral(firstConnected)
-            return
-        case .cached:
-            guard let cached else { return }
-            log.notice("startScan: reusing cached \(cached.identifier, privacy: .public)")
-            connectPeripheral(cached)
-            return
-        case .none:
-            break
-        }
+        if connectReusablePeripheral(context: "startScan") { return }
 
         log.notice("startScan: no connected/cached peripheral, starting full BLE scan")
         centralManager.scanForPeripherals(
@@ -189,6 +170,29 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         peripheral = nil
     }
 
+    @discardableResult
+    private func connectReusablePeripheral(context: String) -> Bool {
+        let connected = centralManager.retrieveConnectedPeripherals(withServices: [PulseConstants.serviceUUID])
+        let cached = connected.first != nil ? nil : cachedPeripheralForReconnect()
+        switch ReusablePeripheralChoice.select(
+            hasConnectedServicePeripheral: connected.first != nil,
+            cachedPeripheralState: cached?.state
+        ) {
+        case .connectedService:
+            let peripheral = connected[0]
+            log.notice("\(context, privacy: .public): reusing connected \(peripheral.identifier, privacy: .public)")
+            connectPeripheral(peripheral)
+            return true
+        case .cached:
+            guard let cached else { return false }
+            log.notice("\(context, privacy: .public): reusing cached \(cached.identifier, privacy: .public)")
+            connectPeripheral(cached)
+            return true
+        case .none:
+            return false
+        }
+    }
+
     private func cachedPeripheralForReconnect() -> CBPeripheral? {
         guard let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
               let uuid = UUID(uuidString: uuidString) else {
@@ -241,23 +245,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
             }
             cleanup()
             errorContinuation.yield(nil)
-            let connected = centralManager.retrieveConnectedPeripherals(withServices: [PulseConstants.serviceUUID])
-            let cached = cachedPeripheralForReconnect()
-            switch ReusablePeripheralChoice.select(
-                hasConnectedServicePeripheral: connected.first != nil,
-                cachedPeripheralState: cached?.state
-            ) {
-            case .connectedService:
-                let firstConnected = connected[0]
-                log.notice("poweredOn: reusing connected \(firstConnected.identifier, privacy: .public)")
-                connectPeripheral(firstConnected)
-            case .cached:
-                guard let cached else { break }
-                log.notice("poweredOn: reusing cached \(cached.identifier, privacy: .public)")
-                connectPeripheral(cached)
-            case .none:
-                break
-            }
+            connectReusablePeripheral(context: "poweredOn")
         case .poweredOff:
             errorContinuation.yield(.poweredOff)
             connectionState = .disconnected

@@ -31,7 +31,7 @@ final class ReusablePeripheralChoiceTests: XCTestCase {
         XCTAssertEqual(choice, .cached)
     }
 
-    func test_select_returnsNone_whenNothingIsConnected() {
+    func test_select_returnsNone_whenNothingIsAvailable() {
         let choice = ReusablePeripheralChoice.select(
             hasConnectedServicePeripheral: false,
             cachedPeripheralState: nil
