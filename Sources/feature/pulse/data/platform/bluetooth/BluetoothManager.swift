@@ -23,12 +23,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
     private let bleQueue = DispatchQueue(label: "pulse5ctl.ble", qos: .userInitiated)
 
     private(set) var connectionState: ConnectionState = .disconnected {
-        didSet {
-            let old = String(describing: oldValue)
-            let new = String(describing: self.connectionState)
-            log.notice("\(old, privacy: .public) -> \(new, privacy: .public)")
-            stateContinuation.yield(connectionState)
-        }
+        didSet { stateContinuation.yield(connectionState) }
     }
 
     private var discoveredPeripherals: [UUID: CBPeripheral] = [:]
@@ -37,33 +32,18 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
     private var connectionTimeoutTask: Task<Void, Never>?
 
     override init() {
-        var stateCont: AsyncStream<ConnectionState>.Continuation?
-        stateUpdates = AsyncStream { stateCont = $0 }
-        stateContinuation = stateCont!
-
-        var deviceCont: AsyncStream<DiscoveredDevice>.Continuation?
-        discoveredDevices = AsyncStream { deviceCont = $0 }
-        deviceContinuation = deviceCont!
-
-        var dataCont: AsyncStream<Data>.Continuation?
-        receivedData = AsyncStream { dataCont = $0 }
-        dataContinuation = dataCont!
-
-        var errorCont: AsyncStream<BluetoothError?>.Continuation?
-        errors = AsyncStream { errorCont = $0 }
-        errorContinuation = errorCont!
-
+        (stateUpdates, stateContinuation) = AsyncStream.makeStream(of: ConnectionState.self)
+        (discoveredDevices, deviceContinuation) = AsyncStream.makeStream(of: DiscoveredDevice.self)
+        (receivedData, dataContinuation) = AsyncStream.makeStream(of: Data.self)
+        (errors, errorContinuation) = AsyncStream.makeStream(of: BluetoothError?.self)
         super.init()
         centralManager = CBCentralManager(delegate: self, queue: bleQueue)
     }
 
     func startScan() {
-        bleQueue.async {
-            self.performStartScan()
-        }
+        bleQueue.async { self.performStartScan() }
     }
 
-    /// Must be called on `bleQueue`.
     private func performStartScan() {
         guard centralManager.state == .poweredOn else {
             let state = self.centralManager.state.rawValue
@@ -77,21 +57,7 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         discoveredPeripherals.removeAll()
         connectionState = .scanning
 
-        let connected = centralManager.retrieveConnectedPeripherals(withServices: [PulseConstants.serviceUUID])
-        if let firstConnected = connected.first {
-            log.notice("startScan: found connected \(firstConnected.identifier, privacy: .public)")
-            connectPeripheral(firstConnected)
-            return
-        }
-
-        if let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
-           let uuid = UUID(uuidString: uuidString),
-           let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first,
-           cached.state == .connected {
-            log.notice("startScan: cached \(uuid, privacy: .public) already connected, reusing")
-            connectPeripheral(cached)
-            return
-        }
+        if connectReusablePeripheral(context: "startScan") { return }
 
         log.notice("startScan: no connected/cached peripheral, starting full BLE scan")
         centralManager.scanForPeripherals(
@@ -118,12 +84,9 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
     }
 
     func connect(to peripheral: CBPeripheral) {
-        bleQueue.async {
-            self.connectPeripheral(peripheral)
-        }
+        bleQueue.async { self.connectPeripheral(peripheral) }
     }
 
-    /// Must be called on `bleQueue`.
     private func connectPeripheral(_ peripheral: CBPeripheral) {
         log.notice("connectPeripheral(\(peripheral.identifier, privacy: .public))")
         self.peripheral = peripheral
@@ -170,12 +133,9 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
 
     func disconnect() {
         log.notice("disconnect() called")
-        bleQueue.async {
-            self.performDisconnect()
-        }
+        bleQueue.async { self.performDisconnect() }
     }
 
-    /// Must be called on `bleQueue`.
     private func performDisconnect() {
         let id = self.peripheral?.identifier.uuidString ?? "nil"
         log.notice("performDisconnect(), peripheral: \(id, privacy: .public)")
@@ -208,6 +168,39 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         writeCharacteristic = nil
         readCharacteristic = nil
         peripheral = nil
+    }
+
+    @discardableResult
+    private func connectReusablePeripheral(context: String, allowDisconnectedCached: Bool = false) -> Bool {
+        let connected = centralManager.retrieveConnectedPeripherals(withServices: [PulseConstants.serviceUUID])
+        let cached = connected.first != nil ? nil : cachedPeripheralForReconnect()
+        switch ReusablePeripheralChoice.select(
+            hasConnectedServicePeripheral: connected.first != nil,
+            cachedPeripheralState: cached?.state,
+            allowDisconnectedCached: allowDisconnectedCached
+        ) {
+        case .connectedService:
+            let peripheral = connected[0]
+            log.notice("\(context, privacy: .public): reusing connected \(peripheral.identifier, privacy: .public)")
+            connectPeripheral(peripheral)
+            return true
+        case .cached:
+            guard let cached else { return false }
+            log.notice("\(context, privacy: .public): reusing cached \(cached.identifier, privacy: .public)")
+            connectPeripheral(cached)
+            return true
+        case .none:
+            return false
+        }
+    }
+
+    private func cachedPeripheralForReconnect() -> CBPeripheral? {
+        guard let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
+              let uuid = UUID(uuidString: uuidString) else {
+            return nil
+        }
+
+        return centralManager.retrievePeripherals(withIdentifiers: [uuid]).first
     }
 
     private func attemptReconnect() {
@@ -253,12 +246,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
             }
             cleanup()
             errorContinuation.yield(nil)
-            if let uuidString = cachedUUID,
-               let uuid = UUID(uuidString: uuidString),
-               let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first {
-                log.notice("poweredOn: auto-connecting to \(uuid, privacy: .public)")
-                connect(to: cached)
-            }
+            connectReusablePeripheral(context: "poweredOn", allowDisconnectedCached: true)
         case .poweredOff:
             errorContinuation.yield(.poweredOff)
             connectionState = .disconnected
