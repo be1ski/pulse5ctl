@@ -57,12 +57,19 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         centralManager = CBCentralManager(delegate: self, queue: bleQueue)
     }
 
-    @discardableResult
-    func startScan() -> Bool {
+    func startScan() {
+        bleQueue.async {
+            self.performStartScan()
+        }
+    }
+
+    /// Must be called on `bleQueue`.
+    private func performStartScan() {
         guard centralManager.state == .poweredOn else {
             let state = self.centralManager.state.rawValue
             log.error("startScan() but central state is \(state, privacy: .public) — not poweredOn")
-            return false
+            errorContinuation.yield(.poweredOff)
+            return
         }
 
         log.notice("startScan() called, central state: poweredOn")
@@ -73,8 +80,8 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
         let connected = centralManager.retrieveConnectedPeripherals(withServices: [PulseConstants.serviceUUID])
         if let firstConnected = connected.first {
             log.notice("startScan: found connected \(firstConnected.identifier, privacy: .public)")
-            connect(to: firstConnected)
-            return true
+            connectPeripheral(firstConnected)
+            return
         }
 
         if let uuidString = UserDefaults.standard.string(forKey: PulseConstants.lastPeripheralUUIDKey),
@@ -82,8 +89,8 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
            let cached = centralManager.retrievePeripherals(withIdentifiers: [uuid]).first,
            cached.state == .connected {
             log.notice("startScan: cached \(uuid, privacy: .public) already connected, reusing")
-            connect(to: cached)
-            return true
+            connectPeripheral(cached)
+            return
         }
 
         log.notice("startScan: no connected/cached peripheral, starting full BLE scan")
@@ -91,7 +98,6 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
             withServices: nil,
             options: [CBCentralManagerScanOptionAllowDuplicatesKey: false]
         )
-        return true
     }
 
     func stopScan() {
