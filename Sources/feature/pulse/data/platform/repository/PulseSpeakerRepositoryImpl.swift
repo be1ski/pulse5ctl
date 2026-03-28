@@ -28,10 +28,7 @@ public final class PulseSpeakerRepositoryImpl: PulseSpeakerRepository, @unchecke
         log.notice("startScan()")
         discoveredDevicesByID.removeAll()
         emit(.discoveredDevices([]))
-        let started = bluetoothManager.startScan()
-        if !started {
-            emit(.error(BluetoothError.poweredOff.localizedDescription))
-        }
+        bluetoothManager.startScan()
     }
 
     public func stopScan() {
