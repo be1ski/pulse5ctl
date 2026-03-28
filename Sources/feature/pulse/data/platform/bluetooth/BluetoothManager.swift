@@ -171,12 +171,13 @@ final class BluetoothManager: NSObject, @unchecked Sendable {
     }
 
     @discardableResult
-    private func connectReusablePeripheral(context: String) -> Bool {
+    private func connectReusablePeripheral(context: String, allowDisconnectedCached: Bool = false) -> Bool {
         let connected = centralManager.retrieveConnectedPeripherals(withServices: [PulseConstants.serviceUUID])
         let cached = connected.first != nil ? nil : cachedPeripheralForReconnect()
         switch ReusablePeripheralChoice.select(
             hasConnectedServicePeripheral: connected.first != nil,
-            cachedPeripheralState: cached?.state
+            cachedPeripheralState: cached?.state,
+            allowDisconnectedCached: allowDisconnectedCached
         ) {
         case .connectedService:
             let peripheral = connected[0]
@@ -245,7 +246,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
             }
             cleanup()
             errorContinuation.yield(nil)
-            connectReusablePeripheral(context: "poweredOn")
+            connectReusablePeripheral(context: "poweredOn", allowDisconnectedCached: true)
         case .poweredOff:
             errorContinuation.yield(.poweredOff)
             connectionState = .disconnected

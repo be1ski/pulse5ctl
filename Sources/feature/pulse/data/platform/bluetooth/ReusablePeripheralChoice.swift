@@ -7,15 +7,18 @@ enum ReusablePeripheralChoice: Equatable {
 
     static func select(
         hasConnectedServicePeripheral: Bool,
-        cachedPeripheralState: CBPeripheralState?
+        cachedPeripheralState: CBPeripheralState?,
+        allowDisconnectedCached: Bool = false
     ) -> Self {
         if hasConnectedServicePeripheral {
             return .connectedService
         }
 
         switch cachedPeripheralState {
-        case .connected, .disconnected:
+        case .connected:
             return .cached
+        case .disconnected:
+            return allowDisconnectedCached ? .cached : .none
         default:
             return .none
         }

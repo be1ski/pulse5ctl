@@ -22,10 +22,20 @@ final class ReusablePeripheralChoiceTests: XCTestCase {
         XCTAssertEqual(choice, .cached)
     }
 
-    func test_select_returnsCached_whenCachedPeripheralIsDisconnected() {
+    func test_select_returnsNone_forDisconnectedCached_byDefault() {
         let choice = ReusablePeripheralChoice.select(
             hasConnectedServicePeripheral: false,
             cachedPeripheralState: .disconnected
+        )
+
+        XCTAssertEqual(choice, .none)
+    }
+
+    func test_select_returnsCached_forDisconnectedCached_whenAllowed() {
+        let choice = ReusablePeripheralChoice.select(
+            hasConnectedServicePeripheral: false,
+            cachedPeripheralState: .disconnected,
+            allowDisconnectedCached: true
         )
 
         XCTAssertEqual(choice, .cached)
