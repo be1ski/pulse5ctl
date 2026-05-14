@@ -49,7 +49,7 @@ jobs:
         run: gh release create ${{ steps.version.outputs.tag }} --generate-notes
 
   swift-test:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v6
       - name: Run Swift tests
@@ -74,7 +74,7 @@ jobs:
 
   macos-app:
     needs: [swift-test, create-release]
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v6
 
