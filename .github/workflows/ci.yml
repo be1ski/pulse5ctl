@@ -31,7 +31,7 @@ jobs:
         run: pytest --cov --cov-branch --cov-report=xml
 
       - name: Upload Python coverage to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: python
@@ -62,7 +62,7 @@ jobs:
             -format=lcov > coverage.lcov
 
       - name: Upload Swift coverage to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: swift
